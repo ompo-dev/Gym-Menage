@@ -28,20 +28,20 @@ export function ThemeToggle() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline" size="icon">
-          <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
-          <Moon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+        <Button variant="outline" size="icon" className="hover-transition">
+          <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 icon-transition dark:-rotate-90 dark:scale-0" />
+          <Moon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 icon-transition dark:rotate-0 dark:scale-100" />
           <span className="sr-only">Toggle theme</span>
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end">
+      <DropdownMenuContent align="end" className="gradient-transition">
         <DropdownMenuLabel>Tema</DropdownMenuLabel>
-        <DropdownMenuItem onClick={() => setTheme("light")}>
-          <Sun className="mr-2 h-4 w-4" />
+        <DropdownMenuItem onClick={() => setTheme("light")} className="hover-transition">
+          <Sun className="mr-2 h-4 w-4 icon-transition" />
           Claro
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setTheme("dark")}>
-          <Moon className="mr-2 h-4 w-4" />
+        <DropdownMenuItem onClick={() => setTheme("dark")} className="hover-transition">
+          <Moon className="mr-2 h-4 w-4 icon-transition" />
           Escuro
         </DropdownMenuItem>
         <DropdownMenuSeparator />
@@ -50,17 +50,17 @@ export function ThemeToggle() {
           <DropdownMenuItem
             key={color.value}
             onClick={() => setAccent(color.value)}
-            className="flex items-center"
+            className="flex items-center hover-transition"
           >
             <div
-              className="mr-2 h-4 w-4 rounded-full"
+              className="mr-2 h-4 w-4 rounded-full gradient-transition"
               style={{
                 backgroundColor: `hsl(var(--${color.value}))`,
               }}
             />
             {color.name}
             {accent === color.value && (
-              <span className="ml-auto">✓</span>
+              <span className="ml-auto icon-transition">✓</span>
             )}
           </DropdownMenuItem>
         ))}

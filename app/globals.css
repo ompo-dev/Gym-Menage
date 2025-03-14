@@ -4,6 +4,9 @@
 
 @layer base {
   :root {
+    --transition-duration: 0.3s;
+    --transition-timing: cubic-bezier(0.4, 0, 0.2, 1);
+    
     --primary-rgb: 79, 70, 229;
     
     --background: 0 0% 100%;
@@ -101,7 +104,7 @@
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;
 
-    /* Sidebar colors for dark mode - mantendo o mesmo estilo */
+    /* Sidebar colors for dark mode */
     --sidebar-background: 222 47% 11%;
     --sidebar-foreground: 215 20.2% 90%;
     --sidebar-primary: 210 40% 98%;
@@ -117,8 +120,26 @@
   * {
     @apply border-border;
   }
+
+  /* Transição suave para todo o documento */
+  :root {
+    color-scheme: light;
+    --transition-all: background-color var(--transition-duration) var(--transition-timing),
+                     border-color var(--transition-duration) var(--transition-timing),
+                     color var(--transition-duration) var(--transition-timing),
+                     fill var(--transition-duration) var(--transition-timing),
+                     stroke var(--transition-duration) var(--transition-timing),
+                     opacity var(--transition-duration) var(--transition-timing),
+                     box-shadow var(--transition-duration) var(--transition-timing);
+  }
+
+  .dark {
+    color-scheme: dark;
+  }
+
   body {
     @apply bg-background text-foreground;
+    transition: var(--transition-all);
   }
 }
 
@@ -130,6 +151,46 @@
   
   .scrollbar-none::-webkit-scrollbar {
     display: none;
+  }
+
+  /* Transições para elementos específicos */
+  .card,
+  .button,
+  .input,
+  .select,
+  .sidebar,
+  .nav-item,
+  .dropdown-menu,
+  .dialog,
+  .tooltip {
+    transition: var(--transition-all);
+  }
+
+  /* Transições para gráficos e elementos de destaque */
+  .chart,
+  .progress-bar,
+  .status-indicator,
+  .badge,
+  .alert {
+    transition: var(--transition-all);
+  }
+
+  /* Transição suave para hover states */
+  .hover-transition {
+    transition: var(--transition-all),
+                transform var(--transition-duration) var(--transition-timing);
+  }
+
+  /* Transições específicas para ícones e elementos decorativos */
+  .icon-transition {
+    transition: transform var(--transition-duration) var(--transition-timing),
+                opacity var(--transition-duration) var(--transition-timing);
+  }
+
+  /* Transição para gradientes e backgrounds complexos */
+  .gradient-transition {
+    transition: var(--transition-all),
+                background-image var(--transition-duration) var(--transition-timing);
   }
 }
 
