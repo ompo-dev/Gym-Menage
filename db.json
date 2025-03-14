@@ -1,0 +1,909 @@
+{
+  "academias": [
+    {
+      "id": 1,
+      "nome": "Academia Central",
+      "cnpj": "12.345.678/0001-90",
+      "email": "contato@academiacentral.com",
+      "telefone": "(11) 3456-7890",
+      "endereco": {
+        "rua": "Av. Paulista",
+        "numero": "1000",
+        "complemento": "Andar 10",
+        "bairro": "Bela Vista",
+        "cidade": "São Paulo",
+        "estado": "SP",
+        "cep": "01310-100"
+      },
+      "plano": "empresarial",
+      "status": "ativo",
+      "dataCriacao": "2024-01-01",
+      "horarioFuncionamento": {
+        "segunda_sexta": {
+          "abertura": "06:00",
+          "fechamento": "23:00"
+        },
+        "sabado": {
+          "abertura": "08:00",
+          "fechamento": "18:00"
+        },
+        "domingo": {
+          "abertura": "08:00",
+          "fechamento": "14:00"
+        }
+      },
+      "modalidades": ["musculação", "crossfit", "pilates", "yoga", "spinning"]
+    }
+  ],
+  "planos_academia": [
+    {
+      "id": 1,
+      "nome": "Básico",
+      "valor": 99.90,
+      "descricao": "Acesso básico à academia",
+      "beneficios": [
+        "Área de musculação",
+        "Área de cardio",
+        "Armário simples"
+      ],
+      "duracao": "mensal",
+      "status": "ativo",
+      "modalidades": ["musculação", "cardio"],
+      "horarios": {
+        "inicio": "06:00",
+        "fim": "22:00",
+        "restricoes": ["Não inclui aulas em grupo"]
+      },
+      "taxaAdesao": 50.00,
+      "taxaManutencao": 10.00,
+      "periodosDisponiveis": [
+        {
+          "periodo": "mensal",
+          "valor": 99.90,
+          "desconto": 0
+        },
+        {
+          "periodo": "trimestral",
+          "valor": 269.70,
+          "desconto": 10
+        },
+        {
+          "periodo": "semestral",
+          "valor": 479.50,
+          "desconto": 20
+        },
+        {
+          "periodo": "anual",
+          "valor": 838.80,
+          "desconto": 30
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "nome": "Premium",
+      "valor": 149.90,
+      "descricao": "Acesso completo com benefícios extras",
+      "beneficios": [
+        "Todos os benefícios do plano básico",
+        "Aulas em grupo",
+        "Avaliação física mensal",
+        "Armário premium"
+      ],
+      "duracao": "mensal",
+      "status": "ativo"
+    }
+  ],
+  "usuarios": [
+    {
+      "id": 1,
+      "nome": "João Silva",
+      "email": "joao.silva@academiacentral.com",
+      "cargo": "admin",
+      "telefone": "(11) 98765-4321",
+      "academiaId": 1,
+      "status": "ativo",
+      "dataCriacao": "2024-01-01",
+      "ultimoAcesso": "2024-03-14T10:30:00",
+      "permissoes": ["admin", "financeiro", "relatorios"]
+    }
+  ],
+  "clientes": [
+    {
+      "id": 1,
+      "nome": "Maria Oliveira",
+      "email": "maria.oliveira@email.com",
+      "cpf": "123.456.789-00",
+      "telefone": "(11) 98765-4321",
+      "dataNascimento": "1990-05-15",
+      "genero": "feminino",
+      "endereco": {
+        "rua": "Rua das Flores",
+        "numero": "123",
+        "complemento": "Apto 45",
+        "bairro": "Jardim Europa",
+        "cidade": "São Paulo",
+        "estado": "SP",
+        "cep": "04534-001"
+      },
+      "planoId": 2,
+      "academiaId": 1,
+      "status": "ativo",
+      "dataMatricula": "2024-02-01",
+      "dataVencimento": "2024-03-01",
+      "objetivos": ["perda de peso", "hipertrofia"],
+      "restricoes": ["joelho direito"],
+      "avaliacoesFisicas": [
+        {
+          "id": 1,
+          "data": "2024-02-01",
+          "peso": 65.5,
+          "altura": 1.65,
+          "imc": 24.1,
+          "percentualGordura": 28,
+          "medidas": {
+            "braco": 28,
+            "antebraco": 24,
+            "peitoral": 89,
+            "cintura": 71,
+            "quadril": 98,
+            "coxa": 55,
+            "panturrilha": 36
+          }
+        }
+      ],
+      "historicoVisitas": [
+        {
+          "data": "2024-03-14",
+          "horaEntrada": "07:30:00",
+          "horaSaida": "09:00:00",
+          "duracao": 90,
+          "aulasRealizadas": ["Musculação"]
+        },
+        {
+          "data": "2024-03-12",
+          "horaEntrada": "08:00:00",
+          "horaSaida": "09:30:00",
+          "duracao": 90,
+          "aulasRealizadas": ["Pilates"]
+        }
+      ],
+      "historicoPlanos": [
+        {
+          "planoId": 2,
+          "dataInicio": "2024-02-01",
+          "dataFim": "2024-03-01",
+          "valor": 149.90,
+          "status": "Encerrado"
+        },
+        {
+          "planoId": 2,
+          "dataInicio": "2024-03-01",
+          "dataFim": "2024-04-01",
+          "valor": 149.90,
+          "status": "Ativo"
+        }
+      ],
+      "statusPagamento": {
+        "ultimoPagamento": "2024-02-28",
+        "proximoVencimento": "2024-03-28",
+        "situacao": "Em dia"
+      }
+    }
+  ],
+  "funcionarios": [
+    {
+      "id": 1,
+      "nome": "Pedro Santos",
+      "email": "pedro.santos@academiacentral.com",
+      "cpf": "987.654.321-00",
+      "telefone": "(11) 97654-3210",
+      "cargo": "instrutor",
+      "especialidades": ["musculação", "crossfit"],
+      "academiaId": 1,
+      "status": "ativo",
+      "dataContratacao": "2024-01-15",
+      "horarioTrabalho": {
+        "segunda": ["06:00-12:00", "15:00-21:00"],
+        "terca": ["06:00-12:00", "15:00-21:00"],
+        "quarta": ["06:00-12:00", "15:00-21:00"],
+        "quinta": ["06:00-12:00", "15:00-21:00"],
+        "sexta": ["06:00-12:00", "15:00-21:00"]
+      },
+      "salario": 3500.00,
+      "comissao": 10
+    }
+  ],
+  "equipamentos": [
+    {
+      "id": 1,
+      "nome": "Esteira Profissional X3000",
+      "tipo": "cardio",
+      "marca": "TechFitness",
+      "modelo": "X3000",
+      "numeroSerie": "TF2024001",
+      "dataAquisicao": "2024-01-10",
+      "valorAquisicao": 15000.00,
+      "academiaId": 1,
+      "status": "ativo",
+      "ultimaManutencao": "2024-02-10",
+      "proximaManutencao": "2024-05-10",
+      "historicoManutencao": [
+        {
+          "id": 1,
+          "data": "2024-02-10",
+          "tipo": "preventiva",
+          "descricao": "Lubrificação e ajuste de esteira",
+          "custo": 250.00,
+          "tecnico": "José Técnico"
+        }
+      ]
+    }
+  ],
+  "aulas": [
+    {
+      "id": 1,
+      "nome": "Crossfit Iniciante",
+      "instrutor": 1,
+      "modalidade": "crossfit",
+      "capacidade": 15,
+      "duracao": 60,
+      "nivel": "iniciante",
+      "horarios": {
+        "segunda": ["07:00", "19:00"],
+        "quarta": ["07:00", "19:00"],
+        "sexta": ["07:00", "19:00"]
+      },
+      "academiaId": 1,
+      "status": "ativo"
+    }
+  ],
+  "pagamentos": [
+    {
+      "id": 1,
+      "clienteId": 1,
+      "planoId": 2,
+      "valor": 149.90,
+      "status": "pago",
+      "metodoPagamento": "cartao_credito",
+      "dataVencimento": "2024-03-01",
+      "dataPagamento": "2024-02-28",
+      "comprovante": "https://url-do-comprovante.com/123",
+      "academiaId": 1
+    }
+  ],
+  "metricas": {
+    "frequencia": [
+      {
+        "data": "2024-03-14",
+        "academiaId": 1,
+        "total": 245,
+        "porHora": {
+          "06": 15,
+          "07": 35,
+          "08": 45,
+          "09": 30,
+          "10": 20,
+          "11": 15,
+          "12": 10,
+          "13": 5,
+          "14": 8,
+          "15": 12,
+          "16": 15,
+          "17": 20,
+          "18": 25,
+          "19": 30,
+          "20": 20,
+          "21": 15,
+          "22": 10
+        }
+      }
+    ],
+    "financeiro": {
+      "receitas": [
+        {
+          "mes": "2024-03",
+          "academiaId": 1,
+          "mensalidades": 45000.00,
+          "matriculas": 2500.00,
+          "produtos": 1500.00,
+          "total": 49000.00
+        }
+      ],
+      "despesas": [
+        {
+          "mes": "2024-03",
+          "academiaId": 1,
+          "funcionarios": 25000.00,
+          "aluguel": 8000.00,
+          "energia": 3000.00,
+          "agua": 1000.00,
+          "manutencao": 2000.00,
+          "marketing": 1500.00,
+          "outros": 1000.00,
+          "total": 41500.00
+        }
+      ],
+      "indicadores": {
+        "crescimentoMensal": {
+          "mes": "2024-03",
+          "percentual": 12.5,
+          "novosClientes": 15,
+          "cancelamentos": 3
+        },
+        "taxaRetencao": 92.5,
+        "ticketMedio": 175.50
+      }
+    },
+    "aulas": {
+      "agendadas": 48,
+      "realizadas": 42,
+      "canceladas": 2,
+      "ocupacaoMedia": 85.5
+    },
+    "treinos": {
+      "distribuicaoDiaria": [
+        {
+          "dia": "Segunda",
+          "realizados": 80,
+          "perdidos": 20,
+          "ocupacao": 85
+        },
+        {
+          "dia": "Terça",
+          "realizados": 85,
+          "perdidos": 15,
+          "ocupacao": 88
+        },
+        {
+          "dia": "Quarta",
+          "realizados": 90,
+          "perdidos": 10,
+          "ocupacao": 92
+        },
+        {
+          "dia": "Quinta",
+          "realizados": 75,
+          "perdidos": 25,
+          "ocupacao": 82
+        },
+        {
+          "dia": "Sexta",
+          "realizados": 70,
+          "perdidos": 30,
+          "ocupacao": 78
+        }
+      ]
+    }
+  },
+  "presenca": [
+    {
+      "id": 1,
+      "clienteId": 1,
+      "academiaId": 1,
+      "dataHoraEntrada": "2024-03-14T07:30:00",
+      "dataHoraSaida": "2024-03-14T09:00:00",
+      "duracao": 90
+    }
+  ],
+  "treinos": [
+    {
+      "id": 1,
+      "clienteId": 1,
+      "instrutorId": 1,
+      "nome": "Treino A - Superior",
+      "tipo": "musculacao",
+      "nivel": "intermediario",
+      "dataCriacao": "2024-02-01",
+      "dataAtualizacao": "2024-02-01",
+      "exercicios": [
+        {
+          "nome": "Supino Reto",
+          "series": 4,
+          "repeticoes": "12",
+          "carga": "40kg",
+          "descanso": "60seg",
+          "observacoes": "Manter escapulas aduzidas"
+        },
+        {
+          "nome": "Puxada Frontal",
+          "series": 4,
+          "repeticoes": "12",
+          "carga": "45kg",
+          "descanso": "60seg",
+          "observacoes": "Pegada aberta"
+        }
+      ],
+      "status": "ativo"
+    }
+  ],
+  "aulas_agendadas": [
+    {
+      "id": 1,
+      "nome": "Musculação Avançada",
+      "instrutor": "Carlos Silva",
+      "horario": "14:00",
+      "capacidade": 12,
+      "inscritos": [1, 2, 3],
+      "sala": "Sala de Musculação",
+      "status": "confirmada",
+      "data": "2024-03-15"
+    },
+    {
+      "id": 2,
+      "nome": "Pilates",
+      "instrutor": "Ana Oliveira",
+      "horario": "15:30",
+      "capacidade": 8,
+      "inscritos": [4, 5],
+      "sala": "Sala de Pilates",
+      "status": "confirmada",
+      "data": "2024-03-15"
+    }
+  ],
+  "avaliacoes_fisicas": [
+    {
+      "id": 1,
+      "clienteId": 1,
+      "instrutorId": 1,
+      "data": "2024-03-01",
+      "tipo": "completa",
+      "medidas": {
+        "peso": 65.5,
+        "altura": 1.65,
+        "imc": 24.1,
+        "percentualGordura": 28,
+        "massaMuscular": 45.2,
+        "idadeCorporal": 25,
+        "metabolismoBasal": 1500,
+        "medidas": {
+          "braco_direito": 28,
+          "braco_esquerdo": 27.8,
+          "antebraco_direito": 24,
+          "antebraco_esquerdo": 23.8,
+          "peitoral": 89,
+          "cintura": 71,
+          "abdomen": 75,
+          "quadril": 98,
+          "coxa_direita": 55,
+          "coxa_esquerda": 54.8,
+          "panturrilha_direita": 36,
+          "panturrilha_esquerda": 35.8
+        }
+      },
+      "dobras": {
+        "triceps": 15,
+        "biceps": 8,
+        "subescapular": 14,
+        "suprailiaca": 16,
+        "abdominal": 18,
+        "coxa": 20,
+        "panturrilha": 12
+      },
+      "perimetros": {
+        "pescoco": 35,
+        "ombro": 110,
+        "torax": 95
+      },
+      "observacoes": "Cliente apresenta boa evolução",
+      "objetivos": ["hipertrofia", "definicao"],
+      "restricoes": ["joelho direito"],
+      "fotos": {
+        "frente": "url/fotos/1_frente.jpg",
+        "costas": "url/fotos/1_costas.jpg",
+        "perfil": "url/fotos/1_perfil.jpg"
+      }
+    }
+  ],
+  "exercicios": [
+    {
+      "id": 1,
+      "nome": "Supino Reto",
+      "categoria": "peito",
+      "equipamento": "banco supino",
+      "tipo": "musculacao",
+      "gruposMusculares": ["peito", "triceps", "ombro"],
+      "nivel": "intermediario",
+      "instrucoes": [
+        "Deite no banco com os pés apoiados no chão",
+        "Segure a barra com pegada média",
+        "Desça a barra controladamente até o peito",
+        "Empurre a barra para cima até estender os braços"
+      ],
+      "dicas": [
+        "Mantenha as escápulas aduzidas",
+        "Respire durante o movimento",
+        "Mantenha os cotovelos em ângulo adequado"
+      ],
+      "videos": {
+        "execucao": "url/videos/supino_reto.mp4",
+        "comuns_erros": "url/videos/supino_reto_erros.mp4"
+      },
+      "variacoes": [
+        "Supino inclinado",
+        "Supino declinado",
+        "Supino com halteres"
+      ]
+    }
+  ],
+  "fichas_treino": [
+    {
+      "id": 1,
+      "nome": "Treino A - Superior",
+      "clienteId": 1,
+      "instrutorId": 1,
+      "objetivo": "hipertrofia",
+      "nivel": "intermediario",
+      "duracao": 60,
+      "frequencia": ["segunda", "quarta", "sexta"],
+      "validade": {
+        "inicio": "2024-03-01",
+        "fim": "2024-05-01"
+      },
+      "grupos": ["peito", "costas", "ombro", "biceps", "triceps"],
+      "exercicios": [
+        {
+          "exercicioId": 1,
+          "ordem": 1,
+          "series": 4,
+          "repeticoes": "12",
+          "carga": "40kg",
+          "descanso": "60seg",
+          "observacoes": "Manter escapulas aduzidas",
+          "superSet": null
+        }
+      ],
+      "observacoes": "Realizar aquecimento antes dos exercícios",
+      "status": "ativo"
+    }
+  ],
+  "produtos": [
+    {
+      "id": 1,
+      "nome": "Whey Protein",
+      "marca": "SupplementFit",
+      "categoria": "suplementos",
+      "descricao": "Whey protein concentrado sabor chocolate",
+      "preco": 129.90,
+      "estoque": 50,
+      "unidade": "pote",
+      "peso": "900g",
+      "codigoBarras": "7891234567890",
+      "fornecedor": "SupplementFit Distribuidora",
+      "dataValidade": "2025-03-01",
+      "status": "disponivel",
+      "imagens": ["url/produtos/whey1.jpg", "url/produtos/whey2.jpg"]
+    }
+  ],
+  "vendas": [
+    {
+      "id": 1,
+      "clienteId": 1,
+      "data": "2024-03-14",
+      "itens": [
+        {
+          "produtoId": 1,
+          "quantidade": 2,
+          "precoUnitario": 129.90,
+          "desconto": 0,
+          "total": 259.80
+        }
+      ],
+      "formaPagamento": "cartao_credito",
+      "status": "concluida",
+      "total": 259.80,
+      "notaFiscal": "NFE-123456"
+    }
+  ],
+  "fornecedores": [
+    {
+      "id": 1,
+      "nome": "SupplementFit Distribuidora",
+      "cnpj": "12.345.678/0001-90",
+      "email": "contato@supplementfit.com",
+      "telefone": "(11) 3456-7890",
+      "endereco": {
+        "rua": "Rua dos Suplementos",
+        "numero": "123",
+        "complemento": "Galpão 1",
+        "bairro": "Centro",
+        "cidade": "São Paulo",
+        "estado": "SP",
+        "cep": "01234-567"
+      },
+      "contato": "João Silva",
+      "categoria": ["suplementos", "acessorios"],
+      "status": "ativo"
+    }
+  ],
+  "manutencoes": [
+    {
+      "id": 1,
+      "equipamentoId": 1,
+      "tipo": "preventiva",
+      "status": "agendada",
+      "dataAgendada": "2024-04-15",
+      "prioridade": "media",
+      "descricao": "Manutenção preventiva mensal",
+      "tecnico": "José Técnico",
+      "custoEstimado": 250.00,
+      "pecasNecessarias": [
+        {
+          "nome": "Correia",
+          "quantidade": 1,
+          "valor": 150.00
+        }
+      ]
+    }
+  ],
+  "eventos": [
+    {
+      "id": 1,
+      "titulo": "Aulão de Crossfit",
+      "tipo": "aula_especial",
+      "data": "2024-03-20",
+      "horario": "09:00",
+      "duracao": 120,
+      "instrutor": 1,
+      "capacidade": 30,
+      "inscritos": [],
+      "descricao": "Aulão especial de Crossfit com programação diferenciada",
+      "requisitos": ["Experiência prévia em Crossfit"],
+      "valor": 50.00,
+      "status": "agendado"
+    }
+  ],
+  "notificacoes": [
+    {
+      "id": 1,
+      "tipo": "vencimento_mensalidade",
+      "destinatarioId": 1,
+      "titulo": "Mensalidade a vencer",
+      "mensagem": "Sua mensalidade vence em 3 dias",
+      "data": "2024-03-14T10:00:00",
+      "lida": false,
+      "acoes": [
+        {
+          "texto": "Pagar agora",
+          "url": "/pagamentos"
+        }
+      ]
+    }
+  ],
+  "configuracoes": {
+    "academia": {
+      "id": 1,
+      "limites": {
+        "capacidade_maxima": 200,
+        "alunos_por_aula": 20,
+        "dias_antecedencia_agendamento": 7
+      },
+      "notificacoes": {
+        "vencimento_mensalidade": true,
+        "dias_antecedencia": 3,
+        "avaliacao_fisica": true,
+        "treino_vencido": true
+      },
+      "integracoes": {
+        "gateway_pagamento": "stripe",
+        "envio_email": "sendgrid",
+        "sms": "twilio"
+      }
+    }
+  },
+  "relatorios": {
+    "templates": [
+      {
+        "id": 1,
+        "nome": "Relatório Financeiro Mensal",
+        "tipo": "financeiro",
+        "campos": [
+          "receitas",
+          "despesas",
+          "lucro",
+          "inadimplencia"
+        ],
+        "periodicidade": "mensal",
+        "destinatarios": ["admin", "financeiro"]
+      }
+    ],
+    "agendados": [
+      {
+        "id": 1,
+        "templateId": 1,
+        "dataGeracao": "2024-03-01",
+        "periodo": "2024-02",
+        "status": "gerado",
+        "url": "url/relatorios/fin_202402.pdf"
+      }
+    ]
+  },
+  "redes_academias": [
+    {
+      "id": 1,
+      "nome": "Rede Fitness Plus",
+      "cnpj": "98.765.432/0001-10",
+      "email": "contato@redefitplus.com",
+      "telefone": "(11) 3333-4444",
+      "matriz": {
+        "academiaId": 1,
+        "endereco": {
+          "rua": "Av. Paulista",
+          "numero": "1000",
+          "complemento": "Andar 10",
+          "bairro": "Bela Vista",
+          "cidade": "São Paulo",
+          "estado": "SP",
+          "cep": "01310-100"
+        }
+      },
+      "filiais": [2, 3, 4],
+      "responsavel": {
+        "nome": "Roberto Santos",
+        "email": "roberto.santos@redefitplus.com",
+        "telefone": "(11) 98888-7777",
+        "cargo": "Diretor Executivo"
+      },
+      "planoExpansao": {
+        "metaFiliais": 10,
+        "regioesFoco": ["SP", "RJ", "MG"],
+        "investimentoPrevisto": 5000000.00
+      },
+      "metricas": {
+        "totalAlunos": 5000,
+        "faturamentoMensal": 750000.00,
+        "ticketMedioRede": 150.00
+      }
+    }
+  ],
+  "programa_afiliados": {
+    "comissoes": {
+      "indicacao_academia": {
+        "valor_base": 1000.00,
+        "recorrencia": {
+          "percentual": 5,
+          "duracao_meses": 12
+        }
+      },
+      "indicacao_aluno": {
+        "valor_base": 50.00,
+        "bonus_permanencia": {
+          "3_meses": 25.00,
+          "6_meses": 50.00,
+          "12_meses": 100.00
+        }
+      }
+    },
+    "afiliados": [
+      {
+        "id": 1,
+        "tipo": "academia",
+        "academiaId": 2,
+        "dataInicio": "2024-01-01",
+        "status": "ativo",
+        "indicacoes": {
+          "academias": [3, 4],
+          "alunos": [15, 16, 17]
+        },
+        "ganhos": {
+          "total": 3500.00,
+          "pendente": 500.00,
+          "pago": 3000.00
+        },
+        "rankingMensal": {
+          "posicao": 1,
+          "pontos": 1500
+        }
+      }
+    ],
+    "indicacoes": [
+      {
+        "id": 1,
+        "tipo": "academia",
+        "afiliadoId": 1,
+        "indicadoId": 3,
+        "dataIndicacao": "2024-02-01",
+        "dataConversao": "2024-02-15",
+        "status": "convertido",
+        "comissoes": [
+          {
+            "valor": 1000.00,
+            "tipo": "valor_base",
+            "status": "pago",
+            "dataPagamento": "2024-03-01"
+          },
+          {
+            "valor": 250.00,
+            "tipo": "recorrencia",
+            "mes": "2024-03",
+            "status": "pendente"
+          }
+        ]
+      }
+    ]
+  },
+  "links_afiliados": [
+    {
+      "id": 1,
+      "afiliadoId": 1,
+      "codigo": "FIT-REF-001",
+      "url": "https://academia.com/registro?ref=FIT-REF-001",
+      "tipo": "registro_academia",
+      "dataCriacao": "2024-01-01",
+      "cliques": 150,
+      "conversoes": 3,
+      "taxaConversao": 2.0
+    }
+  ],
+  "campanhas_indicacao": [
+    {
+      "id": 1,
+      "nome": "Indique e Ganhe - Verão 2024",
+      "dataInicio": "2024-01-01",
+      "dataFim": "2024-03-31",
+      "tipo": "alunos",
+      "beneficios": {
+        "indicador": {
+          "tipo": "desconto",
+          "valor": 50.00,
+          "duracao_meses": 1
+        },
+        "indicado": {
+          "tipo": "isencao_matricula",
+          "valor": 100.00
+        }
+      },
+      "regras": [
+        "Válido apenas para novos alunos",
+        "Limite de 5 indicações por aluno",
+        "Benefício aplicado após primeira mensalidade do indicado"
+      ],
+      "status": "ativa",
+      "resultados": {
+        "indicacoes": 45,
+        "conversoes": 30,
+        "taxaConversao": 66.7
+      }
+    }
+  ],
+  "rankings_afiliados": {
+    "mensal": [
+      {
+        "mes": "2024-03",
+        "academias": [
+          {
+            "afiliadoId": 1,
+            "pontos": 1500,
+            "indicacoes": 3,
+            "conversoes": 2,
+            "ganhos": 3500.00,
+            "posicao": 1
+          }
+        ],
+        "usuarios": [
+          {
+            "afiliadoId": 2,
+            "pontos": 800,
+            "indicacoes": 5,
+            "conversoes": 4,
+            "ganhos": 250.00,
+            "posicao": 1
+          }
+        ]
+      }
+    ],
+    "premiacoes": [
+      {
+        "id": 1,
+        "mes": "2024-03",
+        "categoria": "academia",
+        "posicao": 1,
+        "premio": {
+          "tipo": "bonus",
+          "valor": 5000.00,
+          "descricao": "Prêmio Top Afiliado do Mês"
+        }
+      }
+    ]
+  }
+} 
