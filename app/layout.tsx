@@ -25,7 +25,7 @@ export default function RootLayout({
           <ThemeProvider>
             <ThemeInitializer />
             <SidebarInitializer />
-            {children}
+              {children}
           </ThemeProvider>
         </NuqsProvider>
       </body>
