@@ -3,65 +3,24 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Button } from "@/components/ui/button"
-import { ArrowUpRight, Users, DollarSign, Calendar, TrendingUp, Activity, UserPlus } from "lucide-react"
+import { Users, DollarSign, Calendar, TrendingUp, Activity, UserPlus } from "lucide-react"
 import { useState, useEffect } from "react"
-import { Metadata } from "next"
 import {
   AreaChartComponent,
   DonutChartComponent,
   MultipleBarChartComponent,
-  StackedBarChartComponent,
-  type AttendanceData,
-  type PlanData,
-  type WorkoutData,
-  type RevenueData,
+  StackedBarChartComponent
 } from "@/components/charts"
-import { Area, AreaChart, Bar, BarChart, CartesianGrid, XAxis, YAxis, Tooltip, TooltipProps, ResponsiveContainer } from "recharts"
-import { type ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart"
-
-// Format data for recharts
-interface ChartDataPoint {
-  month: string;
-  value: number;
-}
-
-const formatChartData = (data: number[], labels: string[]): ChartDataPoint[] => {
-  return labels.map((label: string, index: number) => ({
-    month: label,
-    value: data[index],
-  }))
-}
-
-// Chart configurations
-const revenueChartConfig = {
-  value: {
-    label: "Receita",
-    color: "hsl(var(--chart-1))",
-  },
-} satisfies ChartConfig
-
-const clientsChartConfig = {
-  value: {
-    label: "Clientes",
-    color: "hsl(var(--chart-2))",
-  },
-} satisfies ChartConfig
-
-const attendanceChartConfig = {
-  value: {
-    label: "Frequência",
-    color: "hsl(var(--chart-3))",
-  },
-} satisfies ChartConfig
+import { Area, AreaChart, ResponsiveContainer } from "recharts"
 
 // Sample data for attendance chart
 const attendanceData = [
-  { date: "2024-01", attendance: 120 },
+  { date: "2024-01", attendance: 320 },
   { date: "2024-02", attendance: 150 },
   { date: "2024-03", attendance: 180 },
-  { date: "2024-04", attendance: 220 },
-  { date: "2024-05", attendance: 250 },
-  { date: "2024-06", attendance: 280 },
+  { date: "2024-04", attendance: 90 },
+  { date: "2024-05", attendance: 170 },
+  { date: "2024-06", attendance: 380 },
 ]
 
 // Sample data for plans distribution
@@ -121,50 +80,11 @@ const revenueData = [
   },
 ]
 
-// Add clients data array before the component
-const clientsData = [180, 195, 200, 205, 210, 215, 220] // Example data for the last 7 months
-
-// Add type definitions for tooltip props
-type CustomTooltipProps = {
-  active?: boolean;
-  payload?: Array<{
-    value: number;
-    payload: {
-      month: string;
-      value: number;
-    };
-  }>;
-  label?: string;
-};
-
-const CustomTooltip = ({ active, payload, config }: CustomTooltipProps & { config: ChartConfig }) => {
-  if (active && payload && payload.length) {
-    return (
-      <div className="rounded-lg border bg-background p-2 shadow-sm">
-        <div className="grid grid-cols-2 gap-2">
-          <div className="flex flex-col">
-            <span className="text-[0.70rem] uppercase text-muted-foreground">
-              {config.value.label}
-            </span>
-            <span className="font-bold">
-              {payload[0].value}
-            </span>
-          </div>
-        </div>
-      </div>
-    );
-  }
-  return null;
-};
-
 export default function DashboardPage() {
   const [activeClients, setActiveClients] = useState(0)
   const [monthlyRevenue, setMonthlyRevenue] = useState(0)
   const [classesScheduled, setClassesScheduled] = useState(0)
   const [growthRate, setGrowthRate] = useState(0)
-
-  // Labels for the charts
-  const chartLabels = ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul"]
 
   // Simulação de carregamento de dados
   useEffect(() => {
@@ -178,19 +98,33 @@ export default function DashboardPage() {
     return () => clearTimeout(timer)
   }, [])
 
-  // Dados simulados para próximas aulas
-  const upcomingClasses = [
-    { id: 1, name: "Musculação Avançada", instructor: "Carlos Silva", time: "14:00", attendees: 12 },
-    { id: 2, name: "Pilates", instructor: "Ana Oliveira", time: "15:30", attendees: 8 },
-    { id: 3, name: "Spinning", instructor: "Marcos Santos", time: "17:00", attendees: 15 },
-    { id: 4, name: "Yoga", instructor: "Juliana Costa", time: "18:30", attendees: 10 },
+  // Dados para os mini gráficos
+  const clientsSparklineData = [
+    { value: 165 },
+    { value: 158 },
+    { value: 188 },
+    { value: 210 }
   ]
 
-  // Dados simulados para novos clientes
-  const newClients = [
-    { id: 1, name: "Mariana Alves", plan: "Mensal", joinDate: "15/03/2025" },
-    { id: 2, name: "Ricardo Gomes", plan: "Anual", joinDate: "12/03/2025" },
-    { id: 3, name: "Fernanda Lima", plan: "Trimestral", joinDate: "10/03/2025" },
+  const revenueSparklineData = [
+    { value: 17000 },
+    { value: 16500 },
+    { value: 20500 },
+    { value: 23000 }
+  ]
+
+  const classesSparklineData = [
+    { value: 38 },
+    { value: 44 },
+    { value: 41 },
+    { value: 48 }
+  ]
+
+  const growthSparklineData = [
+    { value: 6.8 },
+    { value: 9.2 },
+    { value: 8.4 },
+    { value: 12.5 }
   ]
 
   return (
@@ -209,10 +143,26 @@ export default function DashboardPage() {
             <Users className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{activeClients}</div>
-            <p className="text-xs text-muted-foreground">+15 desde o último mês</p>
-            <div className="mt-4 h-1 w-full rounded-full bg-gray-100">
-              <div className="h-1 rounded-full bg-primary" style={{ width: "85%" }} />
+            <div className="flex items-center justify-between">
+              <div>
+                <div className="text-2xl font-bold">{activeClients}</div>
+                <p className="text-xs text-muted-foreground">+15 desde o último mês</p>
+              </div>
+              <div className="w-[120px] h-[40px]">
+                <ResponsiveContainer width="100%" height="100%">
+                  <AreaChart data={clientsSparklineData} margin={{ top: 2, right: 2, left: 2, bottom: 2 }}>
+                    <Area
+                      type="natural"
+                      dataKey="value"
+                      stroke="hsl(var(--primary))"
+                      fill="hsl(var(--primary)/.15)"
+                      strokeWidth={2}
+                      isAnimationActive={true}
+                      animationDuration={800}
+                    />
+                  </AreaChart>
+                </ResponsiveContainer>
+              </div>
             </div>
           </CardContent>
         </Card>
@@ -222,10 +172,26 @@ export default function DashboardPage() {
             <DollarSign className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">R$ {monthlyRevenue.toLocaleString()}</div>
-            <p className="text-xs text-muted-foreground">+18% desde o último mês</p>
-            <div className="mt-4 h-1 w-full rounded-full bg-gray-100">
-              <div className="h-1 rounded-full bg-primary" style={{ width: "78%" }} />
+            <div className="flex items-center justify-between">
+              <div>
+                <div className="text-2xl font-bold">R$ {monthlyRevenue.toLocaleString()}</div>
+                <p className="text-xs text-muted-foreground">+18% desde o último mês</p>
+              </div>
+              <div className="w-[120px] h-[40px]">
+                <ResponsiveContainer width="100%" height="100%">
+                  <AreaChart data={revenueSparklineData} margin={{ top: 2, right: 2, left: 2, bottom: 2 }}>
+                    <Area
+                      type="natural"
+                      dataKey="value"
+                      stroke="hsl(var(--primary))"
+                      fill="hsl(var(--primary)/.15)"
+                      strokeWidth={2}
+                      isAnimationActive={true}
+                      animationDuration={800}
+                    />
+                  </AreaChart>
+                </ResponsiveContainer>
+              </div>
             </div>
           </CardContent>
         </Card>
@@ -235,10 +201,26 @@ export default function DashboardPage() {
             <Calendar className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{classesScheduled}</div>
-            <p className="text-xs text-muted-foreground">Para os próximos 7 dias</p>
-            <div className="mt-4 h-1 w-full rounded-full bg-gray-100">
-              <div className="h-1 rounded-full bg-primary" style={{ width: "65%" }} />
+            <div className="flex items-center justify-between">
+              <div>
+                <div className="text-2xl font-bold">{classesScheduled}</div>
+                <p className="text-xs text-muted-foreground">Para os próximos 7 dias</p>
+              </div>
+              <div className="w-[120px] h-[40px]">
+                <ResponsiveContainer width="100%" height="100%">
+                  <AreaChart data={classesSparklineData} margin={{ top: 2, right: 2, left: 2, bottom: 2 }}>
+                    <Area
+                      type="natural"
+                      dataKey="value"
+                      stroke="hsl(var(--primary))"
+                      fill="hsl(var(--primary)/.15)"
+                      strokeWidth={2}
+                      isAnimationActive={true}
+                      animationDuration={800}
+                    />
+                  </AreaChart>
+                </ResponsiveContainer>
+              </div>
             </div>
           </CardContent>
         </Card>
@@ -248,10 +230,26 @@ export default function DashboardPage() {
             <TrendingUp className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{growthRate}%</div>
-            <p className="text-xs text-muted-foreground">Nos últimos 3 meses</p>
-            <div className="mt-4 h-1 w-full rounded-full bg-gray-100">
-              <div className="h-1 rounded-full bg-primary" style={{ width: "92%" }} />
+            <div className="flex items-center justify-between">
+              <div>
+                <div className="text-2xl font-bold">{growthRate}%</div>
+                <p className="text-xs text-muted-foreground">Nos últimos 3 meses</p>
+              </div>
+              <div className="w-[120px] h-[40px]">
+                <ResponsiveContainer width="100%" height="100%">
+                  <AreaChart data={growthSparklineData} margin={{ top: 2, right: 2, left: 2, bottom: 2 }}>
+                    <Area
+                      type="natural"
+                      dataKey="value"
+                      stroke="hsl(var(--primary))"
+                      fill="hsl(var(--primary)/.15)"
+                      strokeWidth={2}
+                      isAnimationActive={true}
+                      animationDuration={800}
+                    />
+                  </AreaChart>
+                </ResponsiveContainer>
+              </div>
             </div>
           </CardContent>
         </Card>
@@ -264,69 +262,33 @@ export default function DashboardPage() {
           <TabsTrigger value="reports">Relatórios</TabsTrigger>
         </TabsList>
         <TabsContent value="overview" className="space-y-4">
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
-            <Card className="col-span-4">
-              <CardHeader>
-                <CardTitle>Visão Geral</CardTitle>
-                <CardDescription>
-                  Visão geral das métricas principais do seu negócio
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="pl-2">
+          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+              <div className="w-full col-span-1 md:col-span-2">
                 <StackedBarChartComponent
                   data={revenueData}
                   title="Receita por Categoria"
                   description="Distribuição de receita por tipo de serviço"
                 />
-              </CardContent>
-            </Card>
-            <Card className="col-span-3">
-              <CardHeader>
-                <CardTitle>Distribuição</CardTitle>
-                <CardDescription>
-                  Distribuição de alunos por plano
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
+                </div>
                 <DonutChartComponent
                   data={plansData}
                   title="Distribuição de Planos"
                   description="Quantidade de alunos por tipo de plano"
                 />
-              </CardContent>
-            </Card>
           </div>
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
-            <Card className="col-span-4">
-              <CardHeader>
-                <CardTitle>Frequência</CardTitle>
-                <CardDescription>
-                  Evolução da frequência de alunos ao longo do tempo
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
+          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+              <div className="w-full col-span-1 md:col-span-2">
                 <AreaChartComponent
                   data={attendanceData}
                   title="Frequência de Alunos"
                   description="Evolução da frequência ao longo dos meses"
                 />
-              </CardContent>
-            </Card>
-            <Card className="col-span-3">
-              <CardHeader>
-                <CardTitle>Treinos</CardTitle>
-                <CardDescription>
-                  Distribuição de treinos realizados e perdidos
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
+              </div>
                 <MultipleBarChartComponent
                   data={workoutsData}
                   title="Treinos por Dia"
                   description="Treinos realizados e perdidos por dia da semana"
                 />
-              </CardContent>
-            </Card>
           </div>
         </TabsContent>
         <TabsContent value="analytics" className="space-y-4">

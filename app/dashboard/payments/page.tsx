@@ -91,13 +91,34 @@ const initialPayments = [
   },
 ]
 
+// Tipos para os dados de pagamento
+interface Payment {
+  id: number
+  clientName: string
+  amount: number
+  date: string
+  dueDate: string
+  status: string
+  method: string
+  plan: string
+  invoice: string
+}
+
+interface NewPayment {
+  clientName: string
+  amount: string
+  dueDate: string
+  status: string
+  plan: string
+}
+
 export default function PaymentsPage() {
-  const [payments, setPayments] = useState(initialPayments)
+  const [payments, setPayments] = useState<Payment[]>(initialPayments)
   const [searchTerm, setSearchTerm] = useState("")
   const [statusFilter, setStatusFilter] = useState("all")
   const [planFilter, setPlanFilter] = useState("all")
   const [isNewPaymentDialogOpen, setIsNewPaymentDialogOpen] = useState(false)
-  const [newPayment, setNewPayment] = useState({
+  const [newPayment, setNewPayment] = useState<NewPayment>({
     clientName: "",
     amount: "",
     dueDate: "",
@@ -117,7 +138,7 @@ export default function PaymentsPage() {
   })
 
   // Manipular mudanças no formulário de novo pagamento
-  const handleNewPaymentChange = (e) => {
+  const handleNewPaymentChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
     setNewPayment((prev) => ({ ...prev, [name]: value }))
   }
@@ -127,11 +148,15 @@ export default function PaymentsPage() {
     const today = new Date()
     const formattedDate = `${today.getDate().toString().padStart(2, "0")}/${(today.getMonth() + 1).toString().padStart(2, "0")}/${today.getFullYear()}`
 
-    const newPaymentData = {
+    const newPaymentData: Payment = {
       id: payments.length + 1,
-      ...newPayment,
+      clientName: newPayment.clientName,
+      amount: parseFloat(newPayment.amount) || 0,
       date: newPayment.status === "Pago" ? formattedDate : "",
+      dueDate: newPayment.dueDate,
+      status: newPayment.status,
       method: newPayment.status === "Pago" ? "Cartão de Crédito" : "",
+      plan: newPayment.plan,
       invoice: `INV-2025-${(payments.length + 1).toString().padStart(3, "0")}`,
     }
 

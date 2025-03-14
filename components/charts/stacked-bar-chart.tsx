@@ -69,7 +69,7 @@ export function StackedBarChartComponent({ data, title, description }: StackedBa
   }, [])
 
   return (
-    <Card>
+    <Card className="w-full">
       <style>
         {`
           .recharts-rectangle.recharts-tooltip-cursor {
