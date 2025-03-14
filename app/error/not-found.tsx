@@ -1,4 +1,7 @@
+"use client"
+
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { AlertCircle, HomeIcon, RotateCcw } from "lucide-react"
 import { cn } from "@/lib/utils"
@@ -20,6 +23,8 @@ export default function NotFound({
   iconColor = "text-red-400",
   iconSize = "w-16 h-16"
 }: ErrorPageProps) {
+  const router = useRouter()
+
   return (
     <div className="flex flex-col items-center justify-center min-h-screen px-4">
       <div className="text-center max-w-md w-full justify-center items-center flex flex-col">
@@ -40,7 +45,7 @@ export default function NotFound({
         <div className="space-y-4">
           {showReload && (
             <Button 
-              onClick={() => window.location.reload()} 
+              onClick={() => router.refresh()} 
               variant="outline" 
               className="w-full"
             >

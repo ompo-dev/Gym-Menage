@@ -3,24 +3,25 @@
 import { useEffect } from "react"
 import { usePathname, useSearchParams } from "next/navigation"
 import { useSidebarStore } from "@/lib/store/sidebar-store"
+import { Suspense } from "react"
 
-export function StudentSidebarInitializer() {
-  const pathname = usePathname()
+function StudentSidebarInitializerContent() {
   const searchParams = useSearchParams()
-  const setActiveRoute = useSidebarStore((state) => state.setActiveRoute)
+  const pathname = usePathname()
+  const { setActiveRoute } = useSidebarStore()
 
   useEffect(() => {
-    // Construir a rota ativa baseada nos parâmetros da URL
-    const params = Array.from(searchParams.entries())
-    if (params.length > 0) {
-      // Se houver parâmetros, construir a URL com todos eles
-      const queryString = params.map(([key, value]) => `${key}${value ? `=${value}` : ""}`).join("&")
-      setActiveRoute(`/students?${queryString}`)
-    } else {
-      // Se não houver parâmetros, usar apenas o pathname
-      setActiveRoute(pathname)
-    }
+    // Atualiza a rota ativa com base no pathname e searchParams
+    setActiveRoute(pathname + (searchParams.toString() ? `?${searchParams.toString()}` : ""))
   }, [pathname, searchParams, setActiveRoute])
 
   return null
+}
+
+export function StudentSidebarInitializer() {
+  return (
+    <Suspense>
+      <StudentSidebarInitializerContent />
+    </Suspense>
+  )
 } 

@@ -1,34 +1,36 @@
 "use client"
 
-import * as React from "react"
+import { Fragment } from "react"
 import { useSearchParams } from "next/navigation"
 import { ChevronRight } from "lucide-react"
+import { Suspense } from "react"
 
-const routeMap = {
-  overview: "Início",
+const breadcrumbMap = {
+  overview: "Visão Geral",
+  profile: "Perfil",
   workouts: "Treinos",
   measurements: "Medidas",
-  diet: "Dieta",
-  schedule: "Agenda",
-  profile: "Perfil",
+  payments: "Pagamentos",
+  schedule: "Horários",
+}
+
+function StudentBreadcrumbContent() {
+  const searchParams = useSearchParams()
+  const currentPage = Object.keys(breadcrumbMap).find((key) => searchParams.has(key)) || "overview"
+
+  return (
+    <div className="flex items-center gap-1 text-sm">
+      <span>Área do Aluno</span>
+      <ChevronRight className="h-4 w-4" />
+      <span>{breadcrumbMap[currentPage as keyof typeof breadcrumbMap]}</span>
+    </div>
+  )
 }
 
 export function StudentBreadcrumb() {
-  const searchParams = useSearchParams()
-  const currentPage = React.useMemo(() => {
-    if (searchParams.has("workouts")) return "workouts"
-    if (searchParams.has("measurements")) return "measurements"
-    if (searchParams.has("diet")) return "diet"
-    if (searchParams.has("schedule")) return "schedule"
-    if (searchParams.has("profile")) return "profile"
-    return "overview"
-  }, [searchParams])
-
   return (
-    <nav className="flex items-center gap-1 text-sm">
-      <span className="text-muted-foreground">Aluno</span>
-      <ChevronRight className="size-4 text-muted-foreground" />
-      <span>{routeMap[currentPage as keyof typeof routeMap]}</span>
-    </nav>
+    <Suspense>
+      <StudentBreadcrumbContent />
+    </Suspense>
   )
 } 

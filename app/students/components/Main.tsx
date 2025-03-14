@@ -1,7 +1,7 @@
 "use client"
 
 import { useSearchParams } from "next/navigation"
-import { useCallback, useEffect, useState } from "react"
+import { useCallback, useEffect, useState, Suspense } from "react"
 import dynamic from "next/dynamic"
 import { PageSkeleton } from "@/app/dashboard/components/PageSkeleton"
 
@@ -35,7 +35,7 @@ const DynamicPages = {
   })
 }
 
-export function Main() {
+function MainContent() {
   const searchParams = useSearchParams()
   const [currentComponent, setCurrentComponent] = useState<AvailablePages>("overview")
   
@@ -63,5 +63,13 @@ export function Main() {
     <div className="container p-4 md:p-6">
       <PageComponent />
     </div>
+  )
+}
+
+export function Main() {
+  return (
+    <Suspense fallback={<PageSkeleton />}>
+      <MainContent />
+    </Suspense>
   )
 } 
