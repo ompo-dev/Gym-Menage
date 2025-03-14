@@ -72,8 +72,12 @@ export function StackedBarChartComponent({ data, title, description }: StackedBa
     <Card>
       <style>
         {`
-          .recharts-bar-rectangle:hover {
-            fill: inherit !important;
+          .recharts-rectangle.recharts-tooltip-cursor {
+            z-index: -1;
+            transform: translateY(8px);
+          }
+          .recharts-bar-rectangles {
+            z-index: 1;
           }
         `}
       </style>
@@ -99,6 +103,7 @@ export function StackedBarChartComponent({ data, title, description }: StackedBa
                 left: 10,
                 bottom: 0,
               }}
+              barGap={20}
             >
               <XAxis
                 dataKey="month"
@@ -118,21 +123,25 @@ export function StackedBarChartComponent({ data, title, description }: StackedBa
                 dataKey="mensalidades"
                 stackId="revenue"
                 fill="hsl(var(--primary))"
-                radius={[4, 4, 0, 0]}
+                radius={[4, 4, 4, 4]}                
               />
               <Bar
                 dataKey="produtos"
                 stackId="revenue"
                 fill="hsl(var(--primary)/.6)"
-                radius={[4, 4, 0, 0]}
+                radius={[4, 4, 4, 4]}
               />
               <Bar
                 dataKey="servicos"
                 stackId="revenue"
                 fill="hsl(var(--primary)/.3)"
-                radius={[4, 4, 0, 0]}
+                radius={[4, 4, 4, 4]}
               />
               <Tooltip
+                cursor={{
+                  fill: "rgb(243 244 246 / 0.05)",
+                  radius: 5
+                }}
                 content={({ active, payload, label }) => (
                   <ChartTooltip
                     active={active}

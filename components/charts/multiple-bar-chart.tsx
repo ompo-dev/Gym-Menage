@@ -43,6 +43,17 @@ const chartConfig = {
 export function MultipleBarChartComponent({ data, title, description }: MultipleBarChartProps) {
   return (
     <Card>
+      <style>
+        {`
+          .recharts-rectangle.recharts-tooltip-cursor {
+            z-index: -1;
+            transform: translateY(8px);
+          }
+          .recharts-bar-rectangles {
+            z-index: 1;
+          }
+        `}
+      </style>
       <CardHeader>
         <CardTitle>{title}</CardTitle>
         {description && <CardDescription>{description}</CardDescription>}
@@ -83,6 +94,10 @@ export function MultipleBarChartComponent({ data, title, description }: Multiple
                 radius={[4, 4, 0, 0]}
               />
               <Tooltip
+                cursor={{
+                  fill: "rgb(243 244 246 / 0.05)",
+                  radius: 5
+                }}
                 content={({ active, payload, label }) => (
                   <ChartTooltip
                     active={active}

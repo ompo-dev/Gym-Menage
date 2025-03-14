@@ -21,16 +21,17 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
   // Aplica a cor de destaque quando montar e quando mudar
   useEffect(() => {
     const root = window.document.documentElement
-    const hues = {
-      blue: "217",
-      green: "142",
-      red: "0",
-      purple: "262",
-      orange: "24",
-      yellow: "41",
-      pink: "322",
+    const colors = {
+      blue: "235 40% 60%",
+      green: "142 71% 45%",
+      red: "0 84% 60%",
+      purple: "262 83% 58%",
+      orange: "24 95% 53%",
+      yellow: "41 96% 50%",
+      pink: "322 81% 60%",
     }
-    root.style.setProperty("--primary-hue", hues[accent as keyof typeof hues] || "217")
+    root.style.setProperty("--primary", colors[accent as keyof typeof colors] || "235 40% 60%")
+    root.style.setProperty("--ring", colors[accent as keyof typeof colors] || "235 40% 60%")
   }, [accent])
 
   return <>{children}</>
