@@ -6,7 +6,7 @@ import { ThemeInitializer } from "@/components/theme-initializer"
 import { SidebarInitializer } from "@/components/sidebar-initializer"
 import { NuqsProvider } from '@/components/providers/nuqs-provider'
 import { ErrorBoundary } from 'react-error-boundary'
-import { NotFound } from '@/app/components/error'
+import { NotFound } from '@/app/error'
 
 const inter = Inter({ subsets: ['latin'] })
 

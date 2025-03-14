@@ -8,7 +8,10 @@ import { StudentSidebarInitializer } from "./components/student-sidebar-initiali
 import { Main } from "./components/Main"
 import { Separator } from "@/components/ui/separator"
 import { ErrorBoundary } from 'react-error-boundary'
-import { NotFound } from '@/app/components/error'
+import { NotFound, UnauthorizedPage } from '@/app/error/index'
+
+// TODO: Integrar com sistema de autenticação
+const hasAccess = false // Simula verificação de acesso
 
 export default function StudentsLayout() {
   const [mounted, setMounted] = React.useState(false)
@@ -19,6 +22,21 @@ export default function StudentsLayout() {
 
   if (!mounted) {
     return null
+  }
+
+  // Se não tiver acesso, mostra página de acesso restrito
+  if (!hasAccess) {
+    return (
+      <UnauthorizedPage
+        title="Acesso Restrito"
+        message="Você precisa ser um aluno para acessar esta área."
+        loginLink="/login"
+        homeLink="/"
+        loginButtonText="Fazer login como aluno"
+        homeButtonText="Voltar para página inicial"
+        supportMessage="Se você é um aluno e está vendo esta mensagem, por favor entre em contato com a academia."
+      />
+    )
   }
 
   return (

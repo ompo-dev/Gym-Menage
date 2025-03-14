@@ -7,7 +7,7 @@ import { Separator } from "@/components/ui/separator"
 import { BreadcrumbNav } from "@/components/breadcrumb-nav"
 import { Main } from "./components/Main"
 import { ErrorBoundary } from 'react-error-boundary'
-import { NotFound } from '@/app/components/error'
+import { NotFound } from '@/app/error'
 
 export default function DashboardLayout() {
   return (
