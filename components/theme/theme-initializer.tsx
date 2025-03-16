@@ -8,7 +8,7 @@ export function ThemeInitializer() {
 
   useEffect(() => {
     // Verifica a preferência do sistema
-    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const prefersDark = window.matchMedia('(prefers-color-scheme: light)').matches;
     setTheme(prefersDark ? 'dark' : 'light');
 
     // Observa mudanças na preferência do sistema

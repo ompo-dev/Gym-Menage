@@ -8,9 +8,7 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb';
-import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { useQueryState } from 'nuqs';
 import * as React from 'react';
 
 type RouteMap = {
@@ -64,7 +62,6 @@ const studentRouteMap: RouteMap = {
 function AppBreadcrumbContent() {
   const router = useRouter();
   const pathname = usePathname();
-  const [searchParams] = useQueryState('', { history: 'push' });
 
   // Determina se estamos na área de dashboard ou de estudantes
   const isStudentArea = pathname.includes('/students');
@@ -77,18 +74,48 @@ function AppBreadcrumbContent() {
     router.push(href);
   };
 
+  // Estado para armazenar os parâmetros da URL
+  const [queryString, setQueryString] = React.useState('');
+
+  // Atualiza os parâmetros da URL quando o componente é montado e quando a URL muda
+  React.useEffect(() => {
+    // Certifica-se de que estamos no cliente antes de acessar window
+    if (typeof window !== 'undefined') {
+      const updateQueryString = () => {
+        const currentSearchParams = new URLSearchParams(window.location.search);
+        setQueryString(currentSearchParams.toString());
+      };
+
+      // Atualiza imediatamente
+      updateQueryString();
+
+      // Adiciona um listener para detectar mudanças na URL
+      window.addEventListener('popstate', updateQueryString);
+
+      // No App Router, precisamos usar o evento 'hashchange' ou 'popstate'
+      // para detectar mudanças na URL, já que não temos mais router.events
+      window.addEventListener('hashchange', updateQueryString);
+
+      // Limpa os listeners quando o componente é desmontado
+      return () => {
+        window.removeEventListener('popstate', updateQueryString);
+        window.removeEventListener('hashchange', updateQueryString);
+      };
+    }
+  }, []);
+
   // Função para depuração
   React.useEffect(() => {
-    console.log('Search Params:', searchParams);
+    console.log('Query String:', queryString);
     console.log('Pathname:', pathname);
 
     // Verificamos se o primeiro parâmetro está no mapa de rotas
-    if (searchParams) {
-      const firstParam = searchParams.split('&')[0];
+    if (queryString) {
+      const firstParam = queryString.split('&')[0].split('=')[0];
       console.log('First Param:', firstParam);
       console.log('In Route Map:', !!routeMap[firstParam]);
     }
-  }, [searchParams, pathname, routeMap]);
+  }, [queryString, pathname, routeMap]);
 
   const getBreadcrumbs = () => {
     // Primeiro item sempre é a rota base
@@ -96,17 +123,14 @@ function AppBreadcrumbContent() {
       {
         href: baseRoute,
         label: routeMap[baseRoute],
-        isLast: !searchParams,
+        isLast: !queryString,
       },
     ];
 
     // Se não temos parâmetros de busca, retornamos apenas o item base
-    if (!searchParams) {
+    if (!queryString) {
       return breadcrumbs;
     }
-
-    // Obtemos todos os parâmetros de busca como string
-    const queryString = searchParams;
 
     // Verificamos se temos um parâmetro sem valor (ex: ?clients)
     // Este é o formato específico usado na aplicação
