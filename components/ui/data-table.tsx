@@ -134,6 +134,7 @@ export function DataTable<TData>({
     pageSize: 10,
   });
   const inputRef = useRef<HTMLInputElement>(null);
+  const tableContainerRef = useRef<HTMLDivElement>(null);
 
   const [sorting, setSorting] = useState<SortingState>([]);
 
@@ -164,6 +165,15 @@ export function DataTable<TData>({
       columnFilters,
       columnVisibility,
     },
+  });
+
+  // Set up virtualizer
+  const { rows } = table.getRowModel();
+  const rowVirtualizer = useVirtualizer({
+    count: rows.length,
+    getScrollElement: () => tableContainerRef.current,
+    estimateSize: () => 48, // Approximate row height
+    overscan: 10,
   });
 
   // Get unique status values if statusColumn is provided
@@ -217,16 +227,6 @@ export function DataTable<TData>({
 
     column.setFilterValue(newFilterValue.length ? newFilterValue : undefined);
   };
-
-  const tableContainerRef = useRef<HTMLDivElement>(null);
-
-  // Configuração do virtualizador
-  const rowVirtualizer = useVirtualizer({
-    count: table.getRowModel().rows.length,
-    getScrollElement: () => tableContainerRef.current,
-    estimateSize: () => 48, // altura estimada de cada linha em pixels
-    overscan: 10, // número de linhas para renderizar além da área visível
-  });
 
   return (
     <div className="space-y-4">
@@ -391,11 +391,11 @@ export function DataTable<TData>({
 
       {/* Table */}
       <div
+        className="bg-background overflow-hidden rounded-md border"
         ref={tableContainerRef}
-        className="bg-background overflow-auto rounded-md border"
-        style={{ height: '500px' }} // Altura fixa para o container da tabela
+        style={{ maxHeight: '80vh', overflow: 'auto' }}
       >
-        <Table className="table-fixed relative">
+        <Table className="table-fixed">
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id} className="hover:bg-transparent">
@@ -456,35 +456,52 @@ export function DataTable<TData>({
               </TableRow>
             ))}
           </TableHeader>
-          <TableBody
-            style={{
-              height: `${rowVirtualizer.getTotalSize()}px`,
-              position: 'relative',
-            }}
-          >
-            {rowVirtualizer.getVirtualItems().map((virtualRow) => {
-              const row = table.getRowModel().rows[virtualRow.index];
-              return (
-                <TableRow
-                  key={row.id}
-                  data-state={row.getIsSelected() && 'selected'}
+          <TableBody>
+            {rows?.length ? (
+              <>
+                {/* Add padding to ensure proper scrolling */}
+                <tr style={{ height: `${rowVirtualizer.getVirtualItems()[0]?.start || 0}px` }} />
+
+                {rowVirtualizer.getVirtualItems().map((virtualRow) => {
+                  const row = rows[virtualRow.index];
+                  return (
+                    <TableRow
+                      key={row.id}
+                      data-state={row.getIsSelected() && 'selected'}
+                      data-index={virtualRow.index}
+                      ref={(el) => {
+                        if (el) {
+                          rowVirtualizer.measureElement(el);
+                        }
+                      }}
+                    >
+                      {row.getVisibleCells().map((cell) => (
+                        <TableCell key={cell.id} className="last:py-0">
+                          {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                        </TableCell>
+                      ))}
+                    </TableRow>
+                  );
+                })}
+
+                {/* Add padding to ensure proper scrolling */}
+                <tr
                   style={{
-                    height: `${virtualRow.size}px`,
-                    transform: `translateY(${virtualRow.start}px)`,
-                    position: 'absolute',
-                    top: 0,
-                    left: 0,
-                    width: '100%',
+                    height: `${
+                      rowVirtualizer.getTotalSize() -
+                      (rowVirtualizer.getVirtualItems()[rowVirtualizer.getVirtualItems().length - 1]
+                        ?.end || 0)
+                    }px`,
                   }}
-                >
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id} className="last:py-0">
-                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                    </TableCell>
-                  ))}
-                </TableRow>
-              );
-            })}
+                />
+              </>
+            ) : (
+              <TableRow>
+                <TableCell colSpan={columns.length} className="h-24 text-center">
+                  No results.
+                </TableCell>
+              </TableRow>
+            )}
           </TableBody>
         </Table>
       </div>
