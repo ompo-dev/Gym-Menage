@@ -2,8 +2,7 @@
 
 import { PageSkeleton } from '@/components/PageSkeleton';
 import dynamic from 'next/dynamic';
-import { usePathname, useRouter } from 'next/navigation';
-import { useQueryState } from 'nuqs';
+import { useSearchParams } from 'next/navigation';
 import { Suspense, useCallback, useEffect, useState } from 'react';
 
 type AvailablePages =
@@ -48,18 +47,26 @@ const DynamicPages = {
 };
 
 function MainContent() {
-  const [searchParams] = useQueryState('', { history: 'push' });
+  const searchParams = useSearchParams();
   const [currentComponent, setCurrentComponent] = useState<AvailablePages>('overview');
+
+  // Adicionar um useEffect para capturar mudanças na URL
+  useEffect(() => {
+    console.log('Dashboard Main component mounted/updated, searchParams:', searchParams.toString());
+  }, [searchParams]);
 
   // Função para determinar qual página exibir baseado nos parâmetros de busca
   const getCurrentPage = useCallback((): AvailablePages => {
-    // Verifica cada parâmetro de busca
-    if (searchParams?.includes('clients')) return 'clients';
-    if (searchParams?.includes('employees')) return 'employees';
-    if (searchParams?.includes('equipment')) return 'equipment';
-    if (searchParams?.includes('payments')) return 'payments';
-    if (searchParams?.includes('reports')) return 'reports';
-    if (searchParams?.includes('schedule')) return 'schedule';
+    const paramsString = searchParams.toString();
+    console.log('Search Params (Dashboard Main.tsx):', paramsString);
+
+    // Verificar cada parâmetro
+    if (paramsString.includes('clients')) return 'clients';
+    if (paramsString.includes('employees')) return 'employees';
+    if (paramsString.includes('equipment')) return 'equipment';
+    if (paramsString.includes('payments')) return 'payments';
+    if (paramsString.includes('reports')) return 'reports';
+    if (paramsString.includes('schedule')) return 'schedule';
 
     // Se não houver parâmetros, retorna a página inicial
     return 'overview';
@@ -67,8 +74,13 @@ function MainContent() {
 
   useEffect(() => {
     const newPage = getCurrentPage();
-    setCurrentComponent(newPage);
-  }, [getCurrentPage]);
+    console.log('Dashboard Current Component:', currentComponent, 'New Page:', newPage);
+
+    // Só atualiza se for diferente para evitar loops
+    if (newPage !== currentComponent) {
+      setCurrentComponent(newPage);
+    }
+  }, [getCurrentPage, currentComponent]);
 
   const PageComponent = DynamicPages[currentComponent];
 

@@ -12,9 +12,8 @@ import {
   SidebarMenuSubItem,
 } from '@/components/ui/sidebar';
 import { ChevronRight, type LucideIcon } from 'lucide-react';
-import { usePathname, useRouter } from 'next/navigation';
-import { useQueryState } from 'nuqs';
-import { Suspense } from 'react';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { Suspense, useEffect } from 'react';
 import type { SidebarNavItem } from './app-sidebar';
 
 function NavMainContent({
@@ -26,7 +25,12 @@ function NavMainContent({
 }) {
   const router = useRouter();
   const pathname = usePathname();
-  const [searchParams] = useQueryState('', { history: 'push' });
+  const searchParams = useSearchParams();
+
+  // Log para depuração
+  useEffect(() => {
+    console.log('NavMain - searchParams:', searchParams.toString());
+  }, [searchParams]);
 
   const handleNavigation = (
     e: React.MouseEvent<HTMLAnchorElement>,
@@ -35,32 +39,45 @@ function NavMainContent({
   ) => {
     e.preventDefault();
 
+    // Log para depuração
+    console.log('Navigation triggered:', { url, param, userRole, pathname });
+
     if (userRole === 'admin' && url) {
       // Extrair apenas os parâmetros de busca da URL
       const queryString = url.split('?')[1] || '';
+      console.log('Admin navigation - Query String:', queryString);
+
       // Atualizar a URL sem recarregar a página
-      router.push(`${pathname}${queryString ? `?${queryString}` : ''}`, { scroll: false });
+      const newUrl = `${pathname}${queryString ? `?${queryString}` : ''}`;
+      console.log('Admin navigation - New URL:', newUrl);
+
+      // Usar router.replace em vez de router.push para garantir que a URL seja atualizada
+      router.replace(newUrl, { scroll: false });
     } else if (userRole === 'student') {
       // Para estudantes, usamos o sistema de parâmetros
       if (param) {
-        router.push(`/students?${param}`);
+        console.log('Student navigation - Param:', param);
+        router.replace(`/students?${param}`);
       } else {
-        router.push('/students');
+        router.replace('/students');
       }
     }
   };
 
   // Verifica se um item está ativo com base no URL ou parâmetros
   const isItemActive = (item: SidebarNavItem): boolean => {
+    // Usar searchParams para verificação
+    const paramsString = searchParams.toString();
+
     if (userRole === 'admin' && item.url) {
       // Para admin, verificamos se a URL atual contém a URL do item
-      const currentUrl = pathname + (searchParams ? `?${searchParams}` : '');
+      const currentUrl = pathname + (paramsString ? `?${paramsString}` : '');
       return item.isActive || currentUrl.includes(item.url);
     }
 
     if (userRole === 'student' && item.param) {
       // Para estudantes, verificamos se o parâmetro está presente
-      return item.isActive || !!searchParams?.includes(item.param);
+      return item.isActive || !!paramsString?.includes(item.param);
     }
 
     return item.isActive || false;

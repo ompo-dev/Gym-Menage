@@ -2,7 +2,7 @@
 
 import { PageSkeleton } from '@/components/PageSkeleton';
 import dynamic from 'next/dynamic';
-import { useQueryState } from 'nuqs';
+import { useSearchParams } from 'next/navigation';
 import { Suspense, useCallback, useEffect, useState } from 'react';
 
 type AvailablePages = 'overview' | 'workouts' | 'measurements' | 'diet' | 'schedule' | 'profile';
@@ -36,17 +36,24 @@ const DynamicPages = {
 };
 
 function MainContent() {
-  const [searchParams] = useQueryState('', { history: 'push' });
+  const searchParams = useSearchParams();
   const [currentComponent, setCurrentComponent] = useState<AvailablePages>('overview');
+
+  useEffect(() => {
+    console.log('Student Main component mounted/updated, searchParams:', searchParams.toString());
+  }, [searchParams]);
 
   // Função para determinar qual página exibir baseado nos parâmetros de busca
   const getCurrentPage = useCallback((): AvailablePages => {
+    const paramsString = searchParams.toString();
+    console.log('Search Params (Student Main.tsx):', paramsString);
+
     // Verifica cada parâmetro de busca
-    if (searchParams?.includes('workouts')) return 'workouts';
-    if (searchParams?.includes('measurements')) return 'measurements';
-    if (searchParams?.includes('diet')) return 'diet';
-    if (searchParams?.includes('schedule')) return 'schedule';
-    if (searchParams?.includes('profile')) return 'profile';
+    if (paramsString.includes('workouts')) return 'workouts';
+    if (paramsString.includes('measurements')) return 'measurements';
+    if (paramsString.includes('diet')) return 'diet';
+    if (paramsString.includes('schedule')) return 'schedule';
+    if (paramsString.includes('profile')) return 'profile';
 
     // Se não houver parâmetros, retorna a página inicial
     return 'overview';
@@ -54,8 +61,12 @@ function MainContent() {
 
   useEffect(() => {
     const newPage = getCurrentPage();
-    setCurrentComponent(newPage);
-  }, [getCurrentPage]);
+    console.log('Student Current Component:', currentComponent, 'New Page:', newPage);
+
+    if (newPage !== currentComponent) {
+      setCurrentComponent(newPage);
+    }
+  }, [getCurrentPage, currentComponent]);
 
   const PageComponent = DynamicPages[currentComponent];
 
