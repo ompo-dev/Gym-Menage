@@ -1,44 +1,43 @@
-"use client"
+'use client';
 
-import * as React from "react"
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts"
-
+import * as React from 'react';
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
+  Bar,
+  BarChart,
+  CartesianGrid,
+  Legend,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
+} from 'recharts';
 
-import {
-  ChartConfig,
-  ChartContainer,
-  ChartTooltip,
-} from "@/components/ui/chart"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+
+import { ChartConfig, ChartContainer, ChartTooltip } from '@/components/ui/chart';
 
 export interface WorkoutData {
-  name: string
-  completed: number
-  missed: number
+  name: string;
+  completed: number;
+  missed: number;
 }
 
 interface MultipleBarChartProps {
-  data: WorkoutData[]
-  title: string
-  description?: string
+  data: WorkoutData[];
+  title: string;
+  description?: string;
 }
 
 const chartConfig = {
   completed: {
-    label: "Realizados",
-    color: "hsl(var(--primary))"
+    label: 'Realizados',
+    color: 'hsl(var(--primary))',
   },
   missed: {
-    label: "Perdidos",
-    color: "hsl(var(--destructive))"
-  }
-}
+    label: 'Perdidos',
+    color: 'hsl(var(--destructive))',
+  },
+};
 
 export function MultipleBarChartComponent({ data, title, description }: MultipleBarChartProps) {
   return (
@@ -77,35 +76,25 @@ export function MultipleBarChartComponent({ data, title, description }: Multiple
                 fontSize={12}
                 tickMargin={8}
               />
-              <YAxis
-                tickLine={false}
-                axisLine={false}
-                fontSize={12}
-                tickMargin={8}
-              />
-              <Bar
-                dataKey="completed"
-                fill="hsl(var(--primary))"
-                radius={[4, 4, 0, 0]}
-              />
-              <Bar
-                dataKey="missed"
-                fill="hsl(var(--destructive))"
-                radius={[4, 4, 0, 0]}
-              />
+              <YAxis tickLine={false} axisLine={false} fontSize={12} tickMargin={8} />
+              <Bar dataKey="completed" fill="hsl(var(--primary))" radius={[4, 4, 0, 0]} />
+              <Bar dataKey="missed" fill="hsl(var(--destructive))" radius={[4, 4, 0, 0]} />
               <Tooltip
                 cursor={{
-                  fill: "rgb(243 244 246 / 0.05)",
-                  radius: 5
+                  fill: 'rgb(243 244 246 / 0.05)',
+                  radius: 5,
                 }}
                 content={({ active, payload, label }) => (
                   <ChartTooltip
                     active={active}
-                    payload={payload?.map(item => ({
+                    payload={payload?.map((item) => ({
                       value: item.value as number,
                       name: item.name || '',
-                      color: item.dataKey === 'completed' ? 'hsl(var(--primary))' : 'hsl(var(--destructive))',
-                      dataKey: item.dataKey || ''
+                      color:
+                        item.dataKey === 'completed'
+                          ? 'hsl(var(--primary))'
+                          : 'hsl(var(--destructive))',
+                      dataKey: item.dataKey || '',
                     }))}
                     label={label}
                     config={chartConfig}
@@ -117,5 +106,5 @@ export function MultipleBarChartComponent({ data, title, description }: Multiple
         </ChartContainer>
       </CardContent>
     </Card>
-  )
-} 
+  );
+}

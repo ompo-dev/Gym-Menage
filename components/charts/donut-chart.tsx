@@ -1,51 +1,45 @@
-"use client"
+'use client';
 
-import * as React from "react"
-import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip } from "recharts"
+import * as React from 'react';
+import { Cell, Legend, Pie, PieChart, ResponsiveContainer, Tooltip } from 'recharts';
 
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 
 import {
   ChartConfig,
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
-} from "@/components/ui/chart"
+} from '@/components/ui/chart';
 
 export interface PlanData {
-  name: string
-  value: number
+  name: string;
+  value: number;
 }
 
 interface DonutChartProps {
-  data: PlanData[]
-  title: string
-  description?: string
+  data: PlanData[];
+  title: string;
+  description?: string;
 }
 
 const chartConfig = {
   plan: {
-    label: "Plano",
-    color: "hsl(var(--primary))"
-  }
-}
+    label: 'Plano',
+    color: 'hsl(var(--primary))',
+  },
+};
 
 const COLORS = [
-  "hsl(var(--primary))",
-  "hsl(var(--primary)/.8)",
-  "hsl(var(--primary)/.6)",
-  "hsl(var(--primary)/.4)",
-  "hsl(var(--primary)/.2)",
-]
+  'hsl(var(--primary))',
+  'hsl(var(--primary)/.8)',
+  'hsl(var(--primary)/.6)',
+  'hsl(var(--primary)/.4)',
+  'hsl(var(--primary)/.2)',
+];
 
 export function DonutChartComponent({ data, title, description }: DonutChartProps) {
-  const total = data.reduce((sum, item) => sum + item.value, 0)
+  const total = data.reduce((sum, item) => sum + item.value, 0);
 
   return (
     <Card>
@@ -67,27 +61,24 @@ export function DonutChartComponent({ data, title, description }: DonutChartProp
                 dataKey="value"
               >
                 {data.map((entry, index) => (
-                  <Cell 
-                    key={`cell-${index}`} 
-                    fill={COLORS[index % COLORS.length]} 
-                  />
+                  <Cell key={`cell-${entry.name}`} fill={COLORS[index % COLORS.length]} />
                 ))}
               </Pie>
               <Tooltip
                 content={({ active, payload, label }) => (
                   <ChartTooltip
                     active={active}
-                    payload={payload?.map(item => ({
+                    payload={payload?.map((item) => ({
                       value: item.value as number,
                       name: item.name || '',
-                      color: COLORS[data.findIndex(d => d.name === item.name) % COLORS.length],
-                      dataKey: 'plan'
+                      color: COLORS[data.findIndex((d) => d.name === item.name) % COLORS.length],
+                      dataKey: 'plan',
                     }))}
                     label={label}
                     config={chartConfig}
                     formatter={(value) => {
-                      const percentage = ((value / total) * 100).toFixed(1)
-                      return `${value} (${percentage}%)`
+                      const percentage = ((value / total) * 100).toFixed(1);
+                      return `${value} (${percentage}%)`;
                     }}
                   />
                 )}
@@ -97,5 +88,5 @@ export function DonutChartComponent({ data, title, description }: DonutChartProp
         </ChartContainer>
       </CardContent>
     </Card>
-  )
-} 
+  );
+}

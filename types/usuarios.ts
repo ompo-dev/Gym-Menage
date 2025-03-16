@@ -1,7 +1,7 @@
-import { Endereco, StatusAtivo } from './common';
-import { HistoricoPlano } from './planos';
+import type { Endereco, StatusAtivo } from './common';
+import type { HistoricoPlano } from './planos';
 
-export type Permissao = "admin" | "financeiro" | "relatorios" | "instrutor" | "recepcionista";
+export type Permissao = 'admin' | 'financeiro' | 'relatorios' | 'instrutor' | 'recepcionista';
 
 export interface Usuario {
   id: number;
@@ -23,7 +23,7 @@ export interface Cliente {
   cpf: string;
   telefone: string;
   dataNascimento: string;
-  genero: "masculino" | "feminino" | "outro";
+  genero: 'masculino' | 'feminino' | 'outro';
   endereco: Endereco;
   planoId: number;
   academiaId: number;
@@ -38,7 +38,7 @@ export interface Cliente {
   statusPagamento: {
     ultimoPagamento: string;
     proximoVencimento: string;
-    situacao: "Em dia" | "Atrasado" | "Pendente";
+    situacao: 'Em dia' | 'Atrasado' | 'Pendente';
   };
 }
 
@@ -66,4 +66,4 @@ export interface HistoricoVisita {
   horaSaida: string;
   duracao: number;
   aulasRealizadas: string[];
-} 
+}

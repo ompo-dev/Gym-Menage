@@ -1,31 +1,31 @@
-import Link from "next/link"
-import { Button } from "@/components/ui/button"
-import { LockIcon, HomeIcon } from "lucide-react"
-import { cn } from "@/lib/utils"
-import { UnauthorizedPageProps } from "./types"
+import { Button } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
+import { HomeIcon, LockIcon } from 'lucide-react';
+import Link from 'next/link';
+import type { UnauthorizedPageProps } from './types';
 
 export default function UnauthorizedPage({
-  title = "Opa, acesso restrito",
-  message = "Parece que você não tem permissão para acessar esta página.",
+  title = 'Opa, acesso restrito',
+  message = 'Parece que você não tem permissão para acessar esta página.',
   showLogin = true,
   showHome = true,
   customActions,
-  supportMessage = "Se você acha que isso é um erro, por favor entre em contato com o suporte.",
-  loginLink = "/login",
-  homeLink = "/",
-  loginButtonText = "Fazer login",
-  homeButtonText = "Voltar para a página inicial",
+  supportMessage = 'Se você acha que isso é um erro, por favor entre em contato com o suporte.',
+  loginLink = '/login',
+  homeLink = '/',
+  loginButtonText = 'Fazer login',
+  homeButtonText = 'Voltar para a página inicial',
   className,
   showIcon = true,
-  iconColor = "text-gray-400",
-  iconSize = "w-16 h-16"
+  iconColor = 'text-gray-400',
+  iconSize = 'w-16 h-16',
 }: UnauthorizedPageProps) {
   return (
-    <div className={cn("flex flex-col items-center justify-center min-h-screen px-4", className)}>
+    <div className={cn('flex flex-col items-center justify-center min-h-screen px-4', className)}>
       <div className="text-center max-w-md w-full justify-center items-center flex flex-col">
         {showIcon && (
           <div className="mb-8">
-            <LockIcon className={cn("mx-auto", iconColor, iconSize)} />
+            <LockIcon className={cn('mx-auto', iconColor, iconSize)} />
           </div>
         )}
         <h1 className="text-3xl font-bold text-gray-100 mb-2">{title}</h1>
@@ -54,5 +54,5 @@ export default function UnauthorizedPage({
         <p>{supportMessage}</p>
       </footer>
     </div>
-  )
-} 
+  );
+}

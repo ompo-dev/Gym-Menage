@@ -79,28 +79,28 @@ import {
 import { useId, useMemo, useRef, useState } from 'react';
 
 // Custom filter function for multi-column searching
-export const multiColumnFilterFn: FilterFn<Record<string, unknown>> = (
-  row,
-  columnId,
-  filterValue
-) => {
+export function multiColumnFilterFn<TData>(
+  row: Row<TData>,
+  columnId: string,
+  filterValue: string
+): boolean {
   const searchableRowContent = Object.values(row.original as Record<string, unknown>)
     .filter((value) => typeof value === 'string')
     .join(' ')
     .toLowerCase();
   const searchTerm = (filterValue ?? '').toLowerCase();
   return searchableRowContent.includes(searchTerm);
-};
+}
 
-export const statusFilterFn: FilterFn<Record<string, unknown>> = (
-  row,
-  columnId,
+export function statusFilterFn<TData>(
+  row: Row<TData>,
+  columnId: string,
   filterValue: string[]
-) => {
+): boolean {
   if (!filterValue?.length) return true;
   const status = row.getValue(columnId) as string;
   return filterValue.includes(status);
-};
+}
 
 export interface DataTableProps<TData> {
   data: TData[];

@@ -13,10 +13,7 @@
     "commit": "node scripts/commit.js"
   },
   "lint-staged": {
-    "*.{js,jsx,ts,tsx}": [
-      "biome check --write",
-      "biome format --write"
-    ]
+    "*.{js,jsx,ts,tsx}": ["biome check --write", "biome format --write"]
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.1",

@@ -1,53 +1,53 @@
-"use client"
+'use client';
 
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Separator } from "@/components/ui/separator"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Textarea } from "@/components/ui/textarea"
-import { Camera, Target, Trophy } from "lucide-react"
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Separator } from '@/components/ui/separator';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Textarea } from '@/components/ui/textarea';
+import { Camera, Target, Trophy } from 'lucide-react';
 
 // Dados de exemplo
 const studentData = {
-  name: "João Silva",
-  email: "joao.silva@email.com",
-  phone: "(11) 98765-4321",
-  birthdate: "1990-05-15",
+  name: 'João Silva',
+  email: 'joao.silva@email.com',
+  phone: '(11) 98765-4321',
+  birthdate: '1990-05-15',
   goals: [
     {
       id: 1,
-      title: "Perder Peso",
-      description: "Reduzir 10kg em 6 meses",
+      title: 'Perder Peso',
+      description: 'Reduzir 10kg em 6 meses',
       progress: 40,
-      target: "73kg",
-      current: "78kg",
+      target: '73kg',
+      current: '78kg',
     },
     {
       id: 2,
-      title: "Ganho de Massa",
-      description: "Aumentar massa magra",
+      title: 'Ganho de Massa',
+      description: 'Aumentar massa magra',
       progress: 60,
-      target: "35% massa magra",
-      current: "30% massa magra",
+      target: '35% massa magra',
+      current: '30% massa magra',
     },
   ],
   achievements: [
     {
       id: 1,
-      title: "30 Dias Seguidos",
-      description: "Treinou por 30 dias consecutivos",
-      date: "2024-02-15",
+      title: '30 Dias Seguidos',
+      description: 'Treinou por 30 dias consecutivos',
+      date: '2024-02-15',
     },
     {
       id: 2,
-      title: "Meta de Peso",
-      description: "Atingiu 50% da meta de peso",
-      date: "2024-03-01",
+      title: 'Meta de Peso',
+      description: 'Atingiu 50% da meta de peso',
+      date: '2024-03-01',
     },
   ],
-}
+};
 
 export default function ProfilePage() {
   return (
@@ -68,9 +68,7 @@ export default function ProfilePage() {
           <Card>
             <CardHeader>
               <CardTitle>Informações Pessoais</CardTitle>
-              <CardDescription>
-                Atualize suas informações de perfil
-              </CardDescription>
+              <CardDescription>Atualize suas informações de perfil</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="flex items-center gap-4">
@@ -78,7 +76,11 @@ export default function ProfilePage() {
                   <div className="h-24 w-24 rounded-full bg-primary/10">
                     <Camera className="h-8 w-8 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-muted-foreground" />
                   </div>
-                  <Button size="sm" variant="outline" className="absolute -bottom-2 left-1/2 -translate-x-1/2">
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    className="absolute -bottom-2 left-1/2 -translate-x-1/2"
+                  >
                     Alterar
                   </Button>
                 </div>
@@ -115,9 +117,7 @@ export default function ProfilePage() {
           <Card>
             <CardHeader>
               <CardTitle>Meus Objetivos</CardTitle>
-              <CardDescription>
-                Acompanhe seu progresso em direção aos objetivos
-              </CardDescription>
+              <CardDescription>Acompanhe seu progresso em direção aos objetivos</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
@@ -139,7 +139,9 @@ export default function ProfilePage() {
                     </CardContent>
                   </Card>
                 ))}
-                <Button variant="outline" className="w-full">Adicionar Novo Objetivo</Button>
+                <Button variant="outline" className="w-full">
+                  Adicionar Novo Objetivo
+                </Button>
               </div>
             </CardContent>
           </Card>
@@ -149,9 +151,7 @@ export default function ProfilePage() {
           <Card>
             <CardHeader>
               <CardTitle>Minhas Conquistas</CardTitle>
-              <CardDescription>
-                Suas conquistas e marcos alcançados
-              </CardDescription>
+              <CardDescription>Suas conquistas e marcos alcançados</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
@@ -177,5 +177,5 @@ export default function ProfilePage() {
         </TabsContent>
       </Tabs>
     </div>
-  )
-} 
+  );
+}

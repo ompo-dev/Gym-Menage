@@ -1,83 +1,83 @@
-'use client'
+'use client';
 
-import { useEffect, useState } from 'react'
-import Link from "next/link"
-import { 
-  ArrowRight, 
-  Smartphone, 
-  Building2, 
-  Users, 
-  Dumbbell, 
-  Calendar, 
-  CreditCard, 
-  BarChart, 
-  Shield, 
-  Cloud, 
-  Zap,
+import { Button } from '@/components/ui/button';
+import { AnimatePresence, motion } from 'framer-motion';
+import {
+  ArrowRight,
+  BarChart,
+  Building2,
+  Calendar,
   CheckCircle2,
-  Menu
-} from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { motion, AnimatePresence } from "framer-motion"
+  Cloud,
+  CreditCard,
+  Dumbbell,
+  Menu,
+  Shield,
+  Smartphone,
+  Users,
+  Zap,
+} from 'lucide-react';
+import Link from 'next/link';
+import { useEffect, useState } from 'react';
 
 const fadeIn = {
   initial: { opacity: 0, y: 20 },
   animate: { opacity: 1, y: 0 },
-  transition: { duration: 0.5 }
-}
+  transition: { duration: 0.5 },
+};
 
 const staggerChildren = {
   animate: {
     transition: {
-      staggerChildren: 0.1
-    }
-  }
-}
+      staggerChildren: 0.1,
+    },
+  },
+};
 
 export default function Home() {
-  const [scrolled, setScrolled] = useState(false)
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [scrolled, setScrolled] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
-      const isScrolled = window.scrollY > 20
-      setScrolled(isScrolled)
-    }
+      const isScrolled = window.scrollY > 20;
+      setScrolled(isScrolled);
+    };
 
-    window.addEventListener('scroll', handleScroll)
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [])
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   return (
     <div className="flex flex-col min-h-screen w-full justify-center items-center bg-gradient-to-b from-gray-50 to-white dark:from-gray-900 dark:to-gray-800">
-      <motion.header 
+      <motion.header
         initial={{ y: -100 }}
         animate={{ y: 0 }}
         className={`px-4 lg:px-6 h-20 flex items-center w-full fixed top-0 z-50 transition-all duration-300 ${
-          scrolled 
-            ? "bg-white/90 dark:bg-gray-900/90 backdrop-blur-md shadow-sm" 
-            : "bg-transparent"
+          scrolled ? 'bg-white/90 dark:bg-gray-900/90 backdrop-blur-md shadow-sm' : 'bg-transparent'
         }`}
       >
         <div className="container mx-auto flex items-center justify-between">
           <Link href="/" className="flex items-center">
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, scale: 0.5 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.5 }}
               className="flex items-center font-bold text-2xl gap-1"
             >
-              <span className="bg-gradient-to-r from-gray-800 to-gray-600 dark:from-gray-200 dark:to-gray-400 bg-clip-text text-transparent">Gym</span>
+              <span className="bg-gradient-to-r from-gray-800 to-gray-600 dark:from-gray-200 dark:to-gray-400 bg-clip-text text-transparent">
+                Gym
+              </span>
               <span className="text-gray-800 dark:text-white">Manage</span>
             </motion.div>
           </Link>
 
           <nav className="hidden md:flex items-center gap-1">
             {[
-              { href: "#features", label: "Funcionalidades" },
-              { href: "#benefits", label: "Benefícios" },
-              { href: "#app", label: "App" },
-              { href: "#pricing", label: "Preços" },
+              { href: '#features', label: 'Funcionalidades' },
+              { href: '#benefits', label: 'Benefícios' },
+              { href: '#app', label: 'App' },
+              { href: '#pricing', label: 'Preços' },
             ].map((item, index) => (
               <motion.div
                 key={item.href}
@@ -85,8 +85,8 @@ export default function Home() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.1 }}
               >
-                <Link 
-                  href={item.href} 
+                <Link
+                  href={item.href}
                   className="relative px-4 py-2 text-sm font-medium group hover:text-gray-800 dark:hover:text-gray-200 transition-colors"
                 >
                   {item.label}
@@ -103,9 +103,9 @@ export default function Home() {
               transition={{ delay: 0.4 }}
             >
               <Link href="/login">
-                <Button 
-                  variant="ghost" 
-                  size="sm" 
+                <Button
+                  variant="ghost"
+                  size="sm"
                   className="hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
                 >
                   Entrar
@@ -118,8 +118,8 @@ export default function Home() {
               transition={{ delay: 0.5 }}
             >
               <Link href="/register">
-                <Button 
-                  size="sm" 
+                <Button
+                  size="sm"
                   className="bg-gray-800 hover:bg-gray-700 dark:bg-gray-200 dark:hover:bg-gray-300 dark:text-gray-800 transition-colors"
                 >
                   Teste Grátis
@@ -128,7 +128,8 @@ export default function Home() {
             </motion.div>
           </div>
 
-          <button 
+          <button
+            type="button"
             className="md:hidden p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
           >
@@ -148,12 +149,12 @@ export default function Home() {
             <div className="container mx-auto py-4 px-4">
               <nav className="flex flex-col gap-2">
                 {[
-                  { href: "#features", label: "Funcionalidades" },
-                  { href: "#benefits", label: "Benefícios" },
-                  { href: "#app", label: "App" },
-                  { href: "#pricing", label: "Preços" },
+                  { href: '#features', label: 'Funcionalidades' },
+                  { href: '#benefits', label: 'Benefícios' },
+                  { href: '#app', label: 'App' },
+                  { href: '#pricing', label: 'Preços' },
                 ].map((item, index) => (
-                  <Link 
+                  <Link
                     key={item.href}
                     href={item.href}
                     className="px-4 py-2 text-sm font-medium hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
@@ -164,17 +165,15 @@ export default function Home() {
                 ))}
                 <div className="flex flex-col gap-2 mt-4 pt-4 border-t">
                   <Link href="/login" onClick={() => setMobileMenuOpen(false)}>
-                    <Button 
-                      variant="ghost" 
+                    <Button
+                      variant="ghost"
                       className="w-full hover:bg-gray-100 dark:hover:bg-gray-800"
                     >
                       Entrar
                     </Button>
                   </Link>
                   <Link href="/register" onClick={() => setMobileMenuOpen(false)}>
-                    <Button 
-                      className="w-full bg-gray-800 hover:bg-gray-700 dark:bg-gray-200 dark:hover:bg-gray-300 dark:text-gray-800"
-                    >
+                    <Button className="w-full bg-gray-800 hover:bg-gray-700 dark:bg-gray-200 dark:hover:bg-gray-300 dark:text-gray-800">
                       Teste Grátis
                     </Button>
                   </Link>
@@ -188,27 +187,25 @@ export default function Home() {
       <main className="flex-1 w-full pt-20">
         <section className="relative flex flex-col items-center justify-center w-full py-24 md:py-32 lg:py-48 overflow-hidden">
           <div className="absolute inset-0 bg-gradient-to-b from-gray-100/50 to-transparent dark:from-gray-800/30 -z-10" />
-          <motion.div 
+          <motion.div
             initial="initial"
             animate="animate"
             variants={staggerChildren}
             className="container px-4 md:px-6 relative"
           >
             <div className="grid gap-6 lg:grid-cols-2 lg:gap-12 xl:grid-cols-2">
-              <motion.div 
-                variants={fadeIn}
-                className="flex flex-col justify-center space-y-8"
-              >
+              <motion.div variants={fadeIn} className="flex flex-col justify-center space-y-8">
                 <div className="space-y-6">
                   <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl xl:text-6xl/none bg-gradient-to-r from-gray-700 to-gray-500 dark:from-gray-100 dark:to-white bg-clip-text text-transparent py-2">
                     Gestão Completa para Academias e Redes
                   </h1>
                   <p className="max-w-[600px] text-gray-500 md:text-xl dark:text-gray-300">
-                    Plataforma all-in-one para gestão de academias. Controle múltiplas unidades, alunos, treinos, pagamentos e muito mais em um só lugar.
+                    Plataforma all-in-one para gestão de academias. Controle múltiplas unidades,
+                    alunos, treinos, pagamentos e muito mais em um só lugar.
                   </p>
                 </div>
                 <div className="space-y-4">
-                  <motion.div 
+                  <motion.div
                     whileHover={{ x: 10 }}
                     className="flex gap-4 items-center p-4 rounded-lg bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm border border-gray-200 dark:border-gray-700"
                   >
@@ -217,7 +214,7 @@ export default function Home() {
                     </div>
                     <span className="font-medium">Gestão de múltiplas unidades</span>
                   </motion.div>
-                  <motion.div 
+                  <motion.div
                     whileHover={{ x: 10 }}
                     className="flex gap-4 items-center p-4 rounded-lg bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm border border-gray-200 dark:border-gray-700"
                   >
@@ -226,7 +223,7 @@ export default function Home() {
                     </div>
                     <span className="font-medium">App mobile para alunos</span>
                   </motion.div>
-                  <motion.div 
+                  <motion.div
                     whileHover={{ x: 10 }}
                     className="flex gap-4 items-center p-4 rounded-lg bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm border border-gray-200 dark:border-gray-700"
                   >
@@ -238,22 +235,26 @@ export default function Home() {
                 </div>
                 <div className="flex flex-col gap-3 min-[400px]:flex-row">
                   <Link href="/register">
-                    <Button size="lg" className="w-full bg-gray-800 hover:bg-gray-700 dark:bg-gray-200 dark:hover:bg-gray-300 dark:text-gray-800 transition-colors gap-2">
+                    <Button
+                      size="lg"
+                      className="w-full bg-gray-800 hover:bg-gray-700 dark:bg-gray-200 dark:hover:bg-gray-300 dark:text-gray-800 transition-colors gap-2"
+                    >
                       Teste Grátis 14 Dias
                       <ArrowRight className="h-4 w-4" />
                     </Button>
                   </Link>
                   <Link href="#demo">
-                    <Button size="lg" variant="outline" className="w-full border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-800">
+                    <Button
+                      size="lg"
+                      variant="outline"
+                      className="w-full border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-800"
+                    >
                       Ver demonstração
                     </Button>
                   </Link>
                 </div>
               </motion.div>
-              <motion.div 
-                variants={fadeIn}
-                className="flex items-center justify-center"
-              >
+              <motion.div variants={fadeIn} className="flex items-center justify-center">
                 <div className="relative">
                   <div className="absolute -inset-4 bg-gradient-to-r from-gray-200 to-gray-300 dark:from-gray-700 dark:to-gray-600 rounded-xl blur-xl opacity-20 animate-pulse" />
                   <img
@@ -269,16 +270,19 @@ export default function Home() {
           </motion.div>
         </section>
 
-        <section id="features" className="relative flex flex-col items-center justify-center w-full py-24 md:py-32 lg:py-32 bg-white dark:bg-gray-900">
+        <section
+          id="features"
+          className="relative flex flex-col items-center justify-center w-full py-24 md:py-32 lg:py-32 bg-white dark:bg-gray-900"
+        >
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_30%,rgba(243,244,246,0.6),transparent)] dark:bg-[radial-gradient(circle_at_30%_30%,rgba(31,41,55,0.5),transparent)] -z-10" />
           <motion.div
             initial="initial"
             whileInView="animate"
             viewport={{ once: true }}
-            variants={staggerChildren} 
+            variants={staggerChildren}
             className="container px-4 md:px-6"
           >
-            <motion.div 
+            <motion.div
               variants={fadeIn}
               className="flex flex-col items-center justify-center space-y-4 text-center"
             >
@@ -295,43 +299,59 @@ export default function Home() {
               {[
                 {
                   icon: Building2,
-                  title: "Gestão de Múltiplas Unidades",
-                  description: "Controle centralizado de toda sua rede de academias com métricas consolidadas e KPIs em tempo real.",
-                  features: ["Dashboard unificado", "Métricas consolidadas", "Controle de filiais"]
+                  title: 'Gestão de Múltiplas Unidades',
+                  description:
+                    'Controle centralizado de toda sua rede de academias com métricas consolidadas e KPIs em tempo real.',
+                  features: ['Dashboard unificado', 'Métricas consolidadas', 'Controle de filiais'],
                 },
                 {
                   icon: Users,
-                  title: "Gestão de Clientes",
-                  description: "Perfil completo dos alunos com histórico de treinos, avaliações e evolução.",
-                  features: ["Check-in em tempo real", "Histórico de frequência", "Objetivos e restrições"]
+                  title: 'Gestão de Clientes',
+                  description:
+                    'Perfil completo dos alunos com histórico de treinos, avaliações e evolução.',
+                  features: [
+                    'Check-in em tempo real',
+                    'Histórico de frequência',
+                    'Objetivos e restrições',
+                  ],
                 },
                 {
                   icon: Dumbbell,
-                  title: "Avaliações Físicas",
-                  description: "Sistema completo de avaliação física com medidas, fotos e comparativos.",
-                  features: ["Medidas bilaterais", "Registro fotográfico", "Cálculos automáticos"]
+                  title: 'Avaliações Físicas',
+                  description:
+                    'Sistema completo de avaliação física com medidas, fotos e comparativos.',
+                  features: ['Medidas bilaterais', 'Registro fotográfico', 'Cálculos automáticos'],
                 },
                 {
                   icon: Calendar,
-                  title: "Programas de Treino",
-                  description: "Crie e gerencie treinos personalizados com biblioteca de exercícios.",
-                  features: ["Biblioteca de exercícios", "Progressão de cargas", "Observações por exercício"]
+                  title: 'Programas de Treino',
+                  description:
+                    'Crie e gerencie treinos personalizados com biblioteca de exercícios.',
+                  features: [
+                    'Biblioteca de exercícios',
+                    'Progressão de cargas',
+                    'Observações por exercício',
+                  ],
                 },
                 {
                   icon: CreditCard,
-                  title: "Gestão Financeira",
-                  description: "Controle completo de mensalidades, pagamentos e inadimplência.",
-                  features: ["Múltiplos pagamentos", "Controle de inadimplência", "Relatórios detalhados"]
+                  title: 'Gestão Financeira',
+                  description: 'Controle completo de mensalidades, pagamentos e inadimplência.',
+                  features: [
+                    'Múltiplos pagamentos',
+                    'Controle de inadimplência',
+                    'Relatórios detalhados',
+                  ],
                 },
                 {
                   icon: BarChart,
-                  title: "Relatórios e Analytics",
-                  description: "Dashboard completo com métricas de negócio e previsões.",
-                  features: ["KPIs em tempo real", "Análise de retenção", "Previsões e tendências"]
+                  title: 'Relatórios e Analytics',
+                  description: 'Dashboard completo com métricas de negócio e previsões.',
+                  features: ['KPIs em tempo real', 'Análise de retenção', 'Previsões e tendências'],
                 },
               ].map((feature, index) => (
                 <motion.div
-                  key={index}
+                  key={`feature-${feature.title}`}
                   variants={fadeIn}
                   className="group relative flex flex-col space-y-4 rounded-2xl border border-gray-200 dark:border-gray-700 p-6 hover:border-gray-400 dark:hover:border-gray-500 transition-colors bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm"
                 >
@@ -340,12 +360,14 @@ export default function Home() {
                     <feature.icon className="h-6 w-6 text-gray-800 dark:text-gray-200" />
                   </div>
                   <div className="space-y-2 relative">
-                    <h3 className="text-xl font-bold text-gray-700 dark:text-gray-100 py-2">{feature.title}</h3>
+                    <h3 className="text-xl font-bold text-gray-700 dark:text-gray-100 py-2">
+                      {feature.title}
+                    </h3>
                     <p className="text-gray-500 dark:text-gray-300">{feature.description}</p>
                   </div>
                   <ul className="space-y-2 text-sm text-gray-600 dark:text-gray-400 relative">
-                    {feature.features.map((item, i) => (
-                      <li key={i} className="flex items-center gap-2">
+                    {feature.features.map((item) => (
+                      <li key={`feature-item-${item}`} className="flex items-center gap-2">
                         <div className="h-1.5 w-1.5 rounded-full bg-gray-400 dark:bg-gray-500" />
                         {item}
                       </li>
@@ -357,7 +379,10 @@ export default function Home() {
           </motion.div>
         </section>
 
-        <section id="app" className="relative flex flex-col items-center justify-center w-full py-24 md:py-32 lg:py-32 bg-gray-50 dark:bg-gray-800 overflow-hidden">
+        <section
+          id="app"
+          className="relative flex flex-col items-center justify-center w-full py-24 md:py-32 lg:py-32 bg-gray-50 dark:bg-gray-800 overflow-hidden"
+        >
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_70%,rgba(243,244,246,0.6),transparent)] dark:bg-[radial-gradient(circle_at_70%_70%,rgba(31,41,55,0.5),transparent)] -z-10" />
           <motion.div
             initial="initial"
@@ -383,7 +408,7 @@ export default function Home() {
                 </div>
               </motion.div>
               <motion.div
-                variants={fadeIn} 
+                variants={fadeIn}
                 className="flex flex-col justify-center space-y-8 order-1 lg:order-2"
               >
                 <div className="space-y-2">
@@ -397,37 +422,46 @@ export default function Home() {
                 <div className="grid gap-6 md:grid-cols-2">
                   {[
                     {
-                      title: "Treinos",
-                      description: "Acesso a todos os treinos e exercícios"
+                      title: 'Treinos',
+                      description: 'Acesso a todos os treinos e exercícios',
                     },
                     {
-                      title: "Agendamentos",
-                      description: "Reserve aulas e horários com personal"
+                      title: 'Agendamentos',
+                      description: 'Reserve aulas e horários com personal',
                     },
                     {
-                      title: "Evolução",
-                      description: "Acompanhamento de resultados e medidas"
+                      title: 'Evolução',
+                      description: 'Acompanhamento de resultados e medidas',
                     },
                     {
-                      title: "Pagamentos",
-                      description: "Visualização e pagamento de mensalidades"
+                      title: 'Pagamentos',
+                      description: 'Visualização e pagamento de mensalidades',
                     },
                   ].map((feature, index) => (
                     <motion.div
-                      key={index}
+                      key={`mobile-feature-${feature.title}-${index}`}
                       variants={fadeIn}
                       className="group space-y-2 p-4 rounded-xl hover:bg-white/50 dark:hover:bg-gray-700/50 transition-colors"
                     >
-                      <h3 className="font-bold text-lg text-gray-700 group-hover:text-gray-900 dark:text-gray-100 dark:group-hover:text-white transition-colors py-2">{feature.title}</h3>
+                      <h3 className="font-bold text-lg text-gray-700 group-hover:text-gray-900 dark:text-gray-100 dark:group-hover:text-white transition-colors py-2">
+                        {feature.title}
+                      </h3>
                       <p className="text-gray-500 dark:text-gray-300">{feature.description}</p>
                     </motion.div>
                   ))}
                 </div>
                 <div className="flex gap-4">
-                  <Button size="lg" className="bg-gradient-to-r from-primary to-purple-600 hover:opacity-90">
+                  <Button
+                    size="lg"
+                    className="bg-gradient-to-r from-primary to-purple-600 hover:opacity-90"
+                  >
                     Baixar App
                   </Button>
-                  <Button size="lg" variant="outline" className="hover:bg-white/50 dark:hover:bg-gray-700/50">
+                  <Button
+                    size="lg"
+                    variant="outline"
+                    className="hover:bg-white/50 dark:hover:bg-gray-700/50"
+                  >
                     Saiba mais
                   </Button>
                 </div>
@@ -436,7 +470,10 @@ export default function Home() {
           </motion.div>
         </section>
 
-        <section id="benefits" className="relative flex flex-col items-center justify-center w-full py-24 md:py-32 lg:py-32">
+        <section
+          id="benefits"
+          className="relative flex flex-col items-center justify-center w-full py-24 md:py-32 lg:py-32"
+        >
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_30%,rgba(243,244,246,0.6),transparent)] dark:bg-[radial-gradient(circle_at_70%_30%,rgba(31,41,55,0.5),transparent)] -z-10" />
           <motion.div
             initial="initial"
@@ -462,33 +499,42 @@ export default function Home() {
               {[
                 {
                   icon: Cloud,
-                  title: "100% em Nuvem",
-                  features: ["Acesso de qualquer lugar", "Backups automáticos", "Atualizações constantes"]
+                  title: '100% em Nuvem',
+                  features: [
+                    'Acesso de qualquer lugar',
+                    'Backups automáticos',
+                    'Atualizações constantes',
+                  ],
                 },
                 {
                   icon: Shield,
-                  title: "Segurança Total",
-                  features: ["Proteção LGPD", "Criptografia avançada", "Controle de acesso"]
+                  title: 'Segurança Total',
+                  features: ['Proteção LGPD', 'Criptografia avançada', 'Controle de acesso'],
                 },
                 {
                   icon: Zap,
-                  title: "Alta Performance",
-                  features: ["Sistema otimizado", "Carregamento rápido", "Suporte 24/7"]
+                  title: 'Alta Performance',
+                  features: ['Sistema otimizado', 'Carregamento rápido', 'Suporte 24/7'],
                 },
               ].map((benefit, index) => (
                 <motion.div
-                  key={index}
+                  key={`benefit-${benefit.title}`}
                   variants={fadeIn}
-                  className="group relative flex flex-col items-center text-center space-y-4 rounded-2xl border border-gray-200 dark:border-gray-700 p-8 hover:border-gray-400 dark:hover:border-gray-500 transition-colors bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm"
+                  className="group relative flex flex-col space-y-4 rounded-2xl border border-gray-200 dark:border-gray-700 p-6 hover:border-gray-400 dark:hover:border-gray-500 transition-colors bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm"
                 >
                   <div className="absolute inset-0 bg-gradient-to-br from-gray-50 to-transparent dark:from-gray-800/50 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity" />
                   <div className="relative h-16 w-16 rounded-2xl bg-gray-100 dark:bg-gray-700 flex items-center justify-center group-hover:scale-110 transition-transform">
                     <benefit.icon className="h-8 w-8 text-gray-800 dark:text-gray-200" />
                   </div>
-                  <h3 className="text-2xl font-bold relative text-gray-700 dark:text-gray-100 py-2">{benefit.title}</h3>
+                  <h3 className="text-2xl font-bold relative text-gray-700 dark:text-gray-100 py-2">
+                    {benefit.title}
+                  </h3>
                   <ul className="space-y-3 text-gray-600 dark:text-gray-400 relative">
-                    {benefit.features.map((feature, i) => (
-                      <li key={i} className="flex items-center gap-2 justify-center">
+                    {benefit.features.map((feature) => (
+                      <li
+                        key={`benefit-feature-${feature}`}
+                        className="flex items-center gap-2 justify-center"
+                      >
                         <div className="h-1.5 w-1.5 rounded-full bg-gray-400 dark:bg-gray-500" />
                         {feature}
                       </li>
@@ -500,7 +546,10 @@ export default function Home() {
           </motion.div>
         </section>
 
-        <section id="pricing" className="relative flex flex-col items-center justify-center w-full py-24 md:py-32 lg:py-32 bg-gray-50 dark:bg-gray-800 overflow-hidden">
+        <section
+          id="pricing"
+          className="relative flex flex-col items-center justify-center w-full py-24 md:py-32 lg:py-32 bg-gray-50 dark:bg-gray-800 overflow-hidden"
+        >
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_70%,rgba(243,244,246,0.6),transparent)] dark:bg-[radial-gradient(circle_at_30%_70%,rgba(31,41,55,0.5),transparent)] -z-10" />
           <motion.div
             initial="initial"
@@ -525,87 +574,91 @@ export default function Home() {
             <div className="mx-auto grid max-w-5xl grid-cols-1 gap-8 md:grid-cols-3 lg:gap-12 mt-16">
               {[
                 {
-                  title: "Básico",
-                  price: "R$199",
-                  description: "Ideal para academias iniciantes",
+                  title: 'Básico',
+                  price: 'R$199',
+                  description: 'Ideal para academias iniciantes',
                   features: [
-                    "Até 200 alunos ativos",
-                    "3 funcionários",
-                    "App mobile básico",
-                    "Avaliações físicas",
-                    "Gestão financeira básica",
-                    "Suporte por email"
-                  ]
+                    'Até 200 alunos ativos',
+                    '3 funcionários',
+                    'App mobile básico',
+                    'Avaliações físicas',
+                    'Gestão financeira básica',
+                    'Suporte por email',
+                  ],
                 },
                 {
-                  title: "Premium",
-                  price: "R$399",
-                  description: "Para academias em crescimento",
+                  title: 'Premium',
+                  price: 'R$399',
+                  description: 'Para academias em crescimento',
                   features: [
-                    "Até 500 alunos ativos",
-                    "10 funcionários",
-                    "App mobile completo",
-                    "Sistema de afiliados",
-                    "Integrações básicas",
-                    "Suporte prioritário"
-                  ]
+                    'Até 500 alunos ativos',
+                    '10 funcionários',
+                    'App mobile completo',
+                    'Sistema de afiliados',
+                    'Integrações básicas',
+                    'Suporte prioritário',
+                  ],
                 },
                 {
-                  title: "Enterprise",
-                  price: "Consulte",
-                  description: "Para redes de academia",
+                  title: 'Enterprise',
+                  price: 'Consulte',
+                  description: 'Para redes de academia',
                   features: [
-                    "Alunos ilimitados",
-                    "Funcionários ilimitados",
-                    "Gestão de rede",
-                    "API personalizada",
-                    "Integrações avançadas",
-                    "Suporte 24/7 dedicado"
-                  ]
-                }
+                    'Alunos ilimitados',
+                    'Funcionários ilimitados',
+                    'Gestão de rede',
+                    'API personalizada',
+                    'Integrações avançadas',
+                    'Suporte 24/7 dedicado',
+                  ],
+                },
               ].map((plan, index) => (
                 <motion.div
-                  key={index}
+                  key={`plan-${plan.title}`}
                   variants={fadeIn}
-                  className={`group relative flex flex-col rounded-2xl border p-8 ${
-                    index === 1 
-                      ? "border-gray-400 dark:border-gray-500 shadow-xl scale-105 bg-white dark:bg-gray-800" 
-                      : "border-gray-200 dark:border-gray-700 hover:border-gray-400 dark:hover:border-gray-500 transition-colors bg-white/50 dark:bg-gray-800/50"
+                  className={`group relative flex flex-col rounded-2xl border ${
+                    index === 1
+                      ? 'border-gray-400 dark:border-gray-500 shadow-xl scale-105 bg-white dark:bg-gray-800'
+                      : 'border-gray-200 dark:border-gray-700 hover:border-gray-400 dark:hover:border-gray-500 transition-colors bg-white/50 dark:bg-gray-800/50'
                   }`}
                 >
-                  <div className={`absolute inset-0 bg-gradient-to-br from-gray-50 to-transparent dark:from-gray-800/50 rounded-2xl transition-opacity ${
-                    index === 1 ? "opacity-100" : "opacity-0 group-hover:opacity-100"
-                  }`} />
+                  <div
+                    className={`absolute inset-0 bg-gradient-to-br from-gray-50 to-transparent dark:from-gray-800/50 rounded-2xl transition-opacity ${
+                      index === 1 ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'
+                    }`}
+                  />
                   <div className="space-y-2 relative">
-                    <h3 className="text-2xl font-bold text-gray-700 dark:text-gray-100 py-2">{plan.title}</h3>
+                    <h3 className="text-2xl font-bold text-gray-700 dark:text-gray-100 py-2">
+                      {plan.title}
+                    </h3>
                     <p className="text-gray-500 dark:text-gray-300">{plan.description}</p>
                   </div>
                   <div className="mt-4 relative">
                     <div className="flex items-baseline">
                       <div className="text-4xl font-bold">{plan.price}</div>
-                      {plan.price !== "Consulte" && (
+                      {plan.price !== 'Consulte' && (
                         <div className="text-sm text-gray-500 dark:text-gray-400 ml-2">por mês</div>
                       )}
                     </div>
                   </div>
                   <ul className="mt-8 space-y-3 flex-1 relative">
-                    {plan.features.map((feature, featureIndex) => (
-                      <li key={featureIndex} className="flex items-center gap-2">
+                    {plan.features.map((feature) => (
+                      <li key={`plan-feature-${feature}`} className="flex items-center gap-2">
                         <div className="h-1.5 w-1.5 rounded-full bg-gray-400 dark:bg-gray-500" />
                         {feature}
                       </li>
                     ))}
                   </ul>
                   <div className="mt-8 relative">
-                    <Button 
+                    <Button
                       className={`w-full ${
-                        index === 1 
-                          ? "bg-gray-800 hover:bg-gray-700 dark:bg-gray-200 dark:hover:bg-gray-300 dark:text-gray-800" 
-                          : "border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-800"
-                      }`} 
-                      variant={index === 1 ? "default" : "outline"}
+                        index === 1
+                          ? 'bg-gray-800 hover:bg-gray-700 dark:bg-gray-200 dark:hover:bg-gray-300 dark:text-gray-800'
+                          : 'border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-800'
+                      }`}
+                      variant={index === 1 ? 'default' : 'outline'}
                     >
-                      {index === 2 ? "Falar com consultor" : "Começar agora"}
+                      {index === 2 ? 'Falar com consultor' : 'Começar agora'}
                     </Button>
                   </div>
                 </motion.div>
@@ -664,12 +717,12 @@ export default function Home() {
                   <span className="font-medium">Suporte dedicado</span>
                 </motion.div>
               </div>
-              <motion.div
-                variants={fadeIn}
-                className="flex flex-col gap-3 min-[400px]:flex-row"
-              >
+              <motion.div variants={fadeIn} className="flex flex-col gap-3 min-[400px]:flex-row">
                 <Link href="/register">
-                  <Button size="lg" className="bg-gradient-to-r from-primary to-purple-600 hover:opacity-90 gap-2 min-w-[200px]">
+                  <Button
+                    size="lg"
+                    className="bg-gradient-to-r from-primary to-purple-600 hover:opacity-90 gap-2 min-w-[200px]"
+                  >
                     Começar período gratuito
                     <ArrowRight className="h-4 w-4" />
                   </Button>
@@ -683,7 +736,9 @@ export default function Home() {
         <div className="container flex flex-col gap-8">
           <div className="flex flex-col md:flex-row md:items-center justify-between">
             <Link href="/" className="flex items-center font-bold text-xl gap-1">
-              <span className="bg-gradient-to-r from-gray-800 to-gray-600 dark:from-gray-200 dark:to-gray-400 bg-clip-text text-transparent">Gym</span>
+              <span className="bg-gradient-to-r from-gray-800 to-gray-600 dark:from-gray-200 dark:to-gray-400 bg-clip-text text-transparent">
+                Gym
+              </span>
               <span className="text-gray-800 dark:text-white">Manage</span>
             </Link>
             <nav className="flex gap-6 mt-4 md:mt-0">
@@ -706,6 +761,5 @@ export default function Home() {
         </div>
       </footer>
     </div>
-  )
+  );
 }
-

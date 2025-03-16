@@ -1,61 +1,68 @@
-"use client"
+'use client';
 
-import type React from "react"
+import type React from 'react';
 
-import { useState } from "react"
-import Link from "next/link"
-import { useRouter } from "next/navigation"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { AlertCircle } from "lucide-react"
-import { Alert, AlertDescription } from "@/components/ui/alert"
+import { Alert, AlertDescription } from '@/components/ui/alert';
+import { Button } from '@/components/ui/button';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { AlertCircle } from 'lucide-react';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 
 export default function RegisterPage() {
-  const router = useRouter()
+  const router = useRouter();
   const [formData, setFormData] = useState({
-    gymName: "",
-    ownerName: "",
-    email: "",
-    password: "",
-    confirmPassword: "",
-  })
-  const [error, setError] = useState("")
-  const [loading, setLoading] = useState(false)
+    gymName: '',
+    ownerName: '',
+    email: '',
+    password: '',
+    confirmPassword: '',
+  });
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target
-    setFormData((prev) => ({ ...prev, [name]: value }))
-  }
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setError("")
+    e.preventDefault();
+    setError('');
 
     // Validação básica
     if (formData.password !== formData.confirmPassword) {
-      setError("As senhas não coincidem")
-      return
+      setError('As senhas não coincidem');
+      return;
     }
 
     if (formData.password.length < 6) {
-      setError("A senha deve ter pelo menos 6 caracteres")
-      return
+      setError('A senha deve ter pelo menos 6 caracteres');
+      return;
     }
 
-    setLoading(true)
+    setLoading(true);
 
     try {
       // Simulação de registro
-      await new Promise((resolve) => setTimeout(resolve, 1500))
-      router.push("/dashboard")
+      await new Promise((resolve) => setTimeout(resolve, 1500));
+      router.push('/dashboard');
     } catch (err) {
-      setError("Ocorreu um erro ao criar sua conta. Tente novamente.")
+      setError('Ocorreu um erro ao criar sua conta. Tente novamente.');
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-gray-50 px-4 py-12 dark:bg-gray-900">
@@ -134,13 +141,13 @@ export default function RegisterPage() {
               />
             </div>
             <Button type="submit" className="w-full" disabled={loading}>
-              {loading ? "Criando conta..." : "Registrar"}
+              {loading ? 'Criando conta...' : 'Registrar'}
             </Button>
           </form>
         </CardContent>
         <CardFooter className="flex justify-center">
           <div className="text-center text-sm">
-            Já tem uma conta?{" "}
+            Já tem uma conta?{' '}
             <Link href="/login" className="text-primary hover:underline">
               Faça login
             </Link>
@@ -148,6 +155,5 @@ export default function RegisterPage() {
         </CardFooter>
       </Card>
     </div>
-  )
+  );
 }
-

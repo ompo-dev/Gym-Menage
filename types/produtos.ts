@@ -1,4 +1,4 @@
-import { Endereco, StatusAtivo } from './common';
+import type { Endereco, StatusAtivo } from './common';
 
 export interface Produto {
   id: number;
@@ -13,7 +13,7 @@ export interface Produto {
   codigoBarras: string;
   fornecedor: string;
   dataValidade: string;
-  status: "disponivel" | "indisponivel" | "baixo_estoque";
+  status: 'disponivel' | 'indisponivel' | 'baixo_estoque';
   imagens: string[];
 }
 
@@ -32,10 +32,10 @@ export interface Fornecedor {
 export interface Manutencao {
   id: number;
   equipamentoId: number;
-  tipo: "preventiva" | "corretiva" | "emergencial";
-  status: "agendada" | "em_andamento" | "concluida" | "cancelada";
+  tipo: 'preventiva' | 'corretiva' | 'emergencial';
+  status: 'agendada' | 'em_andamento' | 'concluida' | 'cancelada';
   dataAgendada: string;
-  prioridade: "baixa" | "media" | "alta" | "urgente";
+  prioridade: 'baixa' | 'media' | 'alta' | 'urgente';
   descricao: string;
   tecnico: string;
   custoEstimado: number;
@@ -44,4 +44,4 @@ export interface Manutencao {
     quantidade: number;
     valor: number;
   }[];
-} 
+}

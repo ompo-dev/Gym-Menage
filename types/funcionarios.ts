@@ -1,4 +1,4 @@
-import { DiaSemana, Modalidade, StatusAtivo } from './common';
+import type { DiaSemana, Modalidade, StatusAtivo } from './common';
 
 export interface Funcionario {
   id: number;
@@ -41,7 +41,7 @@ export interface AulaAgendada {
   capacidade: number;
   inscritos: number[];
   sala: string;
-  status: "confirmada" | "cancelada" | "pendente";
+  status: 'confirmada' | 'cancelada' | 'pendente';
   data: string;
 }
 
@@ -58,5 +58,5 @@ export interface Evento {
   descricao: string;
   requisitos: string[];
   valor: number;
-  status: "agendado" | "cancelado" | "concluido" | "em_andamento";
-} 
+  status: 'agendado' | 'cancelado' | 'concluido' | 'em_andamento';
+}

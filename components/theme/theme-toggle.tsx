@@ -1,29 +1,29 @@
-"use client"
+'use client';
 
-import { Moon, Sun } from "lucide-react"
-import { Button } from "@/components/ui/button"
+import { useTheme } from '@/components/theme/theme-provider';
+import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuTrigger,
-  DropdownMenuSeparator,
   DropdownMenuLabel,
-} from "@/components/ui/dropdown-menu"
-import { useTheme } from "@/components/theme/theme-provider"
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import { Moon, Sun } from 'lucide-react';
 
 const accentColors = [
-  { name: "Azul", value: "blue" },
-  { name: "Verde", value: "green" },
-  { name: "Vermelho", value: "red" },
-  { name: "Roxo", value: "purple" },
-  { name: "Laranja", value: "orange" },
-  { name: "Amarelo", value: "yellow" },
-  { name: "Rosa", value: "pink" },
-]
+  { name: 'Azul', value: 'blue' },
+  { name: 'Verde', value: 'green' },
+  { name: 'Vermelho', value: 'red' },
+  { name: 'Roxo', value: 'purple' },
+  { name: 'Laranja', value: 'orange' },
+  { name: 'Amarelo', value: 'yellow' },
+  { name: 'Rosa', value: 'pink' },
+];
 
 export function ThemeToggle() {
-  const { theme, setTheme, accent, setAccent } = useTheme()
+  const { theme, setTheme, accent, setAccent } = useTheme();
 
   return (
     <DropdownMenu>
@@ -36,11 +36,11 @@ export function ThemeToggle() {
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="gradient-transition">
         <DropdownMenuLabel>Tema</DropdownMenuLabel>
-        <DropdownMenuItem onClick={() => setTheme("light")} className="hover-transition">
+        <DropdownMenuItem onClick={() => setTheme('light')} className="hover-transition">
           <Sun className="mr-2 h-4 w-4 icon-transition" />
           Claro
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setTheme("dark")} className="hover-transition">
+        <DropdownMenuItem onClick={() => setTheme('dark')} className="hover-transition">
           <Moon className="mr-2 h-4 w-4 icon-transition" />
           Escuro
         </DropdownMenuItem>
@@ -59,12 +59,10 @@ export function ThemeToggle() {
               }}
             />
             {color.name}
-            {accent === color.value && (
-              <span className="ml-auto icon-transition">✓</span>
-            )}
+            {accent === color.value && <span className="ml-auto icon-transition">✓</span>}
           </DropdownMenuItem>
         ))}
       </DropdownMenuContent>
     </DropdownMenu>
-  )
-} 
+  );
+}

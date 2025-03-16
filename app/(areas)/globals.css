@@ -6,9 +6,9 @@
   :root {
     --transition-duration: 0.3s;
     --transition-timing: cubic-bezier(0.4, 0, 0.2, 1);
-    
+
     --primary-rgb: 79, 70, 229;
-    
+
     --background: 0 0% 100%;
     --foreground: 222.2 84% 4.9%;
 
@@ -124,13 +124,14 @@
   /* Transição suave para todo o documento */
   :root {
     color-scheme: light;
-    --transition-all: background-color var(--transition-duration) var(--transition-timing),
-                     border-color var(--transition-duration) var(--transition-timing),
-                     color var(--transition-duration) var(--transition-timing),
-                     fill var(--transition-duration) var(--transition-timing),
-                     stroke var(--transition-duration) var(--transition-timing),
-                     opacity var(--transition-duration) var(--transition-timing),
-                     box-shadow var(--transition-duration) var(--transition-timing);
+    --transition-all:
+      background-color var(--transition-duration) var(--transition-timing),
+      border-color var(--transition-duration) var(--transition-timing),
+      color var(--transition-duration) var(--transition-timing),
+      fill var(--transition-duration) var(--transition-timing),
+      stroke var(--transition-duration) var(--transition-timing),
+      opacity var(--transition-duration) var(--transition-timing),
+      box-shadow var(--transition-duration) var(--transition-timing);
   }
 
   .dark {
@@ -148,7 +149,7 @@
     scrollbar-width: none;
     -ms-overflow-style: none;
   }
-  
+
   .scrollbar-none::-webkit-scrollbar {
     display: none;
   }
@@ -177,20 +178,18 @@
 
   /* Transição suave para hover states */
   .hover-transition {
-    transition: var(--transition-all),
-                transform var(--transition-duration) var(--transition-timing);
+    transition: var(--transition-all), transform var(--transition-duration) var(--transition-timing);
   }
 
   /* Transições específicas para ícones e elementos decorativos */
   .icon-transition {
-    transition: transform var(--transition-duration) var(--transition-timing),
-                opacity var(--transition-duration) var(--transition-timing);
+    transition: transform var(--transition-duration) var(--transition-timing), opacity
+      var(--transition-duration) var(--transition-timing);
   }
 
   /* Transição para gradientes e backgrounds complexos */
   .gradient-transition {
-    transition: var(--transition-all),
-                background-image var(--transition-duration) var(--transition-timing);
+    transition: var(--transition-all), background-image var(--transition-duration)
+      var(--transition-timing);
   }
 }
-

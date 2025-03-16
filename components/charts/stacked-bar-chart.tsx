@@ -1,72 +1,71 @@
-"use client"
+'use client';
 
-import * as React from "react"
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts"
-
+import * as React from 'react';
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
+  Bar,
+  BarChart,
+  CartesianGrid,
+  Legend,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
+} from 'recharts';
 
-import {
-  ChartConfig,
-  ChartContainer,
-  ChartTooltip,
-} from "@/components/ui/chart"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+
+import { type ChartConfig, ChartContainer, ChartTooltip } from '@/components/ui/chart';
 
 export interface RevenueData {
-  month: string
-  mensalidades: number
-  produtos: number
-  servicos: number
+  month: string;
+  mensalidades: number;
+  produtos: number;
+  servicos: number;
 }
 
 interface StackedBarChartProps {
-  data: RevenueData[]
-  title: string
-  description?: string
+  data: RevenueData[];
+  title: string;
+  description?: string;
 }
 
 const chartConfig = {
   mensalidades: {
-    label: "Mensalidades",
-    color: "hsl(var(--primary))"
+    label: 'Mensalidades',
+    color: 'hsl(var(--primary))',
   },
   produtos: {
-    label: "Produtos",
-    color: "hsl(var(--primary)/.6)"
+    label: 'Produtos',
+    color: 'hsl(var(--primary)/.6)',
   },
   servicos: {
-    label: "Serviços",
-    color: "hsl(var(--primary)/.3)"
-  }
-} satisfies ChartConfig
+    label: 'Serviços',
+    color: 'hsl(var(--primary)/.3)',
+  },
+} satisfies ChartConfig;
 
 export function StackedBarChartComponent({ data, title, description }: StackedBarChartProps) {
   const totalRevenue = data.reduce((total, item) => {
-    return total + item.mensalidades + item.produtos + item.servicos
-  }, 0)
+    return total + item.mensalidades + item.produtos + item.servicos;
+  }, 0);
 
   const formatCurrency = (value: number) => {
     return new Intl.NumberFormat('pt-BR', {
       style: 'currency',
-      currency: 'BRL'
-    }).format(value)
-  }
+      currency: 'BRL',
+    }).format(value);
+  };
 
   const barColors = {
-    mensalidades: "var(--primary)",
-    produtos: "var(--primary-alpha-60)",
-    servicos: "var(--primary-alpha-30)"
-  }
+    mensalidades: 'var(--primary)',
+    produtos: 'var(--primary-alpha-60)',
+    servicos: 'var(--primary-alpha-30)',
+  };
 
   React.useEffect(() => {
-    document.documentElement.style.setProperty('--primary-alpha-60', 'hsl(var(--primary)/.6)')
-    document.documentElement.style.setProperty('--primary-alpha-30', 'hsl(var(--primary)/.3)')
-  }, [])
+    document.documentElement.style.setProperty('--primary-alpha-60', 'hsl(var(--primary)/.6)');
+    document.documentElement.style.setProperty('--primary-alpha-30', 'hsl(var(--primary)/.3)');
+  }, []);
 
   return (
     <Card className="w-full">
@@ -87,9 +86,7 @@ export function StackedBarChartComponent({ data, title, description }: StackedBa
             <CardTitle>{title}</CardTitle>
             {description && <CardDescription>{description}</CardDescription>}
           </div>
-          <div className="text-2xl font-bold">
-            {formatCurrency(totalRevenue)}
-          </div>
+          <div className="text-2xl font-bold">{formatCurrency(totalRevenue)}</div>
         </div>
       </CardHeader>
       <CardContent>
@@ -123,7 +120,7 @@ export function StackedBarChartComponent({ data, title, description }: StackedBa
                 dataKey="mensalidades"
                 stackId="revenue"
                 fill="hsl(var(--primary))"
-                radius={[4, 4, 4, 4]}                
+                radius={[4, 4, 4, 4]}
               />
               <Bar
                 dataKey="produtos"
@@ -139,21 +136,22 @@ export function StackedBarChartComponent({ data, title, description }: StackedBa
               />
               <Tooltip
                 cursor={{
-                  fill: "rgb(243 244 246 / 0.05)",
-                  radius: 5
+                  fill: 'rgb(243 244 246 / 0.05)',
+                  radius: 5,
                 }}
                 content={({ active, payload, label }) => (
                   <ChartTooltip
                     active={active}
-                    payload={payload?.map(item => ({
+                    payload={payload?.map((item) => ({
                       value: item.value as number,
                       name: item.name || '',
-                      color: item.dataKey === 'mensalidades' 
-                        ? 'hsl(var(--primary))' 
-                        : item.dataKey === 'produtos' 
-                          ? 'hsl(var(--primary)/.6)' 
-                          : 'hsl(var(--primary)/.3)',
-                      dataKey: item.dataKey || ''
+                      color:
+                        item.dataKey === 'mensalidades'
+                          ? 'hsl(var(--primary))'
+                          : item.dataKey === 'produtos'
+                            ? 'hsl(var(--primary)/.6)'
+                            : 'hsl(var(--primary)/.3)',
+                      dataKey: item.dataKey || '',
                     }))}
                     label={label}
                     config={chartConfig}
@@ -166,5 +164,5 @@ export function StackedBarChartComponent({ data, title, description }: StackedBa
         </ChartContainer>
       </CardContent>
     </Card>
-  )
-} 
+  );
+}

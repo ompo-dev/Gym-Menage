@@ -1,12 +1,12 @@
-import { create } from 'zustand'
+import { create } from 'zustand';
 
-type Theme = 'light' | 'dark'
+type Theme = 'light' | 'dark';
 
 interface ThemeStore {
-  theme: Theme
-  accent: string
-  setTheme: (theme: Theme) => void
-  setAccent: (accent: string) => void
+  theme: Theme;
+  accent: string;
+  setTheme: (theme: Theme) => void;
+  setAccent: (accent: string) => void;
 }
 
 export const useThemeStore = create<ThemeStore>((set) => ({
@@ -14,4 +14,4 @@ export const useThemeStore = create<ThemeStore>((set) => ({
   accent: 'blue',
   setTheme: (theme: Theme) => set({ theme }),
   setAccent: (accent: string) => set({ accent }),
-})) 
+}));

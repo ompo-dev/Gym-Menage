@@ -1,11 +1,11 @@
-import { MetodoPagamento } from './common';
+import type { MetodoPagamento } from './common';
 
 export interface Pagamento {
   id: number;
   clienteId: number;
   planoId: number;
   valor: number;
-  status: "pago" | "pendente" | "atrasado" | "cancelado";
+  status: 'pago' | 'pendente' | 'atrasado' | 'cancelado';
   metodoPagamento: MetodoPagamento;
   dataVencimento: string;
   dataPagamento: string;
@@ -25,7 +25,7 @@ export interface Venda {
     total: number;
   }[];
   formaPagamento: MetodoPagamento;
-  status: "concluida" | "pendente" | "cancelada";
+  status: 'concluida' | 'pendente' | 'cancelada';
   total: number;
   notaFiscal: string;
 }
@@ -104,4 +104,4 @@ export interface Relatorio {
     status: string;
     url: string;
   }[];
-} 
+}

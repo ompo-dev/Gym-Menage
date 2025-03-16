@@ -23,14 +23,14 @@ export interface HorarioFuncionamento {
   };
 }
 
-export type StatusAtivo = "ativo" | "inativo" | "pendente" | "bloqueado";
-export type MetodoPagamento = "cartao_credito" | "cartao_debito" | "pix" | "boleto" | "dinheiro";
-export type Modalidade = "musculação" | "crossfit" | "pilates" | "yoga" | "spinning" | "cardio";
-export type NivelTreino = "iniciante" | "intermediario" | "avancado";
-export type DiaSemana = "segunda" | "terca" | "quarta" | "quinta" | "sexta" | "sabado" | "domingo";
+export type StatusAtivo = 'ativo' | 'inativo' | 'pendente' | 'bloqueado';
+export type MetodoPagamento = 'cartao_credito' | 'cartao_debito' | 'pix' | 'boleto' | 'dinheiro';
+export type Modalidade = 'musculação' | 'crossfit' | 'pilates' | 'yoga' | 'spinning' | 'cardio';
+export type NivelTreino = 'iniciante' | 'intermediario' | 'avancado';
+export type DiaSemana = 'segunda' | 'terca' | 'quarta' | 'quinta' | 'sexta' | 'sabado' | 'domingo';
 
 export interface PeriodoDisponivel {
-  periodo: "mensal" | "trimestral" | "semestral" | "anual";
+  periodo: 'mensal' | 'trimestral' | 'semestral' | 'anual';
   valor: number;
   desconto: number;
-} 
+}

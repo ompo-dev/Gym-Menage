@@ -1,4 +1,4 @@
-import { Endereco, HorarioFuncionamento, Modalidade, StatusAtivo } from './common';
+import type { Endereco, HorarioFuncionamento, Modalidade, StatusAtivo } from './common';
 
 export interface Academia {
   id: number;
@@ -61,4 +61,4 @@ export interface ConfiguracaoAcademia {
     envio_email: string;
     sms: string;
   };
-} 
+}

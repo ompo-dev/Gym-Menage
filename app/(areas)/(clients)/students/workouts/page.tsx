@@ -1,83 +1,81 @@
-"use client"
+'use client';
 
-import { useState } from "react"
-import { 
-  Dumbbell, 
-  Calendar,
-  Clock,
-  ChevronRight,
-  Play,
+import { cn } from '@/lib/utils';
+import { motion } from 'framer-motion';
+import {
   BarChart,
+  Calendar,
+  ChevronRight,
+  Clock,
+  Dumbbell,
   History,
-  Timer
-} from "lucide-react"
-import { motion } from "framer-motion"
-import { cn } from "@/lib/utils"
+  Play,
+  Timer,
+} from 'lucide-react';
+import { useState } from 'react';
 
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Progress } from "@/components/ui/progress"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { AreaChartComponent } from "@/components/charts/area-chart"
+import { AreaChartComponent } from '@/components/charts/area-chart';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Progress } from '@/components/ui/progress';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 // Dados simulados
 const workoutData = {
   current: {
-    name: "Treino A - Superior",
+    name: 'Treino A - Superior',
     progress: 65,
     exercises: [
-      { name: "Supino Reto", sets: 4, reps: "12", weight: "40kg", done: true },
-      { name: "Puxada Frontal", sets: 4, reps: "12", weight: "35kg", done: true },
-      { name: "Desenvolvimento", sets: 3, reps: "12", weight: "20kg", done: false },
-      { name: "Rosca Direta", sets: 3, reps: "12", weight: "15kg", done: false },
-      { name: "Extensão Triceps", sets: 3, reps: "12", weight: "15kg", done: false }
-    ]
+      { name: 'Supino Reto', sets: 4, reps: '12', weight: '40kg', done: true },
+      { name: 'Puxada Frontal', sets: 4, reps: '12', weight: '35kg', done: true },
+      { name: 'Desenvolvimento', sets: 3, reps: '12', weight: '20kg', done: false },
+      { name: 'Rosca Direta', sets: 3, reps: '12', weight: '15kg', done: false },
+      { name: 'Extensão Triceps', sets: 3, reps: '12', weight: '15kg', done: false },
+    ],
   },
   history: [
-    { date: "2024-03-10", name: "Treino B - Inferior", duration: "45min" },
-    { date: "2024-03-08", name: "Treino A - Superior", duration: "50min" },
-    { date: "2024-03-06", name: "Treino C - Full Body", duration: "60min" }
+    { date: '2024-03-10', name: 'Treino B - Inferior', duration: '45min' },
+    { date: '2024-03-08', name: 'Treino A - Superior', duration: '50min' },
+    { date: '2024-03-06', name: 'Treino C - Full Body', duration: '60min' },
   ],
   performance: [
-    { date: "2024-02-14", attendance: 75 },
-    { date: "2024-02-21", attendance: 80 },
-    { date: "2024-02-28", attendance: 85 },
-    { date: "2024-03-07", attendance: 82 },
-    { date: "2024-03-14", attendance: 88 }
-  ]
-}
+    { date: '2024-02-14', attendance: 75 },
+    { date: '2024-02-21', attendance: 80 },
+    { date: '2024-02-28', attendance: 85 },
+    { date: '2024-03-07', attendance: 82 },
+    { date: '2024-03-14', attendance: 88 },
+  ],
+};
 
 const quickActions = [
-  { 
-    title: "Iniciar Treino", 
-    description: "Continue de onde parou", 
+  {
+    title: 'Iniciar Treino',
+    description: 'Continue de onde parou',
     icon: Play,
-    color: "bg-primary text-primary-foreground"
+    color: 'bg-primary text-primary-foreground',
   },
-  { 
-    title: "Ver Histórico", 
-    description: "Treinos anteriores", 
+  {
+    title: 'Ver Histórico',
+    description: 'Treinos anteriores',
     icon: History,
-    color: "bg-muted hover:bg-muted/80"
+    color: 'bg-muted hover:bg-muted/80',
   },
-  { 
-    title: "Desempenho", 
-    description: "Análise e progresso", 
+  {
+    title: 'Desempenho',
+    description: 'Análise e progresso',
     icon: BarChart,
-    color: "bg-muted hover:bg-muted/80"
-  }
-]
+    color: 'bg-muted hover:bg-muted/80',
+  },
+];
 
 export default function WorkoutsPage() {
-  const [activeTab, setActiveTab] = useState("current")
+  const [activeTab, setActiveTab] = useState('current');
 
   return (
     <div className="space-y-8">
       <div className="flex flex-col gap-2">
         <h1 className="text-3xl font-bold tracking-tight">Meus Treinos</h1>
-        <p className="text-muted-foreground">
-          Acompanhe seus treinos e evolução
-        </p>
+        <p className="text-muted-foreground">Acompanhe seus treinos e evolução</p>
       </div>
 
       <div className="grid gap-4 md:grid-cols-3">
@@ -88,7 +86,7 @@ export default function WorkoutsPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: index * 0.1 }}
           >
-            <Card className={cn("group relative overflow-hidden", action.color)}>
+            <Card className={cn('group relative overflow-hidden', action.color)}>
               <CardContent className="p-6">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-4">
@@ -138,14 +136,16 @@ export default function WorkoutsPage() {
                   <div
                     key={exercise.name}
                     className={cn(
-                      "flex items-center gap-4 rounded-lg border p-4",
-                      exercise.done && "bg-muted/50"
+                      'flex items-center gap-4 rounded-lg border p-4',
+                      exercise.done && 'bg-muted/50'
                     )}
                   >
-                    <div className={cn(
-                      "flex h-8 w-8 items-center justify-center rounded-full border text-sm",
-                      exercise.done && "bg-primary text-primary-foreground border-0"
-                    )}>
+                    <div
+                      className={cn(
+                        'flex h-8 w-8 items-center justify-center rounded-full border text-sm',
+                        exercise.done && 'bg-primary text-primary-foreground border-0'
+                      )}
+                    >
                       {index + 1}
                     </div>
                     <div className="flex-1">
@@ -205,15 +205,12 @@ export default function WorkoutsPage() {
             </CardHeader>
             <CardContent>
               <div className="h-[300px]">
-                <AreaChartComponent
-                  data={workoutData.performance}
-                  title="Desempenho nos Treinos"
-                />
+                <AreaChartComponent data={workoutData.performance} title="Desempenho nos Treinos" />
               </div>
             </CardContent>
           </Card>
         </TabsContent>
       </Tabs>
     </div>
-  )
-} 
+  );
+}

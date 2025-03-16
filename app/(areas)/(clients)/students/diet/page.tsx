@@ -1,24 +1,24 @@
-"use client"
+'use client';
 
-import { useState } from "react"
-import { 
-  Apple, 
-  Plus,
-  ChevronRight,
-  Utensils,
-  Scale,
-  Clock,
+import { cn } from '@/lib/utils';
+import { motion } from 'framer-motion';
+import {
+  Apple,
+  BarChart,
   CalendarDays,
-  BarChart
-} from "lucide-react"
-import { motion } from "framer-motion"
-import { cn } from "@/lib/utils"
+  ChevronRight,
+  Clock,
+  Plus,
+  Scale,
+  Utensils,
+} from 'lucide-react';
+import { useState } from 'react';
 
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Progress } from "@/components/ui/progress"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { AreaChartComponent } from "@/components/charts/area-chart"
+import { AreaChartComponent } from '@/components/charts/area-chart';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Progress } from '@/components/ui/progress';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 // Dados simulados
 const dietData = {
@@ -26,105 +26,103 @@ const dietData = {
     calories: {
       target: 2500,
       current: 1850,
-      remaining: 650
+      remaining: 650,
     },
     macros: {
       protein: { target: 180, current: 135 },
       carbs: { target: 280, current: 210 },
-      fat: { target: 70, current: 52 }
+      fat: { target: 70, current: 52 },
     },
     meals: [
       {
-        name: "Café da Manhã",
-        time: "07:30",
+        name: 'Café da Manhã',
+        time: '07:30',
         foods: [
-          { name: "Aveia", portion: "50g", calories: 180 },
-          { name: "Banana", portion: "1 unid", calories: 105 },
-          { name: "Whey Protein", portion: "30g", calories: 120 }
+          { name: 'Aveia', portion: '50g', calories: 180 },
+          { name: 'Banana', portion: '1 unid', calories: 105 },
+          { name: 'Whey Protein', portion: '30g', calories: 120 },
         ],
-        completed: true
+        completed: true,
       },
       {
-        name: "Lanche da Manhã",
-        time: "10:00",
+        name: 'Lanche da Manhã',
+        time: '10:00',
         foods: [
-          { name: "Iogurte Natural", portion: "170g", calories: 150 },
-          { name: "Granola", portion: "20g", calories: 95 }
+          { name: 'Iogurte Natural', portion: '170g', calories: 150 },
+          { name: 'Granola', portion: '20g', calories: 95 },
         ],
-        completed: true
+        completed: true,
       },
       {
-        name: "Almoço",
-        time: "13:00",
+        name: 'Almoço',
+        time: '13:00',
         foods: [
-          { name: "Arroz Integral", portion: "100g", calories: 110 },
-          { name: "Frango Grelhado", portion: "150g", calories: 165 },
-          { name: "Legumes", portion: "200g", calories: 70 }
+          { name: 'Arroz Integral', portion: '100g', calories: 110 },
+          { name: 'Frango Grelhado', portion: '150g', calories: 165 },
+          { name: 'Legumes', portion: '200g', calories: 70 },
         ],
-        completed: true
+        completed: true,
       },
       {
-        name: "Lanche da Tarde",
-        time: "16:00",
+        name: 'Lanche da Tarde',
+        time: '16:00',
         foods: [
-          { name: "Pão Integral", portion: "2 fatias", calories: 140 },
-          { name: "Ovo", portion: "2 unid", calories: 155 }
+          { name: 'Pão Integral', portion: '2 fatias', calories: 140 },
+          { name: 'Ovo', portion: '2 unid', calories: 155 },
         ],
-        completed: false
+        completed: false,
       },
       {
-        name: "Jantar",
-        time: "20:00",
+        name: 'Jantar',
+        time: '20:00',
         foods: [
-          { name: "Batata Doce", portion: "150g", calories: 135 },
-          { name: "Atum", portion: "120g", calories: 140 },
-          { name: "Salada", portion: "200g", calories: 45 }
+          { name: 'Batata Doce', portion: '150g', calories: 135 },
+          { name: 'Atum', portion: '120g', calories: 140 },
+          { name: 'Salada', portion: '200g', calories: 45 },
         ],
-        completed: false
-      }
-    ]
+        completed: false,
+      },
+    ],
   },
   progress: [
-    { date: "2024-02-14", attendance: 2200 },
-    { date: "2024-02-21", attendance: 2350 },
-    { date: "2024-02-28", attendance: 2450 },
-    { date: "2024-03-07", attendance: 2400 },
-    { date: "2024-03-14", attendance: 2500 }
-  ]
-}
+    { date: '2024-02-14', attendance: 2200 },
+    { date: '2024-02-21', attendance: 2350 },
+    { date: '2024-02-28', attendance: 2450 },
+    { date: '2024-03-07', attendance: 2400 },
+    { date: '2024-03-14', attendance: 2500 },
+  ],
+};
 
 const quickActions = [
-  { 
-    title: "Registrar Refeição", 
-    description: "Adicionar alimentos", 
+  {
+    title: 'Registrar Refeição',
+    description: 'Adicionar alimentos',
     icon: Plus,
-    color: "bg-primary text-primary-foreground"
+    color: 'bg-primary text-primary-foreground',
   },
-  { 
-    title: "Ver Cardápio", 
-    description: "Plano completo", 
+  {
+    title: 'Ver Cardápio',
+    description: 'Plano completo',
     icon: Utensils,
-    color: "bg-muted hover:bg-muted/80"
+    color: 'bg-muted hover:bg-muted/80',
   },
-  { 
-    title: "Análise Nutricional", 
-    description: "Relatório detalhado", 
+  {
+    title: 'Análise Nutricional',
+    description: 'Relatório detalhado',
     icon: BarChart,
-    color: "bg-muted hover:bg-muted/80"
-  }
-]
+    color: 'bg-muted hover:bg-muted/80',
+  },
+];
 
 export default function DietPage() {
-  const [activeTab, setActiveTab] = useState("today")
-  const caloriesProgress = (dietData.today.calories.current / dietData.today.calories.target) * 100
+  const [activeTab, setActiveTab] = useState('today');
+  const caloriesProgress = (dietData.today.calories.current / dietData.today.calories.target) * 100;
 
   return (
     <div className="space-y-8">
       <div className="flex flex-col gap-2">
         <h1 className="text-3xl font-bold tracking-tight">Plano Alimentar</h1>
-        <p className="text-muted-foreground">
-          Acompanhe sua dieta e nutrição
-        </p>
+        <p className="text-muted-foreground">Acompanhe sua dieta e nutrição</p>
       </div>
 
       <div className="grid gap-4 md:grid-cols-3">
@@ -135,7 +133,7 @@ export default function DietPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: index * 0.1 }}
           >
-            <Card className={cn("group relative overflow-hidden", action.color)}>
+            <Card className={cn('group relative overflow-hidden', action.color)}>
               <CardContent className="p-6">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-4">
@@ -188,9 +186,12 @@ export default function DietPage() {
           </CardHeader>
           <CardContent>
             <div className="flex flex-col gap-4">
-              <Progress 
-                value={(dietData.today.macros.protein.current / dietData.today.macros.protein.target) * 100} 
-                className="h-2" 
+              <Progress
+                value={
+                  (dietData.today.macros.protein.current / dietData.today.macros.protein.target) *
+                  100
+                }
+                className="h-2"
               />
               <div className="text-2xl font-bold">{dietData.today.macros.protein.current}g</div>
             </div>
@@ -203,9 +204,11 @@ export default function DietPage() {
           </CardHeader>
           <CardContent>
             <div className="flex flex-col gap-4">
-              <Progress 
-                value={(dietData.today.macros.carbs.current / dietData.today.macros.carbs.target) * 100} 
-                className="h-2" 
+              <Progress
+                value={
+                  (dietData.today.macros.carbs.current / dietData.today.macros.carbs.target) * 100
+                }
+                className="h-2"
               />
               <div className="text-2xl font-bold">{dietData.today.macros.carbs.current}g</div>
             </div>
@@ -231,8 +234,8 @@ export default function DietPage() {
                   <div
                     key={meal.name}
                     className={cn(
-                      "flex flex-col gap-4 rounded-lg border p-4",
-                      meal.completed && "bg-muted/50"
+                      'flex flex-col gap-4 rounded-lg border p-4',
+                      meal.completed && 'bg-muted/50'
                     )}
                   >
                     <div className="flex items-center justify-between">
@@ -278,15 +281,12 @@ export default function DietPage() {
             </CardHeader>
             <CardContent>
               <div className="h-[300px]">
-                <AreaChartComponent
-                  data={dietData.progress}
-                  title="Consumo Calórico"
-                />
+                <AreaChartComponent data={dietData.progress} title="Consumo Calórico" />
               </div>
             </CardContent>
           </Card>
         </TabsContent>
       </Tabs>
     </div>
-  )
-} 
+  );
+}

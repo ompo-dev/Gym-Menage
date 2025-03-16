@@ -1,11 +1,11 @@
-import { DiaSemana, NivelTreino, StatusAtivo } from './common';
+import type { DiaSemana, NivelTreino, StatusAtivo } from './common';
 
 export interface AvaliacaoFisica {
   id: number;
   clienteId: number;
   instrutorId: number;
   data: string;
-  tipo: "completa" | "parcial";
+  tipo: 'completa' | 'parcial';
   medidas: {
     peso: number;
     altura: number;
@@ -116,4 +116,4 @@ export interface Treino {
     observacoes: string;
   }[];
   status: StatusAtivo;
-} 
+}

@@ -1,4 +1,4 @@
-import { Modalidade, PeriodoDisponivel, StatusAtivo } from './common';
+import type { Modalidade, PeriodoDisponivel, StatusAtivo } from './common';
 
 export interface PlanoAcademia {
   id: number;
@@ -25,4 +25,4 @@ export interface HistoricoPlano {
   dataFim: string;
   valor: number;
   status: string;
-} 
+}

@@ -6,4 +6,4 @@ export * from './funcionarios';
 export * from './avaliacoes';
 export * from './financeiro';
 export * from './produtos';
-export * from './afiliados'; 
+export * from './afiliados';

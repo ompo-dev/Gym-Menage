@@ -1,102 +1,102 @@
-"use client"
+'use client';
 
-import { motion } from "framer-motion"
-import { 
-  Dumbbell, 
-  LineChart, 
-  Apple, 
+import { cn } from '@/lib/utils';
+import { motion } from 'framer-motion';
+import {
+  Apple,
   Calendar,
+  ChevronRight,
   Clock,
-  Trophy,
+  Dumbbell,
+  LineChart,
   Target,
   TrendingUp,
-  ChevronRight
-} from "lucide-react"
-import { cn } from "@/lib/utils"
+  Trophy,
+} from 'lucide-react';
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Progress } from "@/components/ui/progress"
-import { AreaChartComponent } from "@/components/charts/area-chart"
+import { AreaChartComponent } from '@/components/charts/area-chart';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Progress } from '@/components/ui/progress';
 
 // Dados simulados
 const studentData = {
   nextWorkout: {
-    name: "Treino A - Superior",
-    time: "16:00",
-    instructor: "Carlos Silva",
-    completed: 65
+    name: 'Treino A - Superior',
+    time: '16:00',
+    instructor: 'Carlos Silva',
+    completed: 65,
   },
   measurements: {
     weight: {
       current: 75.5,
       initial: 78,
-      goal: 73
+      goal: 73,
     },
     bodyFat: {
       current: 18,
       initial: 20,
-      goal: 15
-    }
+      goal: 15,
+    },
   },
   nextMeal: {
-    name: "Lanche da Tarde",
-    time: "16:00",
+    name: 'Lanche da Tarde',
+    time: '16:00',
     calories: 295,
     foods: [
-      { name: "Pão Integral", portion: "2 fatias" },
-      { name: "Ovo", portion: "2 unid" }
-    ]
+      { name: 'Pão Integral', portion: '2 fatias' },
+      { name: 'Ovo', portion: '2 unid' },
+    ],
   },
   nextClass: {
-    name: "Yoga",
-    time: "18:30",
-    instructor: "Ana Paula",
-    room: "Sala 3"
+    name: 'Yoga',
+    time: '18:30',
+    instructor: 'Ana Paula',
+    room: 'Sala 3',
   },
   progress: [
-    { date: "2024-02-14", attendance: 75 },
-    { date: "2024-02-21", attendance: 80 },
-    { date: "2024-02-28", attendance: 85 },
-    { date: "2024-03-07", attendance: 82 },
-    { date: "2024-03-14", attendance: 88 }
-  ]
-}
+    { date: '2024-02-14', attendance: 75 },
+    { date: '2024-02-21', attendance: 80 },
+    { date: '2024-02-28', attendance: 85 },
+    { date: '2024-03-07', attendance: 82 },
+    { date: '2024-03-14', attendance: 88 },
+  ],
+};
 
 const quickLinks = [
-  { 
-    title: "Próximo Treino", 
-    description: "Treino A - Superior", 
+  {
+    title: 'Próximo Treino',
+    description: 'Treino A - Superior',
     icon: Dumbbell,
-    href: "/students/workouts",
-    color: "bg-primary text-primary-foreground"
+    href: '/students/workouts',
+    color: 'bg-primary text-primary-foreground',
   },
-  { 
-    title: "Medidas", 
-    description: "Atualizar medidas", 
+  {
+    title: 'Medidas',
+    description: 'Atualizar medidas',
     icon: LineChart,
-    href: "/students/measurements",
-    color: "bg-muted hover:bg-muted/80"
+    href: '/students/measurements',
+    color: 'bg-muted hover:bg-muted/80',
   },
-  { 
-    title: "Plano Alimentar", 
-    description: "Ver refeições", 
+  {
+    title: 'Plano Alimentar',
+    description: 'Ver refeições',
     icon: Apple,
-    href: "/students/diet",
-    color: "bg-muted hover:bg-muted/80"
-  }
-]
+    href: '/students/diet',
+    color: 'bg-muted hover:bg-muted/80',
+  },
+];
 
 export default function StudentsPage() {
-  const weightProgress = ((studentData.measurements.weight.initial - studentData.measurements.weight.current) / 
-    (studentData.measurements.weight.initial - studentData.measurements.weight.goal)) * 100
+  const weightProgress =
+    ((studentData.measurements.weight.initial - studentData.measurements.weight.current) /
+      (studentData.measurements.weight.initial - studentData.measurements.weight.goal)) *
+    100;
 
   return (
     <div className="space-y-8">
       <div className="flex flex-col gap-2">
         <h1 className="text-3xl font-bold tracking-tight">Bem-vindo, João!</h1>
-        <p className="text-muted-foreground">
-          Acompanhe seu progresso e próximas atividades
-        </p>
+        <p className="text-muted-foreground">Acompanhe seu progresso e próximas atividades</p>
       </div>
 
       <div className="grid gap-4 md:grid-cols-3">
@@ -107,7 +107,7 @@ export default function StudentsPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: index * 0.1 }}
           >
-            <Card className={cn("group relative overflow-hidden cursor-pointer", link.color)}>
+            <Card className={cn('group relative overflow-hidden cursor-pointer', link.color)}>
               <CardContent className="p-6">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-4">
@@ -182,9 +182,7 @@ export default function StudentsPage() {
               <div className="text-sm text-muted-foreground">
                 com {studentData.nextClass.instructor}
               </div>
-              <div className="text-sm text-muted-foreground">
-                {studentData.nextClass.room}
-              </div>
+              <div className="text-sm text-muted-foreground">{studentData.nextClass.room}</div>
             </div>
           </CardContent>
         </Card>
@@ -196,12 +194,14 @@ export default function StudentsPage() {
           </CardHeader>
           <CardContent>
             <div className="flex flex-col gap-4">
-              <div className="text-2xl font-bold">
-                {studentData.measurements.weight.current}kg
-              </div>
+              <div className="text-2xl font-bold">{studentData.measurements.weight.current}kg</div>
               <Progress value={weightProgress} className="h-2" />
               <div className="text-sm text-green-600 dark:text-green-400">
-                -{(studentData.measurements.weight.initial - studentData.measurements.weight.current).toFixed(1)}kg desde o início
+                -
+                {(
+                  studentData.measurements.weight.initial - studentData.measurements.weight.current
+                ).toFixed(1)}
+                kg desde o início
               </div>
             </div>
           </CardContent>
@@ -216,10 +216,7 @@ export default function StudentsPage() {
           </CardHeader>
           <CardContent>
             <div className="h-[300px]">
-              <AreaChartComponent
-                data={studentData.progress}
-                title="Frequência nos Treinos"
-              />
+              <AreaChartComponent data={studentData.progress} title="Frequência nos Treinos" />
             </div>
           </CardContent>
         </Card>
@@ -232,9 +229,9 @@ export default function StudentsPage() {
           <CardContent>
             <div className="space-y-4">
               {[
-                { title: "Treinos Realizados", value: 23, target: 30, icon: Dumbbell },
-                { title: "Dias Consecutivos", value: 5, target: 7, icon: Clock },
-                { title: "Metas Alcançadas", value: 7, target: 10, icon: Target }
+                { title: 'Treinos Realizados', value: 23, target: 30, icon: Dumbbell },
+                { title: 'Dias Consecutivos', value: 5, target: 7, icon: Clock },
+                { title: 'Metas Alcançadas', value: 7, target: 10, icon: Target },
               ].map((achievement) => (
                 <div key={achievement.title} className="flex items-center gap-4">
                   <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10">
@@ -247,9 +244,9 @@ export default function StudentsPage() {
                         {achievement.value}/{achievement.target}
                       </span>
                     </div>
-                    <Progress 
-                      value={(achievement.value / achievement.target) * 100} 
-                      className="h-2 mt-2" 
+                    <Progress
+                      value={(achievement.value / achievement.target) * 100}
+                      className="h-2 mt-2"
                     />
                   </div>
                 </div>
@@ -259,5 +256,5 @@ export default function StudentsPage() {
         </Card>
       </div>
     </div>
-  )
-} 
+  );
+}

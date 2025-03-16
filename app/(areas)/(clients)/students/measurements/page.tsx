@@ -1,27 +1,27 @@
-"use client"
+'use client';
 
-import { useState } from "react"
-import { 
-  LineChart, 
-  Camera,
-  Scale,
-  Ruler,
+import { cn } from '@/lib/utils';
+import { motion } from 'framer-motion';
+import {
   CalendarDays,
+  Camera,
+  ChevronRight,
+  LineChart,
+  Ruler,
+  Scale,
   TrendingUp,
-  ChevronRight
-} from "lucide-react"
-import { motion } from "framer-motion"
-import { cn } from "@/lib/utils"
+} from 'lucide-react';
+import { useState } from 'react';
 
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { AreaChartComponent } from "@/components/charts/area-chart"
+import { AreaChartComponent } from '@/components/charts/area-chart';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 // Dados simulados
 const measurementsData = {
   latest: {
-    date: "2024-03-14",
+    date: '2024-03-14',
     weight: 75.5,
     bodyFat: 18,
     muscle: 35.2,
@@ -32,69 +32,77 @@ const measurementsData = {
       bicepsLeft: 32,
       bicepsRight: 32.5,
       thighLeft: 55,
-      thighRight: 55.5
-    }
+      thighRight: 55.5,
+    },
   },
   history: {
     weight: [
-      { date: "2024-02-14", attendance: 78 },
-      { date: "2024-02-21", attendance: 77.2 },
-      { date: "2024-02-28", attendance: 76.5 },
-      { date: "2024-03-07", attendance: 76 },
-      { date: "2024-03-14", attendance: 75.5 }
+      { date: '2024-02-14', attendance: 78 },
+      { date: '2024-02-21', attendance: 77.2 },
+      { date: '2024-02-28', attendance: 76.5 },
+      { date: '2024-03-07', attendance: 76 },
+      { date: '2024-03-14', attendance: 75.5 },
     ],
     bodyFat: [
-      { date: "2024-02-14", attendance: 20 },
-      { date: "2024-02-21", attendance: 19.5 },
-      { date: "2024-02-28", attendance: 19 },
-      { date: "2024-03-07", attendance: 18.5 },
-      { date: "2024-03-14", attendance: 18 }
+      { date: '2024-02-14', attendance: 20 },
+      { date: '2024-02-21', attendance: 19.5 },
+      { date: '2024-02-28', attendance: 19 },
+      { date: '2024-03-07', attendance: 18.5 },
+      { date: '2024-03-14', attendance: 18 },
     ],
     muscle: [
-      { date: "2024-02-14", attendance: 34 },
-      { date: "2024-02-21", attendance: 34.3 },
-      { date: "2024-02-28", attendance: 34.6 },
-      { date: "2024-03-07", attendance: 34.9 },
-      { date: "2024-03-14", attendance: 35.2 }
-    ]
+      { date: '2024-02-14', attendance: 34 },
+      { date: '2024-02-21', attendance: 34.3 },
+      { date: '2024-02-28', attendance: 34.6 },
+      { date: '2024-03-07', attendance: 34.9 },
+      { date: '2024-03-14', attendance: 35.2 },
+    ],
   },
   photos: [
-    { date: "2024-03-14", front: "/photos/front-1.jpg", side: "/photos/side-1.jpg", back: "/photos/back-1.jpg" },
-    { date: "2024-02-14", front: "/photos/front-2.jpg", side: "/photos/side-2.jpg", back: "/photos/back-2.jpg" }
-  ]
-}
+    {
+      date: '2024-03-14',
+      front: '/photos/front-1.jpg',
+      side: '/photos/side-1.jpg',
+      back: '/photos/back-1.jpg',
+    },
+    {
+      date: '2024-02-14',
+      front: '/photos/front-2.jpg',
+      side: '/photos/side-2.jpg',
+      back: '/photos/back-2.jpg',
+    },
+  ],
+};
 
 const quickActions = [
-  { 
-    title: "Nova Medição", 
-    description: "Registrar medidas atuais", 
+  {
+    title: 'Nova Medição',
+    description: 'Registrar medidas atuais',
     icon: Scale,
-    color: "bg-primary text-primary-foreground"
+    color: 'bg-primary text-primary-foreground',
   },
-  { 
-    title: "Fotos de Progresso", 
-    description: "Adicionar novas fotos", 
+  {
+    title: 'Fotos de Progresso',
+    description: 'Adicionar novas fotos',
     icon: Camera,
-    color: "bg-muted hover:bg-muted/80"
+    color: 'bg-muted hover:bg-muted/80',
   },
-  { 
-    title: "Ver Evolução", 
-    description: "Análise completa", 
+  {
+    title: 'Ver Evolução',
+    description: 'Análise completa',
     icon: TrendingUp,
-    color: "bg-muted hover:bg-muted/80"
-  }
-]
+    color: 'bg-muted hover:bg-muted/80',
+  },
+];
 
 export default function MeasurementsPage() {
-  const [activeTab, setActiveTab] = useState("overview")
+  const [activeTab, setActiveTab] = useState('overview');
 
   return (
     <div className="space-y-8">
       <div className="flex flex-col gap-2">
         <h1 className="text-3xl font-bold tracking-tight">Medidas e Evolução</h1>
-        <p className="text-muted-foreground">
-          Acompanhe suas medidas e progresso físico
-        </p>
+        <p className="text-muted-foreground">Acompanhe suas medidas e progresso físico</p>
       </div>
 
       <div className="grid gap-4 md:grid-cols-3">
@@ -105,7 +113,7 @@ export default function MeasurementsPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: index * 0.1 }}
           >
-            <Card className={cn("group relative overflow-hidden", action.color)}>
+            <Card className={cn('group relative overflow-hidden', action.color)}>
               <CardContent className="p-6">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-4">
@@ -273,5 +281,5 @@ export default function MeasurementsPage() {
         </TabsContent>
       </Tabs>
     </div>
-  )
-} 
+  );
+}

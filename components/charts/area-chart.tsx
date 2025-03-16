@@ -1,22 +1,17 @@
-"use client"
+'use client';
 
-import * as React from "react"
-import { Area, AreaChart, CartesianGrid, XAxis, YAxis, ResponsiveContainer, Tooltip } from "recharts"
+import * as React from 'react';
+import {
+  Area,
+  AreaChart,
+  CartesianGrid,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
+} from 'recharts';
 
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import {
   ChartConfig,
   ChartContainer,
@@ -24,25 +19,32 @@ import {
   ChartLegendContent,
   ChartTooltip,
   ChartTooltipContent,
-} from "@/components/ui/chart"
+} from '@/components/ui/chart';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 
 export interface AttendanceData {
-  date: string
-  attendance: number
+  date: string;
+  attendance: number;
 }
 
 interface AreaChartProps {
-  data: AttendanceData[]
-  title: string
-  description?: string
+  data: AttendanceData[];
+  title: string;
+  description?: string;
 }
 
 const chartConfig = {
   attendance: {
-    label: "Frequência",
-    color: "hsl(var(--primary))"
-  }
-}
+    label: 'Frequência',
+    color: 'hsl(var(--primary))',
+  },
+};
 
 export function AreaChartComponent({ data, title, description }: AreaChartProps) {
   return (
@@ -70,12 +72,7 @@ export function AreaChartComponent({ data, title, description }: AreaChartProps)
                 fontSize={12}
                 tickMargin={8}
               />
-              <YAxis
-                tickLine={false}
-                axisLine={false}
-                fontSize={12}
-                tickMargin={8}
-              />
+              <YAxis tickLine={false} axisLine={false} fontSize={12} tickMargin={8} />
               <Area
                 type="monotone"
                 dataKey="attendance"
@@ -87,11 +84,11 @@ export function AreaChartComponent({ data, title, description }: AreaChartProps)
                 content={({ active, payload, label }) => (
                   <ChartTooltip
                     active={active}
-                    payload={payload?.map(item => ({
+                    payload={payload?.map((item) => ({
                       value: item.value as number,
                       name: item.name || '',
                       color: item.color || 'hsl(var(--primary))',
-                      dataKey: item.dataKey || 'attendance'
+                      dataKey: item.dataKey || 'attendance',
                     }))}
                     label={label}
                     config={chartConfig}
@@ -103,5 +100,5 @@ export function AreaChartComponent({ data, title, description }: AreaChartProps)
         </ChartContainer>
       </CardContent>
     </Card>
-  )
-} 
+  );
+}

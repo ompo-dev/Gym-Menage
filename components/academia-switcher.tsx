@@ -1,7 +1,7 @@
-"use client"
+'use client';
 
-import * as React from "react"
-import { ChevronsUpDown, Plus } from "lucide-react"
+import { ChevronsUpDown, Plus } from 'lucide-react';
+import * as React from 'react';
 
 import {
   DropdownMenu,
@@ -11,23 +11,28 @@ import {
   DropdownMenuSeparator,
   DropdownMenuShortcut,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar } from "@/components/ui/sidebar"
+} from '@/components/ui/dropdown-menu';
+import {
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+  useSidebar,
+} from '@/components/ui/sidebar';
 
 export function AcademiaSwitcher({
   academias,
 }: {
   academias: {
-    name: string
-    logo: React.ElementType
-    plan: string
-  }[]
+    name: string;
+    logo: React.ElementType;
+    plan: string;
+  }[];
 }) {
-  const { isMobile } = useSidebar()
-  const [activeAcademia, setActiveAcademia] = React.useState(academias[0])
+  const { isMobile } = useSidebar();
+  const [activeAcademia, setActiveAcademia] = React.useState(academias[0]);
 
   if (!activeAcademia) {
-    return null
+    return null;
   }
 
   return (
@@ -52,12 +57,18 @@ export function AcademiaSwitcher({
           <DropdownMenuContent
             className="w-[--radix-dropdown-menu-trigger-width] min-w-56 rounded-lg"
             align="start"
-            side={isMobile ? "bottom" : "right"}
+            side={isMobile ? 'bottom' : 'right'}
             sideOffset={4}
           >
-            <DropdownMenuLabel className="text-xs text-muted-foreground">Academias</DropdownMenuLabel>
+            <DropdownMenuLabel className="text-xs text-muted-foreground">
+              Academias
+            </DropdownMenuLabel>
             {academias.map((academia, index) => (
-              <DropdownMenuItem key={academia.name} onClick={() => setActiveAcademia(academia)} className="gap-2 p-2">
+              <DropdownMenuItem
+                key={academia.name}
+                onClick={() => setActiveAcademia(academia)}
+                className="gap-2 p-2"
+              >
                 <div className="flex size-6 items-center justify-center rounded-sm border">
                   <academia.logo className="size-4 shrink-0" />
                 </div>
@@ -76,6 +87,5 @@ export function AcademiaSwitcher({
         </DropdownMenu>
       </SidebarMenuItem>
     </SidebarMenu>
-  )
+  );
 }
-
