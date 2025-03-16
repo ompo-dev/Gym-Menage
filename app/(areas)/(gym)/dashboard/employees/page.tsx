@@ -4,6 +4,8 @@ import { PageSkeleton } from '@/components/PageSkeleton';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Checkbox } from '@/components/ui/checkbox';
+import { DataTable, multiColumnFilterFn, statusFilterFn } from '@/components/ui/data-table';
 import {
   Dialog,
   DialogContent,
@@ -28,17 +30,33 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Calendar, Edit, Eye, Filter, MoreVertical, Search, Trash2, UserPlus } from 'lucide-react';
+import type { ColumnDef, Row } from '@tanstack/react-table';
+import {
+  Calendar,
+  CheckCircle2,
+  CircleX,
+  Edit,
+  Eye,
+  Filter,
+  MoreVertical,
+  Search,
+  Trash2,
+  UserPlus,
+} from 'lucide-react';
 import { Suspense, useState } from 'react';
+
+// Tipo para os dados de funcionário
+interface Employee {
+  id: number;
+  name: string;
+  role: string;
+  email: string;
+  phone: string;
+  status: string;
+  hireDate: string;
+  schedule: string;
+}
 
 // Dados simulados de funcionários
 const initialEmployees = [
@@ -94,11 +112,40 @@ const initialEmployees = [
   },
 ];
 
+// Componente de ações para cada linha
+function EmployeeRowActions({ row }: { row: Row<Employee> }) {
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button variant="ghost" size="icon">
+          <MoreVertical className="h-4 w-4" />
+          <span className="sr-only">Abrir menu</span>
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end">
+        <DropdownMenuItem>
+          <Eye className="mr-2 h-4 w-4" />
+          <span>Visualizar</span>
+        </DropdownMenuItem>
+        <DropdownMenuItem>
+          <Edit className="mr-2 h-4 w-4" />
+          <span>Editar</span>
+        </DropdownMenuItem>
+        <DropdownMenuItem>
+          <Calendar className="mr-2 h-4 w-4" />
+          <span>Gerenciar Horário</span>
+        </DropdownMenuItem>
+        <DropdownMenuItem className="text-destructive">
+          <Trash2 className="mr-2 h-4 w-4" />
+          <span>Excluir</span>
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+}
+
 function EmployeesPageContent() {
-  const [employees, setEmployees] = useState(initialEmployees);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [statusFilter, setStatusFilter] = useState('all');
-  const [roleFilter, setRoleFilter] = useState('all');
+  const [employees, setEmployees] = useState<Employee[]>(initialEmployees);
   const [isNewEmployeeDialogOpen, setIsNewEmployeeDialogOpen] = useState(false);
   const [newEmployee, setNewEmployee] = useState({
     name: '',
@@ -109,16 +156,95 @@ function EmployeesPageContent() {
     schedule: '',
   });
 
-  // Filtrar funcionários
-  const filteredEmployees = employees.filter((employee) => {
-    const matchesSearch =
-      employee.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      employee.email.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesStatus = statusFilter === 'all' || employee.status === statusFilter;
-    const matchesRole = roleFilter === 'all' || employee.role === roleFilter;
-
-    return matchesSearch && matchesStatus && matchesRole;
-  });
+  // Definição das colunas para a tabela
+  const columns: ColumnDef<Employee>[] = [
+    {
+      id: 'select',
+      header: ({ table }) => (
+        <Checkbox
+          checked={
+            table.getIsAllPageRowsSelected() ||
+            (table.getIsSomePageRowsSelected() && 'indeterminate')
+          }
+          onCheckedChange={(value: boolean | 'indeterminate') =>
+            table.toggleAllPageRowsSelected(!!value)
+          }
+          aria-label="Select all"
+        />
+      ),
+      cell: ({ row }) => (
+        <Checkbox
+          checked={row.getIsSelected()}
+          onCheckedChange={(value: boolean) => row.toggleSelected(!!value)}
+          aria-label="Select row"
+        />
+      ),
+      size: 28,
+      enableSorting: false,
+      enableHiding: false,
+    },
+    {
+      header: 'Nome',
+      accessorKey: 'name',
+      cell: ({ row }) => <div className="font-medium">{row.getValue('name')}</div>,
+      size: 180,
+      filterFn: multiColumnFilterFn,
+      enableHiding: false,
+    },
+    {
+      header: 'Cargo',
+      accessorKey: 'role',
+      size: 160,
+    },
+    {
+      header: 'Email',
+      accessorKey: 'email',
+      size: 220,
+    },
+    {
+      header: 'Telefone',
+      accessorKey: 'phone',
+      size: 140,
+    },
+    {
+      header: 'Status',
+      accessorKey: 'status',
+      cell: ({ row }) => (
+        <Badge variant={row.getValue('status') === 'Ativo' ? 'default' : 'destructive'}>
+          {row.getValue('status') === 'Ativo' ? (
+            <span className="flex items-center">
+              <CheckCircle2 className="mr-1 h-3 w-3" />
+              {row.getValue('status')}
+            </span>
+          ) : (
+            <span className="flex items-center">
+              <CircleX className="mr-1 h-3 w-3" />
+              {row.getValue('status')}
+            </span>
+          )}
+        </Badge>
+      ),
+      size: 100,
+      filterFn: statusFilterFn,
+    },
+    {
+      header: 'Data de Contratação',
+      accessorKey: 'hireDate',
+      size: 140,
+    },
+    {
+      header: 'Horário',
+      accessorKey: 'schedule',
+      size: 220,
+    },
+    {
+      id: 'actions',
+      header: () => <span className="sr-only">Ações</span>,
+      cell: ({ row }) => <EmployeeRowActions row={row} />,
+      size: 60,
+      enableHiding: false,
+    },
+  ];
 
   // Manipular mudanças no formulário de novo funcionário
   const handleNewEmployeeChange = (e: { target: { name: string; value: string } }) => {
@@ -147,6 +273,14 @@ function EmployeesPageContent() {
       schedule: '',
     });
     setIsNewEmployeeDialogOpen(false);
+  };
+
+  // Excluir funcionários selecionados
+  const handleDeleteEmployees = (selectedEmployees: Employee[]) => {
+    const updatedEmployees = employees.filter(
+      (employee) => !selectedEmployees.some((selected) => selected.id === employee.id)
+    );
+    setEmployees(updatedEmployees);
   };
 
   return (
@@ -265,147 +399,44 @@ function EmployeesPageContent() {
         </CardHeader>
         <CardContent>
           <Tabs defaultValue="all" className="space-y-4">
-            <div className="flex flex-col space-y-4 sm:flex-row sm:items-center sm:justify-between sm:space-y-0">
-              <TabsList>
-                <TabsTrigger value="all">Todos</TabsTrigger>
-                <TabsTrigger value="active">Ativos</TabsTrigger>
-                <TabsTrigger value="inactive">Inativos</TabsTrigger>
-              </TabsList>
-              <div className="flex items-center space-x-2">
-                <div className="relative">
-                  <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-                  <Input
-                    type="search"
-                    placeholder="Buscar funcionário..."
-                    className="pl-8"
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                  />
-                </div>
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button variant="outline" size="sm" className="h-9 gap-1">
-                      <Filter className="h-4 w-4" />
-                      <span className="hidden sm:inline">Filtrar</span>
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end" className="w-[200px]">
-                    <div className="p-2">
-                      <div className="space-y-1">
-                        <Label>Status</Label>
-                        <Select value={statusFilter} onValueChange={setStatusFilter}>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Selecione" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="all">Todos</SelectItem>
-                            <SelectItem value="Ativo">Ativo</SelectItem>
-                            <SelectItem value="Inativo">Inativo</SelectItem>
-                          </SelectContent>
-                        </Select>
-                      </div>
-                      <div className="mt-2 space-y-1">
-                        <Label>Cargo</Label>
-                        <Select value={roleFilter} onValueChange={setRoleFilter}>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Selecione" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="all">Todos</SelectItem>
-                            <SelectItem value="Personal Trainer">Personal Trainer</SelectItem>
-                            <SelectItem value="Instrutora de Yoga">Instrutor de Yoga</SelectItem>
-                            <SelectItem value="Instrutor de Spinning">
-                              Instrutor de Spinning
-                            </SelectItem>
-                            <SelectItem value="Instrutora de Pilates">
-                              Instrutor de Pilates
-                            </SelectItem>
-                          </SelectContent>
-                        </Select>
-                      </div>
-                    </div>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              </div>
-            </div>
+            <TabsList>
+              <TabsTrigger value="all">Todos</TabsTrigger>
+              <TabsTrigger value="active">Ativos</TabsTrigger>
+              <TabsTrigger value="inactive">Inativos</TabsTrigger>
+            </TabsList>
             <TabsContent value="all" className="space-y-4">
-              <div className="rounded-md border">
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Nome</TableHead>
-                      <TableHead>Cargo</TableHead>
-                      <TableHead>Email</TableHead>
-                      <TableHead>Telefone</TableHead>
-                      <TableHead>Status</TableHead>
-                      <TableHead>Data de Contratação</TableHead>
-                      <TableHead>Horário</TableHead>
-                      <TableHead className="text-right">Ações</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {filteredEmployees.length > 0 ? (
-                      filteredEmployees.map((employee) => (
-                        <TableRow key={employee.id}>
-                          <TableCell className="font-medium">{employee.name}</TableCell>
-                          <TableCell>{employee.role}</TableCell>
-                          <TableCell>{employee.email}</TableCell>
-                          <TableCell>{employee.phone}</TableCell>
-                          <TableCell>
-                            <Badge
-                              variant={employee.status === 'Ativo' ? 'default' : 'destructive'}
-                            >
-                              {employee.status}
-                            </Badge>
-                          </TableCell>
-                          <TableCell>{employee.hireDate}</TableCell>
-                          <TableCell>{employee.schedule}</TableCell>
-                          <TableCell className="text-right">
-                            <DropdownMenu>
-                              <DropdownMenuTrigger asChild>
-                                <Button variant="ghost" size="icon">
-                                  <MoreVertical className="h-4 w-4" />
-                                  <span className="sr-only">Abrir menu</span>
-                                </Button>
-                              </DropdownMenuTrigger>
-                              <DropdownMenuContent align="end">
-                                <DropdownMenuItem>
-                                  <Eye className="mr-2 h-4 w-4" />
-                                  <span>Visualizar</span>
-                                </DropdownMenuItem>
-                                <DropdownMenuItem>
-                                  <Edit className="mr-2 h-4 w-4" />
-                                  <span>Editar</span>
-                                </DropdownMenuItem>
-                                <DropdownMenuItem>
-                                  <Calendar className="mr-2 h-4 w-4" />
-                                  <span>Gerenciar Horário</span>
-                                </DropdownMenuItem>
-                                <DropdownMenuItem className="text-destructive">
-                                  <Trash2 className="mr-2 h-4 w-4" />
-                                  <span>Excluir</span>
-                                </DropdownMenuItem>
-                              </DropdownMenuContent>
-                            </DropdownMenu>
-                          </TableCell>
-                        </TableRow>
-                      ))
-                    ) : (
-                      <TableRow>
-                        <TableCell colSpan={8} className="h-24 text-center">
-                          Nenhum funcionário encontrado.
-                        </TableCell>
-                      </TableRow>
-                    )}
-                  </TableBody>
-                </Table>
-              </div>
+              <DataTable
+                data={employees}
+                columns={columns}
+                searchColumn="name"
+                statusColumn="status"
+                onDeleteRows={handleDeleteEmployees}
+                onAddItem={() => setIsNewEmployeeDialogOpen(true)}
+                addButtonText="Novo Funcionário"
+                searchPlaceholder="Buscar por nome ou email..."
+              />
             </TabsContent>
             <TabsContent value="active" className="space-y-4">
-              {/* Conteúdo similar para funcionários ativos */}
+              <DataTable
+                data={employees.filter((employee) => employee.status === 'Ativo')}
+                columns={columns}
+                searchColumn="name"
+                onDeleteRows={handleDeleteEmployees}
+                onAddItem={() => setIsNewEmployeeDialogOpen(true)}
+                addButtonText="Novo Funcionário"
+                searchPlaceholder="Buscar por nome ou email..."
+              />
             </TabsContent>
             <TabsContent value="inactive" className="space-y-4">
-              {/* Conteúdo similar para funcionários inativos */}
+              <DataTable
+                data={employees.filter((employee) => employee.status === 'Inativo')}
+                columns={columns}
+                searchColumn="name"
+                onDeleteRows={handleDeleteEmployees}
+                onAddItem={() => setIsNewEmployeeDialogOpen(true)}
+                addButtonText="Novo Funcionário"
+                searchPlaceholder="Buscar por nome ou email..."
+              />
             </TabsContent>
           </Tabs>
         </CardContent>

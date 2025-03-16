@@ -7,10 +7,24 @@ import {
   MultipleBarChartComponent,
   StackedBarChartComponent,
 } from '@/components/charts';
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { DataTable } from '@/components/ui/data-table';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Activity, Calendar, DollarSign, TrendingUp, UserPlus, Users } from 'lucide-react';
+import type { ColumnDef } from '@tanstack/react-table';
+import {
+  Activity,
+  Calendar,
+  CheckCircle2,
+  Clock,
+  DollarSign,
+  Loader2,
+  TrendingUp,
+  UserPlus,
+  Users,
+} from 'lucide-react';
+import { ArrowUpRight } from 'lucide-react';
 import { Suspense, useEffect, useState } from 'react';
 import { Area, AreaChart, ResponsiveContainer } from 'recharts';
 
@@ -78,6 +92,122 @@ const revenueData = [
     mensalidades: 68000,
     produtos: 24000,
     servicos: 13000,
+  },
+];
+
+// Tipo para os dados de relatório
+interface Report {
+  id: string;
+  title: string;
+  description: string;
+  date: string;
+  status: string;
+  category: string;
+}
+
+// Dados simulados de relatórios
+const reports: Report[] = [
+  {
+    id: 'rep-1',
+    title: 'Relatório Mensal de Frequência',
+    description: 'Análise da frequência de clientes durante o mês de Abril',
+    date: '30/04/2024',
+    status: 'Completo',
+    category: 'Frequência',
+  },
+  {
+    id: 'rep-2',
+    title: 'Análise de Desempenho de Funcionários',
+    description: 'Avaliação trimestral de desempenho dos instrutores',
+    date: '15/04/2024',
+    status: 'Completo',
+    category: 'Funcionários',
+  },
+  {
+    id: 'rep-3',
+    title: 'Relatório Financeiro - Q1',
+    description: 'Resumo financeiro do primeiro trimestre de 2024',
+    date: '10/04/2024',
+    status: 'Pendente',
+    category: 'Financeiro',
+  },
+  {
+    id: 'rep-4',
+    title: 'Manutenção de Equipamentos',
+    description: 'Status atual e programação de manutenção dos equipamentos',
+    date: '05/04/2024',
+    status: 'Em Progresso',
+    category: 'Equipamentos',
+  },
+  {
+    id: 'rep-5',
+    title: 'Análise de Retenção de Clientes',
+    description: 'Estudo sobre taxas de renovação e cancelamento de planos',
+    date: '01/04/2024',
+    status: 'Completo',
+    category: 'Clientes',
+  },
+];
+
+// Definição das colunas para a tabela de relatórios
+const reportColumns: ColumnDef<Report>[] = [
+  {
+    header: 'Título',
+    accessorKey: 'title',
+    cell: ({ row }) => <div className="font-medium">{row.getValue('title')}</div>,
+  },
+  {
+    header: 'Categoria',
+    accessorKey: 'category',
+  },
+  {
+    header: 'Data',
+    accessorKey: 'date',
+  },
+  {
+    header: 'Status',
+    accessorKey: 'status',
+    cell: ({ row }) => {
+      const status = row.getValue('status') as string;
+      let variant: 'default' | 'secondary' | 'outline' = 'default';
+
+      if (status === 'Pendente') {
+        variant = 'outline';
+      } else if (status === 'Em Progresso') {
+        variant = 'secondary';
+      }
+
+      return (
+        <Badge variant={variant}>
+          {status === 'Completo' && (
+            <span className="flex items-center">
+              <CheckCircle2 className="mr-1 h-3 w-3" />
+              {status}
+            </span>
+          )}
+          {status === 'Pendente' && (
+            <span className="flex items-center">
+              <Clock className="mr-1 h-3 w-3" />
+              {status}
+            </span>
+          )}
+          {status === 'Em Progresso' && (
+            <span className="flex items-center">
+              <Loader2 className="mr-1 h-3 w-3 animate-spin" />
+              {status}
+            </span>
+          )}
+        </Badge>
+      );
+    },
+  },
+  {
+    id: 'actions',
+    cell: () => (
+      <Button variant="ghost" size="icon">
+        <ArrowUpRight className="h-4 w-4" />
+      </Button>
+    ),
   },
 ];
 
@@ -309,38 +439,45 @@ function DashboardPageContent() {
         <TabsContent value="reports" className="space-y-4">
           <Card>
             <CardHeader>
-              <CardTitle>Relatórios Disponíveis</CardTitle>
-              <CardDescription>Acesse os relatórios detalhados da sua academia</CardDescription>
+              <CardTitle>Relatórios Recentes</CardTitle>
+              <CardDescription>
+                Lista dos últimos relatórios gerados para sua academia.
+              </CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-                {[
-                  {
-                    title: 'Financeiro',
-                    description: 'Relatórios financeiros detalhados',
-                    icon: <DollarSign className="h-5 w-5" />,
-                    id: 'financial-report',
-                  },
-                  {
-                    title: 'Frequência',
-                    description: 'Análise de frequência dos alunos',
-                    icon: <Users className="h-5 w-5" />,
-                    id: 'attendance-report',
-                  },
-                  {
-                    title: 'Desempenho',
-                    description: 'Métricas de desempenho da academia',
-                    icon: <Activity className="h-5 w-5" />,
-                    id: 'performance-report',
-                  },
-                ].map((report) => (
-                  <Card key={report.id} className="flex flex-col items-center p-4 text-center">
-                    <div className="rounded-full bg-primary/10 p-3 text-primary">{report.icon}</div>
-                    <h3 className="mt-3 font-medium">{report.title}</h3>
-                    <p className="text-sm text-muted-foreground">{report.description}</p>
-                  </Card>
-                ))}
-              </div>
+              <Tabs defaultValue="all" className="space-y-4">
+                <TabsList>
+                  <TabsTrigger value="all">Todos</TabsTrigger>
+                  <TabsTrigger value="completed">Completos</TabsTrigger>
+                  <TabsTrigger value="pending">Pendentes</TabsTrigger>
+                </TabsList>
+                <TabsContent value="all" className="space-y-4">
+                  <DataTable
+                    data={reports}
+                    columns={reportColumns}
+                    searchColumn="title"
+                    searchPlaceholder="Buscar relatórios..."
+                  />
+                </TabsContent>
+                <TabsContent value="completed" className="space-y-4">
+                  <DataTable
+                    data={reports.filter((report) => report.status === 'Completo')}
+                    columns={reportColumns}
+                    searchColumn="title"
+                    searchPlaceholder="Buscar relatórios completos..."
+                  />
+                </TabsContent>
+                <TabsContent value="pending" className="space-y-4">
+                  <DataTable
+                    data={reports.filter(
+                      (report) => report.status === 'Pendente' || report.status === 'Em Progresso'
+                    )}
+                    columns={reportColumns}
+                    searchColumn="title"
+                    searchPlaceholder="Buscar relatórios pendentes..."
+                  />
+                </TabsContent>
+              </Tabs>
             </CardContent>
           </Card>
         </TabsContent>

@@ -4,6 +4,13 @@ import { PageSkeleton } from '@/components/PageSkeleton';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Checkbox } from '@/components/ui/checkbox';
+import {
+  DataTable,
+  DefaultRowActions,
+  multiColumnFilterFn,
+  statusFilterFn,
+} from '@/components/ui/data-table';
 import {
   Dialog,
   DialogContent,
@@ -28,17 +35,35 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Edit, Eye, Filter, MoreVertical, Search, Trash2, UserCog, UserPlus } from 'lucide-react';
+import type { ColumnDef, Row } from '@tanstack/react-table';
+import {
+  CheckCircle2,
+  CircleX,
+  Clock,
+  CreditCard,
+  Edit,
+  Eye,
+  Filter,
+  MoreVertical,
+  Search,
+  Trash2,
+  UserCog,
+  UserPlus,
+} from 'lucide-react';
 import { Suspense, useState } from 'react';
+
+// Tipo para os dados de cliente
+interface Client {
+  id: number;
+  name: string;
+  email: string;
+  phone: string;
+  plan: string;
+  status: string;
+  joinDate: string;
+  lastVisit: string;
+}
 
 // Dados simulados de clientes
 const initialClients = [
@@ -124,11 +149,40 @@ const initialClients = [
   },
 ];
 
+// Componente de ações para cada linha
+function ClientRowActions({ row }: { row: Row<Client> }) {
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button variant="ghost" size="icon">
+          <MoreVertical className="h-4 w-4" />
+          <span className="sr-only">Abrir menu</span>
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end">
+        <DropdownMenuItem>
+          <Eye className="mr-2 h-4 w-4" />
+          <span>Visualizar</span>
+        </DropdownMenuItem>
+        <DropdownMenuItem>
+          <Edit className="mr-2 h-4 w-4" />
+          <span>Editar</span>
+        </DropdownMenuItem>
+        <DropdownMenuItem>
+          <UserCog className="mr-2 h-4 w-4" />
+          <span>Gerenciar Plano</span>
+        </DropdownMenuItem>
+        <DropdownMenuItem className="text-destructive">
+          <Trash2 className="mr-2 h-4 w-4" />
+          <span>Excluir</span>
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+}
+
 function ClientsPageContent() {
-  const [clients, setClients] = useState(initialClients);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [statusFilter, setStatusFilter] = useState('all');
-  const [planFilter, setPlanFilter] = useState('all');
+  const [clients, setClients] = useState<Client[]>(initialClients);
   const [isNewClientDialogOpen, setIsNewClientDialogOpen] = useState(false);
   const [newClient, setNewClient] = useState({
     name: '',
@@ -138,16 +192,110 @@ function ClientsPageContent() {
     status: 'Ativo',
   });
 
-  // Filtrar clientes
-  const filteredClients = clients.filter((client) => {
-    const matchesSearch =
-      client.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      client.email.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesStatus = statusFilter === 'all' || client.status === statusFilter;
-    const matchesPlan = planFilter === 'all' || client.plan === planFilter;
-
-    return matchesSearch && matchesStatus && matchesPlan;
-  });
+  // Definição das colunas para a tabela
+  const columns: ColumnDef<Client>[] = [
+    {
+      id: 'select',
+      header: ({ table }) => (
+        <Checkbox
+          checked={
+            table.getIsAllPageRowsSelected() ||
+            (table.getIsSomePageRowsSelected() && 'indeterminate')
+          }
+          onCheckedChange={(value: boolean | 'indeterminate') =>
+            table.toggleAllPageRowsSelected(!!value)
+          }
+          aria-label="Select all"
+        />
+      ),
+      cell: ({ row }) => (
+        <Checkbox
+          checked={row.getIsSelected()}
+          onCheckedChange={(value: boolean) => row.toggleSelected(!!value)}
+          aria-label="Select row"
+        />
+      ),
+      size: 28,
+      enableSorting: false,
+      enableHiding: false,
+    },
+    {
+      header: 'Nome',
+      accessorKey: 'name',
+      cell: ({ row }) => <div className="font-medium">{row.getValue('name')}</div>,
+      size: 180,
+      filterFn: multiColumnFilterFn,
+      enableHiding: false,
+    },
+    {
+      header: 'Email',
+      accessorKey: 'email',
+      size: 220,
+    },
+    {
+      header: 'Telefone',
+      accessorKey: 'phone',
+      size: 140,
+    },
+    {
+      header: 'Plano',
+      accessorKey: 'plan',
+      size: 120,
+    },
+    {
+      header: 'Status',
+      accessorKey: 'status',
+      cell: ({ row }) => (
+        <Badge
+          variant={
+            row.getValue('status') === 'Ativo'
+              ? 'default'
+              : row.getValue('status') === 'Inativo'
+                ? 'destructive'
+                : 'outline'
+          }
+        >
+          {row.getValue('status') === 'Ativo' && (
+            <span className="flex items-center">
+              <CheckCircle2 className="mr-1 h-3 w-3" />
+              {row.getValue('status')}
+            </span>
+          )}
+          {row.getValue('status') === 'Inativo' && (
+            <span className="flex items-center">
+              <CircleX className="mr-1 h-3 w-3" />
+              {row.getValue('status')}
+            </span>
+          )}
+          {row.getValue('status') === 'Pendente' && (
+            <span className="flex items-center">
+              <Clock className="mr-1 h-3 w-3" />
+              {row.getValue('status')}
+            </span>
+          )}
+        </Badge>
+      ),
+      size: 100,
+      filterFn: statusFilterFn,
+    },
+    {
+      header: 'Data de Cadastro',
+      accessorKey: 'joinDate',
+      size: 140,
+    },
+    {
+      header: 'Última Visita',
+      accessorKey: 'lastVisit',
+      size: 140,
+    },
+    {
+      id: 'actions',
+      header: () => <span className="sr-only">Ações</span>,
+      cell: ({ row }) => <ClientRowActions row={row} />,
+      size: 60,
+      enableHiding: false,
+    },
+  ];
 
   // Manipular mudanças no formulário de novo cliente
   const handleNewClientChange = (e: { target: { name: string; value: string } }) => {
@@ -176,6 +324,14 @@ function ClientsPageContent() {
       status: 'Ativo',
     });
     setIsNewClientDialogOpen(false);
+  };
+
+  // Excluir clientes selecionados
+  const handleDeleteClients = (selectedClients: Client[]) => {
+    const updatedClients = clients.filter(
+      (client) => !selectedClients.some((selected) => selected.id === client.id)
+    );
+    setClients(updatedClients);
   };
 
   return (
@@ -290,154 +446,56 @@ function ClientsPageContent() {
         </CardHeader>
         <CardContent>
           <Tabs defaultValue="all" className="space-y-4">
-            <div className="flex flex-col space-y-4 sm:flex-row sm:items-center sm:justify-between sm:space-y-0">
-              <TabsList>
-                <TabsTrigger value="all">Todos</TabsTrigger>
-                <TabsTrigger value="active">Ativos</TabsTrigger>
-                <TabsTrigger value="inactive">Inativos</TabsTrigger>
-                <TabsTrigger value="pending">Pendentes</TabsTrigger>
-              </TabsList>
-              <div className="flex items-center space-x-2">
-                <div className="relative">
-                  <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-                  <Input
-                    type="search"
-                    placeholder="Buscar cliente..."
-                    className="pl-8"
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                  />
-                </div>
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button variant="outline" size="sm" className="h-9 gap-1">
-                      <Filter className="h-4 w-4" />
-                      <span className="hidden sm:inline">Filtrar</span>
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end" className="w-[200px]">
-                    <div className="p-2">
-                      <div className="space-y-1">
-                        <Label>Status</Label>
-                        <Select value={statusFilter} onValueChange={setStatusFilter}>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Selecione" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="all">Todos</SelectItem>
-                            <SelectItem value="Ativo">Ativo</SelectItem>
-                            <SelectItem value="Inativo">Inativo</SelectItem>
-                            <SelectItem value="Pendente">Pendente</SelectItem>
-                          </SelectContent>
-                        </Select>
-                      </div>
-                      <div className="mt-2 space-y-1">
-                        <Label>Plano</Label>
-                        <Select value={planFilter} onValueChange={setPlanFilter}>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Selecione" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="all">Todos</SelectItem>
-                            <SelectItem value="Mensal">Mensal</SelectItem>
-                            <SelectItem value="Trimestral">Trimestral</SelectItem>
-                            <SelectItem value="Semestral">Semestral</SelectItem>
-                            <SelectItem value="Anual">Anual</SelectItem>
-                          </SelectContent>
-                        </Select>
-                      </div>
-                    </div>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              </div>
-            </div>
+            <TabsList>
+              <TabsTrigger value="all">Todos</TabsTrigger>
+              <TabsTrigger value="active">Ativos</TabsTrigger>
+              <TabsTrigger value="inactive">Inativos</TabsTrigger>
+              <TabsTrigger value="pending">Pendentes</TabsTrigger>
+            </TabsList>
             <TabsContent value="all" className="space-y-4">
-              <div className="rounded-md border">
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Nome</TableHead>
-                      <TableHead>Email</TableHead>
-                      <TableHead>Telefone</TableHead>
-                      <TableHead>Plano</TableHead>
-                      <TableHead>Status</TableHead>
-                      <TableHead>Data de Cadastro</TableHead>
-                      <TableHead>Última Visita</TableHead>
-                      <TableHead className="text-right">Ações</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {filteredClients.length > 0 ? (
-                      filteredClients.map((client) => (
-                        <TableRow key={client.id}>
-                          <TableCell className="font-medium">{client.name}</TableCell>
-                          <TableCell>{client.email}</TableCell>
-                          <TableCell>{client.phone}</TableCell>
-                          <TableCell>{client.plan}</TableCell>
-                          <TableCell>
-                            <Badge
-                              variant={
-                                client.status === 'Ativo'
-                                  ? 'default'
-                                  : client.status === 'Inativo'
-                                    ? 'destructive'
-                                    : 'outline'
-                              }
-                            >
-                              {client.status}
-                            </Badge>
-                          </TableCell>
-                          <TableCell>{client.joinDate}</TableCell>
-                          <TableCell>{client.lastVisit}</TableCell>
-                          <TableCell className="text-right">
-                            <DropdownMenu>
-                              <DropdownMenuTrigger asChild>
-                                <Button variant="ghost" size="icon">
-                                  <MoreVertical className="h-4 w-4" />
-                                  <span className="sr-only">Abrir menu</span>
-                                </Button>
-                              </DropdownMenuTrigger>
-                              <DropdownMenuContent align="end">
-                                <DropdownMenuItem>
-                                  <Eye className="mr-2 h-4 w-4" />
-                                  <span>Visualizar</span>
-                                </DropdownMenuItem>
-                                <DropdownMenuItem>
-                                  <Edit className="mr-2 h-4 w-4" />
-                                  <span>Editar</span>
-                                </DropdownMenuItem>
-                                <DropdownMenuItem>
-                                  <UserCog className="mr-2 h-4 w-4" />
-                                  <span>Gerenciar Plano</span>
-                                </DropdownMenuItem>
-                                <DropdownMenuItem className="text-destructive">
-                                  <Trash2 className="mr-2 h-4 w-4" />
-                                  <span>Excluir</span>
-                                </DropdownMenuItem>
-                              </DropdownMenuContent>
-                            </DropdownMenu>
-                          </TableCell>
-                        </TableRow>
-                      ))
-                    ) : (
-                      <TableRow>
-                        <TableCell colSpan={8} className="h-24 text-center">
-                          Nenhum cliente encontrado.
-                        </TableCell>
-                      </TableRow>
-                    )}
-                  </TableBody>
-                </Table>
-              </div>
+              <DataTable
+                data={clients}
+                columns={columns}
+                searchColumn="name"
+                statusColumn="status"
+                onDeleteRows={handleDeleteClients}
+                onAddItem={() => setIsNewClientDialogOpen(true)}
+                addButtonText="Novo Cliente"
+                searchPlaceholder="Buscar por nome ou email..."
+              />
             </TabsContent>
             <TabsContent value="active" className="space-y-4">
-              {/* Conteúdo similar para clientes ativos */}
+              <DataTable
+                data={clients.filter((client) => client.status === 'Ativo')}
+                columns={columns}
+                searchColumn="name"
+                onDeleteRows={handleDeleteClients}
+                onAddItem={() => setIsNewClientDialogOpen(true)}
+                addButtonText="Novo Cliente"
+                searchPlaceholder="Buscar por nome ou email..."
+              />
             </TabsContent>
             <TabsContent value="inactive" className="space-y-4">
-              {/* Conteúdo similar para clientes inativos */}
+              <DataTable
+                data={clients.filter((client) => client.status === 'Inativo')}
+                columns={columns}
+                searchColumn="name"
+                onDeleteRows={handleDeleteClients}
+                onAddItem={() => setIsNewClientDialogOpen(true)}
+                addButtonText="Novo Cliente"
+                searchPlaceholder="Buscar por nome ou email..."
+              />
             </TabsContent>
             <TabsContent value="pending" className="space-y-4">
-              {/* Conteúdo similar para clientes pendentes */}
+              <DataTable
+                data={clients.filter((client) => client.status === 'Pendente')}
+                columns={columns}
+                searchColumn="name"
+                onDeleteRows={handleDeleteClients}
+                onAddItem={() => setIsNewClientDialogOpen(true)}
+                addButtonText="Novo Cliente"
+                searchPlaceholder="Buscar por nome ou email..."
+              />
             </TabsContent>
           </Tabs>
         </CardContent>
