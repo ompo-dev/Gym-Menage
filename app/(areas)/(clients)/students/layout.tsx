@@ -2,13 +2,13 @@
 
 import * as React from "react"
 import { SidebarProvider, SidebarInset, SidebarTrigger } from "@/components/ui/sidebar"
-import { StudentSidebar } from "./components/student-sidebar"
-import { StudentBreadcrumb } from "./components/student-breadcrumb"
-import { StudentSidebarInitializer } from "./components/student-sidebar-initializer"
-import { Main } from "./components/Main"
 import { Separator } from "@/components/ui/separator"
 import { ErrorBoundary } from 'react-error-boundary'
-import { NotFound, UnauthorizedPage } from '@/app/error/index'
+import { NotFound, UnauthorizedPage } from "../../error"
+import { StudentSidebarInitializer } from "../components/student-sidebar-initializer"
+import { StudentSidebar } from "../components/student-sidebar"
+import { StudentBreadcrumb } from "../components/student-breadcrumb"
+import { Main } from "../components/Main"
 
 // TODO: Integrar com sistema de autenticação
 const hasAccess = false // Simula verificação de acesso
