@@ -1,69 +1,69 @@
-"use client"
+'use client';
 
-import { useSearchParams } from "next/navigation"
-import { useCallback, useEffect, useState, Suspense } from "react"
-import dynamic from "next/dynamic"
-import { PageSkeleton } from "@/components/PageSkeleton"
+import { PageSkeleton } from '@/components/PageSkeleton';
+import dynamic from 'next/dynamic';
+import { useSearchParams } from 'next/navigation';
+import { Suspense, useCallback, useEffect, useState } from 'react';
 
-type AvailablePages = "overview" | "workouts" | "measurements" | "diet" | "schedule" | "profile"
+type AvailablePages = 'overview' | 'workouts' | 'measurements' | 'diet' | 'schedule' | 'profile';
 
 // Importação dinâmica das páginas
 const DynamicPages = {
-  overview: dynamic(() => import("../../page"), { 
+  overview: dynamic(() => import('../students/page'), {
     loading: () => <PageSkeleton />,
-    ssr: false
+    ssr: false,
   }),
-  workouts: dynamic(() => import("../students/workouts/page"), {
+  workouts: dynamic(() => import('../students/workouts/page'), {
     loading: () => <PageSkeleton />,
-    ssr: false
+    ssr: false,
   }),
-  measurements: dynamic(() => import("../students/measurements/page"), {
+  measurements: dynamic(() => import('../students/measurements/page'), {
     loading: () => <PageSkeleton />,
-    ssr: false
+    ssr: false,
   }),
-  diet: dynamic(() => import("../students/diet/page"), {
+  diet: dynamic(() => import('../students/diet/page'), {
     loading: () => <PageSkeleton />,
-    ssr: false
+    ssr: false,
   }),
-  schedule: dynamic(() => import("../students/schedule/page"), {
+  schedule: dynamic(() => import('../students/schedule/page'), {
     loading: () => <PageSkeleton />,
-    ssr: false
+    ssr: false,
   }),
-  profile: dynamic(() => import("../students/profile/page"), {
+  profile: dynamic(() => import('../students/profile/page'), {
     loading: () => <PageSkeleton />,
-    ssr: false
-  })
-}
+    ssr: false,
+  }),
+};
 
 function MainContent() {
-  const searchParams = useSearchParams()
-  const [currentComponent, setCurrentComponent] = useState<AvailablePages>("overview")
-  
+  const searchParams = useSearchParams();
+  const [currentComponent, setCurrentComponent] = useState<AvailablePages>('overview');
+
   // Função para determinar qual página exibir baseado nos parâmetros de busca
   const getCurrentPage = useCallback((): AvailablePages => {
     // Verifica cada parâmetro de busca
-    if (searchParams.has("workouts")) return "workouts"
-    if (searchParams.has("measurements")) return "measurements"
-    if (searchParams.has("diet")) return "diet"
-    if (searchParams.has("schedule")) return "schedule"
-    if (searchParams.has("profile")) return "profile"
-    
+    if (searchParams.has('workouts')) return 'workouts';
+    if (searchParams.has('measurements')) return 'measurements';
+    if (searchParams.has('diet')) return 'diet';
+    if (searchParams.has('schedule')) return 'schedule';
+    if (searchParams.has('profile')) return 'profile';
+
     // Se não houver parâmetros, retorna a página inicial
-    return "overview"
-  }, [searchParams])
+    return 'overview';
+  }, [searchParams]);
 
   useEffect(() => {
-    const newPage = getCurrentPage()
-    setCurrentComponent(newPage)
-  }, [getCurrentPage])
+    const newPage = getCurrentPage();
+    setCurrentComponent(newPage);
+  }, [getCurrentPage]);
 
-  const PageComponent = DynamicPages[currentComponent]
+  const PageComponent = DynamicPages[currentComponent];
 
   return (
     <div className="container p-4 md:p-6">
       <PageComponent />
     </div>
-  )
+  );
 }
 
 export function Main() {
@@ -71,5 +71,5 @@ export function Main() {
     <Suspense fallback={<PageSkeleton />}>
       <MainContent />
     </Suspense>
-  )
-} 
+  );
+}

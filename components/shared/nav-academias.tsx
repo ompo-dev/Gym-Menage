@@ -1,6 +1,6 @@
-"use client"
+'use client';
 
-import { Building2, Forward, MoreHorizontal, Trash2, Edit, type LucideIcon } from "lucide-react"
+import { Building2, Edit, Forward, type LucideIcon, MoreHorizontal, Trash2 } from 'lucide-react';
 
 import {
   DropdownMenu,
@@ -8,7 +8,7 @@ import {
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
+} from '@/components/ui/dropdown-menu';
 import {
   SidebarGroup,
   SidebarGroupLabel,
@@ -17,18 +17,15 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   useSidebar,
-} from "@/components/ui/sidebar"
+} from '@/components/ui/sidebar';
+import type { SidebarAcademiaData } from './app-sidebar';
 
 export function NavAcademias({
   academias,
 }: {
-  academias: {
-    name: string
-    logo: LucideIcon
-    plan: string
-  }[]
+  academias: SidebarAcademiaData[];
 }) {
-  const { isMobile } = useSidebar()
+  const { isMobile } = useSidebar();
 
   return (
     <SidebarGroup className="group-data-[collapsible=icon]:hidden">
@@ -38,23 +35,29 @@ export function NavAcademias({
       <SidebarMenu>
         {academias.map((academia) => (
           <SidebarMenuItem key={academia.name}>
-            <SidebarMenuButton asChild className="text-foreground dark:text-sidebar-foreground hover:bg-accent dark:hover:bg-sidebar-accent">
-              <a href="#">
+            <SidebarMenuButton
+              asChild
+              className="text-foreground dark:text-sidebar-foreground hover:bg-accent dark:hover:bg-sidebar-accent"
+            >
+              <a href={`/academias/${academia.name.toLowerCase().replace(/\s+/g, '-')}`}>
                 <Building2 className="text-muted-foreground dark:text-sidebar-foreground/60" />
                 <span>{academia.name}</span>
               </a>
             </SidebarMenuButton>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <SidebarMenuAction showOnHover className="text-muted-foreground dark:text-sidebar-foreground/60">
+                <SidebarMenuAction
+                  showOnHover
+                  className="text-muted-foreground dark:text-sidebar-foreground/60"
+                >
                   <MoreHorizontal />
                   <span className="sr-only">Mais</span>
                 </SidebarMenuAction>
               </DropdownMenuTrigger>
               <DropdownMenuContent
                 className="w-48 rounded-lg"
-                side={isMobile ? "bottom" : "right"}
-                align={isMobile ? "end" : "start"}
+                side={isMobile ? 'bottom' : 'right'}
+                align={isMobile ? 'end' : 'start'}
               >
                 <DropdownMenuItem>
                   <Building2 className="text-muted-foreground dark:text-muted-foreground" />
@@ -85,6 +88,5 @@ export function NavAcademias({
         </SidebarMenuItem>
       </SidebarMenu>
     </SidebarGroup>
-  )
+  );
 }
-

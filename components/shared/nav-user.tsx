@@ -1,9 +1,20 @@
-"use client"
+'use client';
 
-import { Bell, ChevronsUpDown, LogOut, Moon, Palette, Settings, Sun, User } from "lucide-react"
-import { useTheme } from "@/components/theme/theme-provider"
+import { useTheme } from '@/components/theme/theme-provider';
+import {
+  Bell,
+  ChevronsUpDown,
+  CreditCard,
+  LogOut,
+  Moon,
+  Palette,
+  Settings,
+  Sparkles,
+  Sun,
+  User,
+} from 'lucide-react';
 
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -15,31 +26,32 @@ import {
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar } from "@/components/ui/sidebar"
+} from '@/components/ui/dropdown-menu';
+import {
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+  useSidebar,
+} from '@/components/ui/sidebar';
+import type { SidebarUserData } from './app-sidebar';
 
 const accentColors = [
-  { name: "Azul", value: "blue" },
-  { name: "Verde", value: "green" },
-  { name: "Vermelho", value: "red" },
-  { name: "Roxo", value: "purple" },
-  { name: "Laranja", value: "orange" },
-  { name: "Amarelo", value: "yellow" },
-  { name: "Rosa", value: "pink" },
-]
+  { name: 'Azul', value: 'blue' },
+  { name: 'Verde', value: 'green' },
+  { name: 'Vermelho', value: 'red' },
+  { name: 'Roxo', value: 'purple' },
+  { name: 'Laranja', value: 'orange' },
+  { name: 'Amarelo', value: 'yellow' },
+  { name: 'Rosa', value: 'pink' },
+];
 
-export function StudentNavUser({
+export function NavUser({
   user,
 }: {
-  user: {
-    name: string
-    email: string
-    avatar: string
-    since: string
-  }
+  user: SidebarUserData;
 }) {
-  const { isMobile } = useSidebar()
-  const { theme, setTheme, accent, setAccent } = useTheme()
+  const { isMobile } = useSidebar();
+  const { theme, setTheme, accent, setAccent } = useTheme();
 
   return (
     <SidebarMenu>
@@ -54,21 +66,25 @@ export function StudentNavUser({
                 <AvatarImage src={user.avatar} alt={user.name} />
                 <AvatarFallback className="rounded-lg">
                   {user.name
-                    .split(" ")
+                    .split(' ')
                     .map((n) => n[0])
-                    .join("")}
+                    .join('')}
                 </AvatarFallback>
               </Avatar>
               <div className="grid flex-1 text-left text-sm leading-tight">
                 <span className="truncate font-semibold">{user.name}</span>
-                <span className="truncate text-xs">Aluno desde {user.since}</span>
+                {user.role === 'student' ? (
+                  <span className="truncate text-xs">Aluno desde {user.since}</span>
+                ) : (
+                  <span className="truncate text-xs">{user.email}</span>
+                )}
               </div>
               <ChevronsUpDown className="ml-auto size-4" />
             </SidebarMenuButton>
           </DropdownMenuTrigger>
           <DropdownMenuContent
             className="w-[--radix-dropdown-menu-trigger-width] min-w-56 rounded-lg"
-            side={isMobile ? "bottom" : "right"}
+            side={isMobile ? 'bottom' : 'right'}
             align="end"
             sideOffset={4}
           >
@@ -78,36 +94,72 @@ export function StudentNavUser({
                   <AvatarImage src={user.avatar} alt={user.name} />
                   <AvatarFallback className="rounded-lg">
                     {user.name
-                      .split(" ")
+                      .split(' ')
                       .map((n) => n[0])
-                      .join("")}
+                      .join('')}
                   </AvatarFallback>
                 </Avatar>
                 <div className="grid flex-1 text-left text-sm leading-tight">
                   <span className="truncate font-semibold">{user.name}</span>
-                  <span className="truncate text-xs">Aluno desde {user.since}</span>
+                  {user.role === 'student' ? (
+                    <span className="truncate text-xs">Aluno desde {user.since}</span>
+                  ) : (
+                    <span className="truncate text-xs">{user.email}</span>
+                  )}
                 </div>
               </div>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuGroup>
-              <DropdownMenuItem>
-                <User className="mr-2 h-4 w-4" />
-                Meu Perfil
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <Bell className="mr-2 h-4 w-4" />
-                Notificações
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <Settings className="mr-2 h-4 w-4" />
-                Configurações
-              </DropdownMenuItem>
-            </DropdownMenuGroup>
+
+            {/* Itens específicos para administradores */}
+            {user.role === 'admin' && (
+              <>
+                <DropdownMenuGroup>
+                  <DropdownMenuItem>
+                    <Sparkles className="mr-2 h-4 w-4" />
+                    Upgrade para Empresarial
+                  </DropdownMenuItem>
+                </DropdownMenuGroup>
+                <DropdownMenuSeparator />
+                <DropdownMenuGroup>
+                  <DropdownMenuItem>
+                    <User className="mr-2 h-4 w-4" />
+                    Meu Perfil
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <CreditCard className="mr-2 h-4 w-4" />
+                    Faturamento
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <Bell className="mr-2 h-4 w-4" />
+                    Notificações
+                  </DropdownMenuItem>
+                </DropdownMenuGroup>
+              </>
+            )}
+
+            {/* Itens específicos para alunos */}
+            {user.role === 'student' && (
+              <DropdownMenuGroup>
+                <DropdownMenuItem>
+                  <User className="mr-2 h-4 w-4" />
+                  Meu Perfil
+                </DropdownMenuItem>
+                <DropdownMenuItem>
+                  <Bell className="mr-2 h-4 w-4" />
+                  Notificações
+                </DropdownMenuItem>
+                <DropdownMenuItem>
+                  <Settings className="mr-2 h-4 w-4" />
+                  Configurações
+                </DropdownMenuItem>
+              </DropdownMenuGroup>
+            )}
+
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <DropdownMenuItem onClick={() => setTheme(theme === "light" ? "dark" : "light")}>
-                {theme === "light" ? (
+              <DropdownMenuItem onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}>
+                {theme === 'light' ? (
                   <>
                     <Moon className="mr-2 h-4 w-4" />
                     Tema Escuro
@@ -138,9 +190,7 @@ export function StudentNavUser({
                         }}
                       />
                       {color.name}
-                      {accent === color.value && (
-                        <span className="ml-auto">✓</span>
-                      )}
+                      {accent === color.value && <span className="ml-auto">✓</span>}
                     </DropdownMenuItem>
                   ))}
                 </DropdownMenuSubContent>
@@ -155,5 +205,5 @@ export function StudentNavUser({
         </DropdownMenu>
       </SidebarMenuItem>
     </SidebarMenu>
-  )
-} 
+  );
+}
