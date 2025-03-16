@@ -167,9 +167,25 @@ function AppBreadcrumbContent() {
   );
 }
 
+function BreadcrumbSkeleton() {
+  return (
+    <Breadcrumb>
+      <BreadcrumbList>
+        <BreadcrumbItem>
+          <div className="h-5 w-24 animate-pulse rounded bg-muted" />
+        </BreadcrumbItem>
+        <BreadcrumbSeparator />
+        <BreadcrumbItem>
+          <div className="h-5 w-20 animate-pulse rounded bg-muted" />
+        </BreadcrumbItem>
+      </BreadcrumbList>
+    </Breadcrumb>
+  );
+}
+
 export function AppBreadcrumb() {
   return (
-    <React.Suspense fallback={<div>Carregando...</div>}>
+    <React.Suspense fallback={<BreadcrumbSkeleton />}>
       <AppBreadcrumbContent />
     </React.Suspense>
   );

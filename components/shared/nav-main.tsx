@@ -140,6 +140,35 @@ function NavMainContent({
   );
 }
 
+function NavSkeleton() {
+  // Array com IDs fixos em vez de usar índices
+  const skeletonItems = [
+    { id: 'skeleton-item-1' },
+    { id: 'skeleton-item-2' },
+    { id: 'skeleton-item-3' },
+    { id: 'skeleton-item-4' },
+    { id: 'skeleton-item-5' },
+  ];
+
+  return (
+    <SidebarGroup>
+      <SidebarGroupLabel className="text-muted-foreground dark:text-sidebar-foreground/60">
+        <div className="h-4 w-24 animate-pulse rounded bg-muted" />
+      </SidebarGroupLabel>
+      <SidebarMenu>
+        {skeletonItems.map((item) => (
+          <SidebarMenuItem key={item.id}>
+            <div className="flex items-center px-3 py-2">
+              <div className="h-5 w-5 mr-2 animate-pulse rounded bg-muted" />
+              <div className="h-5 w-24 animate-pulse rounded bg-muted" />
+            </div>
+          </SidebarMenuItem>
+        ))}
+      </SidebarMenu>
+    </SidebarGroup>
+  );
+}
+
 export function NavMain({
   items,
   userRole = 'admin',
@@ -148,7 +177,7 @@ export function NavMain({
   userRole: 'admin' | 'student' | 'instructor';
 }) {
   return (
-    <Suspense fallback={<div>Carregando menu...</div>}>
+    <Suspense fallback={<NavSkeleton />}>
       <NavMainContent items={items} userRole={userRole} />
     </Suspense>
   );
