@@ -3,33 +3,33 @@
 import { useSearchParams } from "next/navigation"
 import { useCallback, useEffect, useState, Suspense } from "react"
 import dynamic from "next/dynamic"
-import { PageSkeleton } from "@/app/dashboard/components/PageSkeleton"
+import { PageSkeleton } from "@/components/PageSkeleton"
 
 type AvailablePages = "overview" | "workouts" | "measurements" | "diet" | "schedule" | "profile"
 
 // Importação dinâmica das páginas
 const DynamicPages = {
-  overview: dynamic(() => import("../page"), { 
+  overview: dynamic(() => import("../../page"), { 
     loading: () => <PageSkeleton />,
     ssr: false
   }),
-  workouts: dynamic(() => import("../workouts/page"), {
+  workouts: dynamic(() => import("../students/workouts/page"), {
     loading: () => <PageSkeleton />,
     ssr: false
   }),
-  measurements: dynamic(() => import("../measurements/page"), {
+  measurements: dynamic(() => import("../students/measurements/page"), {
     loading: () => <PageSkeleton />,
     ssr: false
   }),
-  diet: dynamic(() => import("../diet/page"), {
+  diet: dynamic(() => import("../students/diet/page"), {
     loading: () => <PageSkeleton />,
     ssr: false
   }),
-  schedule: dynamic(() => import("../schedule/page"), {
+  schedule: dynamic(() => import("../students/schedule/page"), {
     loading: () => <PageSkeleton />,
     ssr: false
   }),
-  profile: dynamic(() => import("../profile/page"), {
+  profile: dynamic(() => import("../students/profile/page"), {
     loading: () => <PageSkeleton />,
     ssr: false
   })
