@@ -1,74 +1,82 @@
-"use client"
+'use client';
 
-import { useSearchParams, useRouter, usePathname } from "next/navigation"
-import { useCallback, useEffect, useState, Suspense } from "react"
-import dynamic from "next/dynamic"
-import { PageSkeleton } from "@/components/PageSkeleton"
+import { PageSkeleton } from '@/components/PageSkeleton';
+import dynamic from 'next/dynamic';
+import { usePathname, useRouter } from 'next/navigation';
+import { useQueryState } from 'nuqs';
+import { Suspense, useCallback, useEffect, useState } from 'react';
 
-type AvailablePages = "overview" | "clients" | "employees" | "equipment" | "payments" | "reports" | "schedule"
+type AvailablePages =
+  | 'overview'
+  | 'clients'
+  | 'employees'
+  | 'equipment'
+  | 'payments'
+  | 'reports'
+  | 'schedule';
 
 // Importação dinâmica das páginas
 const DynamicPages = {
-  overview: dynamic(() => import("../dashboard/page"), { 
+  overview: dynamic(() => import('../dashboard/page'), {
     loading: () => <PageSkeleton />,
-    ssr: false
+    ssr: false,
   }),
-  clients: dynamic(() => import("../dashboard/clients/page"), {
+  clients: dynamic(() => import('../dashboard/clients/page'), {
     loading: () => <PageSkeleton />,
-    ssr: false
+    ssr: false,
   }),
-  employees: dynamic(() => import("../dashboard/employees/page"), {
+  employees: dynamic(() => import('../dashboard/employees/page'), {
     loading: () => <PageSkeleton />,
-    ssr: false
+    ssr: false,
   }),
-  equipment: dynamic(() => import("../dashboard/equipment/page"), {
+  equipment: dynamic(() => import('../dashboard/equipment/page'), {
     loading: () => <PageSkeleton />,
-    ssr: false
+    ssr: false,
   }),
-  payments: dynamic(() => import("../dashboard/payments/page"), {
+  payments: dynamic(() => import('../dashboard/payments/page'), {
     loading: () => <PageSkeleton />,
-    ssr: false
+    ssr: false,
   }),
-  reports: dynamic(() => import("../dashboard/reports/page"), {
+  reports: dynamic(() => import('../dashboard/reports/page'), {
     loading: () => <PageSkeleton />,
-    ssr: false
+    ssr: false,
   }),
-  schedule: dynamic(() => import("../dashboard/schedule/page"), {
+  schedule: dynamic(() => import('../dashboard/schedule/page'), {
     loading: () => <PageSkeleton />,
-    ssr: false
-  })
-}
+    ssr: false,
+  }),
+};
 
 function MainContent() {
-  const searchParams = useSearchParams()
-  const [currentComponent, setCurrentComponent] = useState<AvailablePages>("overview")
-  
+  const [searchParams] = useQueryState('', { history: 'push' });
+  const [currentComponent, setCurrentComponent] = useState<AvailablePages>('overview');
+
   // Função para determinar qual página exibir baseado nos parâmetros de busca
   const getCurrentPage = useCallback((): AvailablePages => {
     // Verifica cada parâmetro de busca
-    if (searchParams.has("clients")) return "clients"
-    if (searchParams.has("employees")) return "employees"
-    if (searchParams.has("equipment")) return "equipment"
-    if (searchParams.has("payments")) return "payments"
-    if (searchParams.has("reports")) return "reports"
-    if (searchParams.has("schedule")) return "schedule"
-    
+    if (searchParams?.includes('clients')) return 'clients';
+    if (searchParams?.includes('employees')) return 'employees';
+    if (searchParams?.includes('equipment')) return 'equipment';
+    if (searchParams?.includes('payments')) return 'payments';
+    if (searchParams?.includes('reports')) return 'reports';
+    if (searchParams?.includes('schedule')) return 'schedule';
+
     // Se não houver parâmetros, retorna a página inicial
-    return "overview"
-  }, [searchParams])
+    return 'overview';
+  }, [searchParams]);
 
   useEffect(() => {
-    const newPage = getCurrentPage()
-    setCurrentComponent(newPage)
-  }, [getCurrentPage])
+    const newPage = getCurrentPage();
+    setCurrentComponent(newPage);
+  }, [getCurrentPage]);
 
-  const PageComponent = DynamicPages[currentComponent]
+  const PageComponent = DynamicPages[currentComponent];
 
   return (
     <div className="container p-4 md:p-6">
       <PageComponent />
     </div>
-  )
+  );
 }
 
 export function Main() {
@@ -76,5 +84,5 @@ export function Main() {
     <Suspense fallback={<PageSkeleton />}>
       <MainContent />
     </Suspense>
-  )
-} 
+  );
+}

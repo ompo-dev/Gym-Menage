@@ -1,5 +1,6 @@
 'use client';
 
+import { PageSkeleton } from '@/components/PageSkeleton';
 import { AppBreadcrumb } from '@/components/shared/app-breadcrumb';
 import { AppSidebar } from '@/components/shared/app-sidebar';
 import { Separator } from '@/components/ui/separator';
@@ -18,6 +19,7 @@ import {
   Warehouse,
 } from 'lucide-react';
 import * as React from 'react';
+import { Suspense } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 import { NotFound } from '../../error';
 import { Main } from '../components/Main';
@@ -229,7 +231,9 @@ export default function DashboardLayout() {
                 />
               }
             >
-              <Main />
+              <Suspense fallback={<PageSkeleton />}>
+                <Main />
+              </Suspense>
             </ErrorBoundary>
           </main>
         </SidebarInset>

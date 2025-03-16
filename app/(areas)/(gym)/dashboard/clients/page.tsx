@@ -1,11 +1,9 @@
-"use client"
+'use client';
 
-import { useState } from "react"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { PageSkeleton } from '@/components/PageSkeleton';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import {
   Dialog,
   DialogContent,
@@ -14,150 +12,171 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog"
-import { Label } from "@/components/ui/label"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Badge } from "@/components/ui/badge"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { UserPlus, MoreVertical, Search, Filter, UserCog, Trash2, Edit, Eye } from "lucide-react"
+} from '@/components/ui/dialog';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Edit, Eye, Filter, MoreVertical, Search, Trash2, UserCog, UserPlus } from 'lucide-react';
+import { Suspense, useState } from 'react';
 
 // Dados simulados de clientes
 const initialClients = [
   {
     id: 1,
-    name: "João Silva",
-    email: "joao.silva@email.com",
-    phone: "(11) 98765-4321",
-    plan: "Mensal",
-    status: "Ativo",
-    joinDate: "10/01/2025",
-    lastVisit: "13/03/2025",
+    name: 'João Silva',
+    email: 'joao.silva@email.com',
+    phone: '(11) 98765-4321',
+    plan: 'Mensal',
+    status: 'Ativo',
+    joinDate: '10/01/2025',
+    lastVisit: '13/03/2025',
   },
   {
     id: 2,
-    name: "Maria Oliveira",
-    email: "maria.oliveira@email.com",
-    phone: "(11) 91234-5678",
-    plan: "Anual",
-    status: "Ativo",
-    joinDate: "05/11/2024",
-    lastVisit: "12/03/2025",
+    name: 'Maria Oliveira',
+    email: 'maria.oliveira@email.com',
+    phone: '(11) 91234-5678',
+    plan: 'Anual',
+    status: 'Ativo',
+    joinDate: '05/11/2024',
+    lastVisit: '12/03/2025',
   },
   {
     id: 3,
-    name: "Pedro Santos",
-    email: "pedro.santos@email.com",
-    phone: "(11) 99876-5432",
-    plan: "Trimestral",
-    status: "Ativo",
-    joinDate: "20/12/2024",
-    lastVisit: "10/03/2025",
+    name: 'Pedro Santos',
+    email: 'pedro.santos@email.com',
+    phone: '(11) 99876-5432',
+    plan: 'Trimestral',
+    status: 'Ativo',
+    joinDate: '20/12/2024',
+    lastVisit: '10/03/2025',
   },
   {
     id: 4,
-    name: "Ana Costa",
-    email: "ana.costa@email.com",
-    phone: "(11) 95555-4444",
-    plan: "Mensal",
-    status: "Inativo",
-    joinDate: "15/09/2024",
-    lastVisit: "01/02/2025",
+    name: 'Ana Costa',
+    email: 'ana.costa@email.com',
+    phone: '(11) 95555-4444',
+    plan: 'Mensal',
+    status: 'Inativo',
+    joinDate: '15/09/2024',
+    lastVisit: '01/02/2025',
   },
   {
     id: 5,
-    name: "Carlos Ferreira",
-    email: "carlos.ferreira@email.com",
-    phone: "(11) 94444-3333",
-    plan: "Anual",
-    status: "Ativo",
-    joinDate: "03/06/2024",
-    lastVisit: "11/03/2025",
+    name: 'Carlos Ferreira',
+    email: 'carlos.ferreira@email.com',
+    phone: '(11) 94444-3333',
+    plan: 'Anual',
+    status: 'Ativo',
+    joinDate: '03/06/2024',
+    lastVisit: '11/03/2025',
   },
   {
     id: 6,
-    name: "Fernanda Lima",
-    email: "fernanda.lima@email.com",
-    phone: "(11) 93333-2222",
-    plan: "Mensal",
-    status: "Ativo",
-    joinDate: "10/03/2025",
-    lastVisit: "12/03/2025",
+    name: 'Fernanda Lima',
+    email: 'fernanda.lima@email.com',
+    phone: '(11) 93333-2222',
+    plan: 'Mensal',
+    status: 'Ativo',
+    joinDate: '10/03/2025',
+    lastVisit: '12/03/2025',
   },
   {
     id: 7,
-    name: "Ricardo Gomes",
-    email: "ricardo.gomes@email.com",
-    phone: "(11) 92222-1111",
-    plan: "Anual",
-    status: "Ativo",
-    joinDate: "12/03/2025",
-    lastVisit: "13/03/2025",
+    name: 'Ricardo Gomes',
+    email: 'ricardo.gomes@email.com',
+    phone: '(11) 92222-1111',
+    plan: 'Anual',
+    status: 'Ativo',
+    joinDate: '12/03/2025',
+    lastVisit: '13/03/2025',
   },
   {
     id: 8,
-    name: "Mariana Alves",
-    email: "mariana.alves@email.com",
-    phone: "(11) 91111-0000",
-    plan: "Mensal",
-    status: "Ativo",
-    joinDate: "15/03/2025",
-    lastVisit: "15/03/2025",
+    name: 'Mariana Alves',
+    email: 'mariana.alves@email.com',
+    phone: '(11) 91111-0000',
+    plan: 'Mensal',
+    status: 'Ativo',
+    joinDate: '15/03/2025',
+    lastVisit: '15/03/2025',
   },
-]
+];
 
-export default function ClientsPage() {
-  const [clients, setClients] = useState(initialClients)
-  const [searchTerm, setSearchTerm] = useState("")
-  const [statusFilter, setStatusFilter] = useState("all")
-  const [planFilter, setPlanFilter] = useState("all")
-  const [isNewClientDialogOpen, setIsNewClientDialogOpen] = useState(false)
+function ClientsPageContent() {
+  const [clients, setClients] = useState(initialClients);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [statusFilter, setStatusFilter] = useState('all');
+  const [planFilter, setPlanFilter] = useState('all');
+  const [isNewClientDialogOpen, setIsNewClientDialogOpen] = useState(false);
   const [newClient, setNewClient] = useState({
-    name: "",
-    email: "",
-    phone: "",
-    plan: "Mensal",
-    status: "Ativo",
-  })
+    name: '',
+    email: '',
+    phone: '',
+    plan: 'Mensal',
+    status: 'Ativo',
+  });
 
   // Filtrar clientes
   const filteredClients = clients.filter((client) => {
     const matchesSearch =
       client.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      client.email.toLowerCase().includes(searchTerm.toLowerCase())
-    const matchesStatus = statusFilter === "all" || client.status === statusFilter
-    const matchesPlan = planFilter === "all" || client.plan === planFilter
+      client.email.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesStatus = statusFilter === 'all' || client.status === statusFilter;
+    const matchesPlan = planFilter === 'all' || client.plan === planFilter;
 
-    return matchesSearch && matchesStatus && matchesPlan
-  })
+    return matchesSearch && matchesStatus && matchesPlan;
+  });
 
   // Manipular mudanças no formulário de novo cliente
-  const handleNewClientChange = (e: { target: { name: any; value: any } }) => {
-    const { name, value } = e.target
-    setNewClient((prev) => ({ ...prev, [name]: value }))
-  }
+  const handleNewClientChange = (e: { target: { name: string; value: string } }) => {
+    const { name, value } = e.target;
+    setNewClient((prev) => ({ ...prev, [name]: value }));
+  };
 
   // Adicionar novo cliente
   const handleAddClient = () => {
-    const today = new Date()
-    const formattedDate = `${today.getDate().toString().padStart(2, "0")}/${(today.getMonth() + 1).toString().padStart(2, "0")}/${today.getFullYear()}`
+    const today = new Date();
+    const formattedDate = `${today.getDate().toString().padStart(2, '0')}/${(today.getMonth() + 1).toString().padStart(2, '0')}/${today.getFullYear()}`;
 
     const newClientData = {
       id: clients.length + 1,
       ...newClient,
       joinDate: formattedDate,
       lastVisit: formattedDate,
-    }
+    };
 
-    setClients([...clients, newClientData])
+    setClients([...clients, newClientData]);
     setNewClient({
-      name: "",
-      email: "",
-      phone: "",
-      plan: "Mensal",
-      status: "Ativo",
-    })
-    setIsNewClientDialogOpen(false)
-  }
+      name: '',
+      email: '',
+      phone: '',
+      plan: 'Mensal',
+      status: 'Ativo',
+    });
+    setIsNewClientDialogOpen(false);
+  };
 
   return (
     <div className="space-y-6">
@@ -265,7 +284,9 @@ export default function ClientsPage() {
       <Card>
         <CardHeader>
           <CardTitle>Gerenciar Clientes</CardTitle>
-          <CardDescription>Visualize, adicione, edite e gerencie todos os clientes da sua academia.</CardDescription>
+          <CardDescription>
+            Visualize, adicione, edite e gerencie todos os clientes da sua academia.
+          </CardDescription>
         </CardHeader>
         <CardContent>
           <Tabs defaultValue="all" className="space-y-4">
@@ -356,11 +377,11 @@ export default function ClientsPage() {
                           <TableCell>
                             <Badge
                               variant={
-                                client.status === "Ativo"
-                                  ? "default"
-                                  : client.status === "Inativo"
-                                    ? "destructive"
-                                    : "outline"
+                                client.status === 'Ativo'
+                                  ? 'default'
+                                  : client.status === 'Inativo'
+                                    ? 'destructive'
+                                    : 'outline'
                               }
                             >
                               {client.status}
@@ -422,6 +443,13 @@ export default function ClientsPage() {
         </CardContent>
       </Card>
     </div>
-  )
+  );
 }
 
+export default function ClientsPage() {
+  return (
+    <Suspense fallback={<PageSkeleton />}>
+      <ClientsPageContent />
+    </Suspense>
+  );
+}

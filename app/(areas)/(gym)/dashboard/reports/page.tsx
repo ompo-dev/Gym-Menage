@@ -1,95 +1,102 @@
-"use client"
+'use client';
 
-import { useState } from "react"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Label } from "@/components/ui/label"
-import { Download, Users, DollarSign, Calendar } from "lucide-react"
+import { PageSkeleton } from '@/components/PageSkeleton';
 import {
   AreaChartComponent,
   DonutChartComponent,
   MultipleBarChartComponent,
-  StackedBarChartComponent
-} from "@/components/charts"
+  StackedBarChartComponent,
+} from '@/components/charts';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Label } from '@/components/ui/label';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Calendar, DollarSign, Download, Users } from 'lucide-react';
+import { Suspense, useState } from 'react';
 
 // Define types for the data structures
-type TimeRange = 'week' | 'month' | 'year'
+type TimeRange = 'week' | 'month' | 'year';
 
 interface ChartData {
-  date: string
-  attendance: number
+  date: string;
+  attendance: number;
 }
 
 interface DataByTimeRange {
-  week: number[]
-  month: number[]
-  year: number[]
+  week: number[];
+  month: number[];
+  year: number[];
 }
 
 interface TimeRangeLabels {
-  week: string[]
-  month: string[]
-  year: string[]
+  week: string[];
+  month: string[];
+  year: string[];
 }
 
-export default function ReportsPage() {
-  const [timeRange, setTimeRange] = useState<TimeRange>("month")
+function ReportsPageContent() {
+  const [timeRange, setTimeRange] = useState<TimeRange>('month');
 
   // Dados simulados para os gráficos com tipos apropriados
   const revenueData: DataByTimeRange = {
     week: [3500, 4200, 3800, 4500, 5100, 4900, 5300],
     month: [12000, 15000, 13500, 17000, 21000, 19500, 23000],
     year: [120000, 135000, 142000, 156000, 170000, 185000, 210000],
-  }
+  };
 
   const clientsData: DataByTimeRange = {
     week: [180, 185, 190, 195, 200, 205, 210],
     month: [150, 160, 170, 180, 190, 200, 210],
     year: [100, 120, 140, 160, 180, 195, 210],
-  }
+  };
 
   const attendanceData: DataByTimeRange = {
     week: [75, 82, 68, 90, 85, 78, 92],
     month: [350, 420, 380, 450, 510, 490, 530],
     year: [4200, 4500, 4800, 5100, 5400, 5700, 6000],
-  }
+  };
 
   const timeRangeLabels: TimeRangeLabels = {
-    week: ["Seg", "Ter", "Qua", "Qui", "Sex", "Sáb", "Dom"],
-    month: ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul"],
-    year: ["2019", "2020", "2021", "2022", "2023", "2024", "2025"],
-  }
+    week: ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom'],
+    month: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul'],
+    year: ['2019', '2020', '2021', '2022', '2023', '2024', '2025'],
+  };
 
   // Formatar dados para os gráficos
   const formatChartData = (data: number[], labels: string[]): ChartData[] => {
     return data.map((value, index) => ({
       date: labels[index],
-      attendance: value
-    }))
-  }
+      attendance: value,
+    }));
+  };
 
-  const revenueChartData = formatChartData(revenueData[timeRange], timeRangeLabels[timeRange])
-  const clientsChartData = formatChartData(clientsData[timeRange], timeRangeLabels[timeRange])
-  const attendanceChartData = formatChartData(attendanceData[timeRange], timeRangeLabels[timeRange])
+  const revenueChartData = formatChartData(revenueData[timeRange], timeRangeLabels[timeRange]);
+  const clientsChartData = formatChartData(clientsData[timeRange], timeRangeLabels[timeRange]);
+  const attendanceChartData = formatChartData(
+    attendanceData[timeRange],
+    timeRangeLabels[timeRange]
+  );
 
   const formatCurrency = (value: number) => {
     return new Intl.NumberFormat('pt-BR', {
       style: 'currency',
-      currency: 'BRL'
-    }).format(value)
-  }
+      currency: 'BRL',
+    }).format(value);
+  };
 
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <h1 className="text-3xl font-bold">Relatórios</h1>
         <div className="flex items-center space-x-2">
-          <Select 
-            value={timeRange} 
-            onValueChange={(value: TimeRange) => setTimeRange(value)}
-          >
+          <Select value={timeRange} onValueChange={(value: TimeRange) => setTimeRange(value)}>
             <SelectTrigger className="w-[180px]">
               <SelectValue placeholder="Selecione o período" />
             </SelectTrigger>
@@ -141,12 +148,14 @@ export default function ReportsPage() {
                 </div>
                 <div>
                   <div className="text-xl font-bold">
-                    +{Math.round(
+                    +
+                    {Math.round(
                       ((revenueData[timeRange][revenueData[timeRange].length - 1] -
                         revenueData[timeRange][revenueData[timeRange].length - 2]) /
                         revenueData[timeRange][revenueData[timeRange].length - 2]) *
                         100
-                    )}%
+                    )}
+                    %
                   </div>
                   <div className="text-xs text-muted-foreground">Crescimento</div>
                 </div>
@@ -163,10 +172,10 @@ export default function ReportsPage() {
               <CardContent>
                 <DonutChartComponent
                   data={[
-                    { name: "Mensal", value: 95 },
-                    { name: "Trimestral", value: 45 },
-                    { name: "Semestral", value: 20 },
-                    { name: "Anual", value: 50 }
+                    { name: 'Mensal', value: 95 },
+                    { name: 'Trimestral', value: 45 },
+                    { name: 'Semestral', value: 20 },
+                    { name: 'Anual', value: 50 },
                   ]}
                   title="Distribuição por Plano"
                   description="Distribuição de receita por plano"
@@ -228,7 +237,9 @@ export default function ReportsPage() {
               />
               <div className="mt-4 grid grid-cols-3 gap-4 text-center">
                 <div>
-                  <div className="text-xl font-bold">{clientsData[timeRange][clientsData[timeRange].length - 1]}</div>
+                  <div className="text-xl font-bold">
+                    {clientsData[timeRange][clientsData[timeRange].length - 1]}
+                  </div>
                   <div className="text-xs text-muted-foreground">Total Atual</div>
                 </div>
                 <div>
@@ -240,12 +251,14 @@ export default function ReportsPage() {
                 </div>
                 <div>
                   <div className="text-xl font-bold">
-                    +{Math.round(
+                    +
+                    {Math.round(
                       ((clientsData[timeRange][clientsData[timeRange].length - 1] -
                         clientsData[timeRange][clientsData[timeRange].length - 2]) /
                         clientsData[timeRange][clientsData[timeRange].length - 2]) *
                         100
-                    )}%
+                    )}
+                    %
                   </div>
                   <div className="text-xs text-muted-foreground">Crescimento</div>
                 </div>
@@ -262,10 +275,10 @@ export default function ReportsPage() {
               <CardContent>
                 <DonutChartComponent
                   data={[
-                    { name: "Mensal", value: 95 },
-                    { name: "Trimestral", value: 45 },
-                    { name: "Semestral", value: 20 },
-                    { name: "Anual", value: 50 }
+                    { name: 'Mensal', value: 95 },
+                    { name: 'Trimestral', value: 45 },
+                    { name: 'Semestral', value: 20 },
+                    { name: 'Anual', value: 50 },
                   ]}
                   title="Distribuição por Plano"
                   description="Número de clientes por plano"
@@ -323,11 +336,11 @@ export default function ReportsPage() {
               <CardContent>
                 <MultipleBarChartComponent
                   data={[
-                    { name: "Spinning", completed: 25, missed: 5 },
-                    { name: "Musculação", completed: 18, missed: 2 },
-                    { name: "Yoga", completed: 15, missed: 3 },
-                    { name: "Pilates", completed: 12, missed: 2 },
-                    { name: "Funcional", completed: 10, missed: 2 }
+                    { name: 'Spinning', completed: 25, missed: 5 },
+                    { name: 'Musculação', completed: 18, missed: 2 },
+                    { name: 'Yoga', completed: 15, missed: 3 },
+                    { name: 'Pilates', completed: 12, missed: 2 },
+                    { name: 'Funcional', completed: 10, missed: 2 },
                   ]}
                   title="Popularidade das Aulas"
                   description="Aulas mais populares por número de alunos"
@@ -348,7 +361,7 @@ export default function ReportsPage() {
                       <span className="font-medium">90%</span>
                     </div>
                     <div className="h-2 w-full rounded-full bg-gray-100">
-                      <div className="h-2 rounded-full bg-primary" style={{ width: "90%" }} />
+                      <div className="h-2 rounded-full bg-primary" style={{ width: '90%' }} />
                     </div>
                   </div>
                   <div className="space-y-2">
@@ -357,7 +370,7 @@ export default function ReportsPage() {
                       <span className="font-medium">85%</span>
                     </div>
                     <div className="h-2 w-full rounded-full bg-gray-100">
-                      <div className="h-2 rounded-full bg-primary" style={{ width: "85%" }} />
+                      <div className="h-2 rounded-full bg-primary" style={{ width: '85%' }} />
                     </div>
                   </div>
                   <div className="space-y-2">
@@ -366,7 +379,7 @@ export default function ReportsPage() {
                       <span className="font-medium">75%</span>
                     </div>
                     <div className="h-2 w-full rounded-full bg-gray-100">
-                      <div className="h-2 rounded-full bg-primary" style={{ width: "75%" }} />
+                      <div className="h-2 rounded-full bg-primary" style={{ width: '75%' }} />
                     </div>
                   </div>
                   <div className="space-y-2">
@@ -375,7 +388,7 @@ export default function ReportsPage() {
                       <span className="font-medium">80%</span>
                     </div>
                     <div className="h-2 w-full rounded-full bg-gray-100">
-                      <div className="h-2 rounded-full bg-primary" style={{ width: "80%" }} />
+                      <div className="h-2 rounded-full bg-primary" style={{ width: '80%' }} />
                     </div>
                   </div>
                 </div>
@@ -412,12 +425,14 @@ export default function ReportsPage() {
                 </div>
                 <div>
                   <div className="text-xl font-bold">
-                    +{Math.round(
+                    +
+                    {Math.round(
                       ((attendanceData[timeRange][attendanceData[timeRange].length - 1] -
                         attendanceData[timeRange][attendanceData[timeRange].length - 2]) /
                         attendanceData[timeRange][attendanceData[timeRange].length - 2]) *
                         100
-                    )}%
+                    )}
+                    %
                   </div>
                   <div className="text-xs text-muted-foreground">Crescimento</div>
                 </div>
@@ -433,14 +448,14 @@ export default function ReportsPage() {
             <CardContent>
               <MultipleBarChartComponent
                 data={[
-                  { name: "6h", completed: 5, missed: 0 },
-                  { name: "8h", completed: 12, missed: 3 },
-                  { name: "10h", completed: 25, missed: 5 },
-                  { name: "12h", completed: 35, missed: 8 },
-                  { name: "14h", completed: 38, missed: 7 },
-                  { name: "16h", completed: 30, missed: 5 },
-                  { name: "18h", completed: 40, missed: 10 },
-                  { name: "20h", completed: 20, missed: 5 }
+                  { name: '6h', completed: 5, missed: 0 },
+                  { name: '8h', completed: 12, missed: 3 },
+                  { name: '10h', completed: 25, missed: 5 },
+                  { name: '12h', completed: 35, missed: 8 },
+                  { name: '14h', completed: 38, missed: 7 },
+                  { name: '16h', completed: 30, missed: 5 },
+                  { name: '18h', completed: 40, missed: 10 },
+                  { name: '20h', completed: 20, missed: 5 },
                 ]}
                 title="Horários de Pico"
                 description="Horários com maior frequência de alunos"
@@ -450,6 +465,13 @@ export default function ReportsPage() {
         </TabsContent>
       </Tabs>
     </div>
-  )
+  );
 }
 
+export default function ReportsPage() {
+  return (
+    <Suspense fallback={<PageSkeleton />}>
+      <ReportsPageContent />
+    </Suspense>
+  );
+}

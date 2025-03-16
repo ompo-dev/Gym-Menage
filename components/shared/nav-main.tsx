@@ -12,10 +12,12 @@ import {
   SidebarMenuSubItem,
 } from '@/components/ui/sidebar';
 import { ChevronRight, type LucideIcon } from 'lucide-react';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
+import { useQueryState } from 'nuqs';
+import { Suspense } from 'react';
 import type { SidebarNavItem } from './app-sidebar';
 
-export function NavMain({
+function NavMainContent({
   items,
   userRole = 'admin',
 }: {
@@ -24,7 +26,7 @@ export function NavMain({
 }) {
   const router = useRouter();
   const pathname = usePathname();
-  const searchParams = useSearchParams();
+  const [searchParams] = useQueryState('', { history: 'push' });
 
   const handleNavigation = (
     e: React.MouseEvent<HTMLAnchorElement>,
@@ -52,13 +54,13 @@ export function NavMain({
   const isItemActive = (item: SidebarNavItem): boolean => {
     if (userRole === 'admin' && item.url) {
       // Para admin, verificamos se a URL atual contém a URL do item
-      const currentUrl = pathname + (searchParams.toString() ? `?${searchParams.toString()}` : '');
+      const currentUrl = pathname + (searchParams ? `?${searchParams}` : '');
       return item.isActive || currentUrl.includes(item.url);
     }
 
     if (userRole === 'student' && item.param) {
       // Para estudantes, verificamos se o parâmetro está presente
-      return item.isActive || searchParams.has(item.param);
+      return item.isActive || !!searchParams?.includes(item.param);
     }
 
     return item.isActive || false;
@@ -135,5 +137,19 @@ export function NavMain({
         )}
       </SidebarMenu>
     </SidebarGroup>
+  );
+}
+
+export function NavMain({
+  items,
+  userRole = 'admin',
+}: {
+  items: SidebarNavItem[];
+  userRole: 'admin' | 'student' | 'instructor';
+}) {
+  return (
+    <Suspense fallback={<div>Carregando menu...</div>}>
+      <NavMainContent items={items} userRole={userRole} />
+    </Suspense>
   );
 }

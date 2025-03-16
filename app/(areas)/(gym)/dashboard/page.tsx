@@ -1,131 +1,117 @@
-"use client"
+'use client';
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Button } from "@/components/ui/button"
-import { Users, DollarSign, Calendar, TrendingUp, Activity, UserPlus } from "lucide-react"
-import { useState, useEffect } from "react"
+import { PageSkeleton } from '@/components/PageSkeleton';
 import {
   AreaChartComponent,
   DonutChartComponent,
   MultipleBarChartComponent,
-  StackedBarChartComponent
-} from "@/components/charts"
-import { Area, AreaChart, ResponsiveContainer } from "recharts"
+  StackedBarChartComponent,
+} from '@/components/charts';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Activity, Calendar, DollarSign, TrendingUp, UserPlus, Users } from 'lucide-react';
+import { Suspense, useEffect, useState } from 'react';
+import { Area, AreaChart, ResponsiveContainer } from 'recharts';
 
 // Sample data for attendance chart
 const attendanceData = [
-  { date: "2024-01", attendance: 320 },
-  { date: "2024-02", attendance: 150 },
-  { date: "2024-03", attendance: 180 },
-  { date: "2024-04", attendance: 90 },
-  { date: "2024-05", attendance: 170 },
-  { date: "2024-06", attendance: 380 },
-]
+  { date: '2024-01', attendance: 320 },
+  { date: '2024-02', attendance: 150 },
+  { date: '2024-03', attendance: 180 },
+  { date: '2024-04', attendance: 90 },
+  { date: '2024-05', attendance: 170 },
+  { date: '2024-06', attendance: 380 },
+];
 
 // Sample data for plans distribution
 const plansData = [
-  { name: "Mensal", value: 150 },
-  { name: "Trimestral", value: 80 },
-  { name: "Semestral", value: 50 },
-  { name: "Anual", value: 20 },
-]
+  { name: 'Mensal', value: 150 },
+  { name: 'Trimestral', value: 80 },
+  { name: 'Semestral', value: 50 },
+  { name: 'Anual', value: 20 },
+];
 
 // Sample data for workouts
 const workoutsData = [
-  { name: "Segunda", completed: 80, missed: 20 },
-  { name: "Terça", completed: 85, missed: 15 },
-  { name: "Quarta", completed: 90, missed: 10 },
-  { name: "Quinta", completed: 75, missed: 25 },
-  { name: "Sexta", completed: 70, missed: 30 },
-]
+  { name: 'Segunda', completed: 80, missed: 20 },
+  { name: 'Terça', completed: 85, missed: 15 },
+  { name: 'Quarta', completed: 90, missed: 10 },
+  { name: 'Quinta', completed: 75, missed: 25 },
+  { name: 'Sexta', completed: 70, missed: 30 },
+];
 
 // Sample data for revenue
 const revenueData = [
   {
-    month: "Jan",
+    month: 'Jan',
     mensalidades: 50000,
     produtos: 15000,
     servicos: 8000,
   },
   {
-    month: "Fev",
+    month: 'Fev',
     mensalidades: 55000,
     produtos: 17000,
     servicos: 9000,
   },
   {
-    month: "Mar",
+    month: 'Mar',
     mensalidades: 58000,
     produtos: 18000,
     servicos: 10000,
   },
   {
-    month: "Abr",
+    month: 'Abr',
     mensalidades: 62000,
     produtos: 20000,
     servicos: 11000,
   },
   {
-    month: "Mai",
+    month: 'Mai',
     mensalidades: 65000,
     produtos: 22000,
     servicos: 12000,
   },
   {
-    month: "Jun",
+    month: 'Jun',
     mensalidades: 68000,
     produtos: 24000,
     servicos: 13000,
   },
-]
+];
 
-export default function DashboardPage() {
-  const [activeClients, setActiveClients] = useState(0)
-  const [monthlyRevenue, setMonthlyRevenue] = useState(0)
-  const [classesScheduled, setClassesScheduled] = useState(0)
-  const [growthRate, setGrowthRate] = useState(0)
+function DashboardPageContent() {
+  const [activeClients, setActiveClients] = useState(0);
+  const [monthlyRevenue, setMonthlyRevenue] = useState(0);
+  const [classesScheduled, setClassesScheduled] = useState(0);
+  const [growthRate, setGrowthRate] = useState(0);
 
   // Simulação de carregamento de dados
   useEffect(() => {
     const timer = setTimeout(() => {
-      setActiveClients(210)
-      setMonthlyRevenue(23000)
-      setClassesScheduled(48)
-      setGrowthRate(12.5)
-    }, 1000)
+      setActiveClients(210);
+      setMonthlyRevenue(23000);
+      setClassesScheduled(48);
+      setGrowthRate(12.5);
+    }, 1000);
 
-    return () => clearTimeout(timer)
-  }, [])
+    return () => clearTimeout(timer);
+  }, []);
 
   // Dados para os mini gráficos
-  const clientsSparklineData = [
-    { value: 165 },
-    { value: 158 },
-    { value: 188 },
-    { value: 210 }
-  ]
+  const clientsSparklineData = [{ value: 165 }, { value: 158 }, { value: 188 }, { value: 210 }];
 
   const revenueSparklineData = [
     { value: 17000 },
     { value: 16500 },
     { value: 20500 },
-    { value: 23000 }
-  ]
+    { value: 23000 },
+  ];
 
-  const classesSparklineData = [
-    { value: 38 },
-    { value: 44 },
-    { value: 41 },
-    { value: 48 }
-  ]
+  const classesSparklineData = [{ value: 38 }, { value: 44 }, { value: 41 }, { value: 48 }];
 
-  const growthSparklineData = [
-    { value: 6.8 },
-    { value: 9.2 },
-    { value: 8.4 },
-    { value: 12.5 }
-  ]
+  const growthSparklineData = [{ value: 6.8 }, { value: 9.2 }, { value: 8.4 }, { value: 12.5 }];
 
   return (
     <div className="space-y-6">
@@ -150,7 +136,10 @@ export default function DashboardPage() {
               </div>
               <div className="w-[120px] h-[40px]">
                 <ResponsiveContainer width="100%" height="100%">
-                  <AreaChart data={clientsSparklineData} margin={{ top: 2, right: 2, left: 2, bottom: 2 }}>
+                  <AreaChart
+                    data={clientsSparklineData}
+                    margin={{ top: 2, right: 2, left: 2, bottom: 2 }}
+                  >
                     <Area
                       type="natural"
                       dataKey="value"
@@ -179,7 +168,10 @@ export default function DashboardPage() {
               </div>
               <div className="w-[120px] h-[40px]">
                 <ResponsiveContainer width="100%" height="100%">
-                  <AreaChart data={revenueSparklineData} margin={{ top: 2, right: 2, left: 2, bottom: 2 }}>
+                  <AreaChart
+                    data={revenueSparklineData}
+                    margin={{ top: 2, right: 2, left: 2, bottom: 2 }}
+                  >
                     <Area
                       type="natural"
                       dataKey="value"
@@ -208,7 +200,10 @@ export default function DashboardPage() {
               </div>
               <div className="w-[120px] h-[40px]">
                 <ResponsiveContainer width="100%" height="100%">
-                  <AreaChart data={classesSparklineData} margin={{ top: 2, right: 2, left: 2, bottom: 2 }}>
+                  <AreaChart
+                    data={classesSparklineData}
+                    margin={{ top: 2, right: 2, left: 2, bottom: 2 }}
+                  >
                     <Area
                       type="natural"
                       dataKey="value"
@@ -237,7 +232,10 @@ export default function DashboardPage() {
               </div>
               <div className="w-[120px] h-[40px]">
                 <ResponsiveContainer width="100%" height="100%">
-                  <AreaChart data={growthSparklineData} margin={{ top: 2, right: 2, left: 2, bottom: 2 }}>
+                  <AreaChart
+                    data={growthSparklineData}
+                    margin={{ top: 2, right: 2, left: 2, bottom: 2 }}
+                  >
                     <Area
                       type="natural"
                       dataKey="value"
@@ -263,42 +261,44 @@ export default function DashboardPage() {
         </TabsList>
         <TabsContent value="overview" className="space-y-4">
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-              <div className="w-full col-span-1 md:col-span-2">
-                <StackedBarChartComponent
-                  data={revenueData}
-                  title="Receita por Categoria"
-                  description="Distribuição de receita por tipo de serviço"
-                />
-                </div>
-                <DonutChartComponent
-                  data={plansData}
-                  title="Distribuição de Planos"
-                  description="Quantidade de alunos por tipo de plano"
-                />
+            <div className="w-full col-span-1 md:col-span-2">
+              <StackedBarChartComponent
+                data={revenueData}
+                title="Receita por Categoria"
+                description="Distribuição de receita por tipo de serviço"
+              />
+            </div>
+            <DonutChartComponent
+              data={plansData}
+              title="Distribuição de Planos"
+              description="Quantidade de alunos por tipo de plano"
+            />
           </div>
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-              <div className="w-full col-span-1 md:col-span-2">
-                <AreaChartComponent
-                  data={attendanceData}
-                  title="Frequência de Alunos"
-                  description="Evolução da frequência ao longo dos meses"
-                />
-              </div>
-                <MultipleBarChartComponent
-                  data={workoutsData}
-                  title="Treinos por Dia"
-                  description="Treinos realizados e perdidos por dia da semana"
-                />
+            <div className="w-full col-span-1 md:col-span-2">
+              <AreaChartComponent
+                data={attendanceData}
+                title="Frequência de Alunos"
+                description="Evolução da frequência ao longo dos meses"
+              />
+            </div>
+            <MultipleBarChartComponent
+              data={workoutsData}
+              title="Treinos por Dia"
+              description="Treinos realizados e perdidos por dia da semana"
+            />
           </div>
         </TabsContent>
         <TabsContent value="analytics" className="space-y-4">
           <Card>
             <CardHeader>
               <CardTitle>Treinos por Modalidade</CardTitle>
-              <CardDescription>Distribuição de alunos por tipo de treino e dia da semana</CardDescription>
+              <CardDescription>
+                Distribuição de alunos por tipo de treino e dia da semana
+              </CardDescription>
             </CardHeader>
             <CardContent>
-              <MultipleBarChartComponent 
+              <MultipleBarChartComponent
                 data={workoutsData}
                 title="Treinos por Modalidade"
                 description="Distribuição de alunos por tipo de treino e dia da semana"
@@ -316,28 +316,28 @@ export default function DashboardPage() {
               <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
                 {[
                   {
-                    title: "Relatório Financeiro",
-                    description: "Receitas, despesas e lucro",
+                    title: 'Financeiro',
+                    description: 'Relatórios financeiros detalhados',
                     icon: <DollarSign className="h-5 w-5" />,
+                    id: 'financial-report',
                   },
                   {
-                    title: "Relatório de Clientes",
-                    description: "Aquisição e retenção",
+                    title: 'Frequência',
+                    description: 'Análise de frequência dos alunos',
                     icon: <Users className="h-5 w-5" />,
+                    id: 'attendance-report',
                   },
                   {
-                    title: "Relatório de Frequência",
-                    description: "Horários de pico e utilização",
+                    title: 'Desempenho',
+                    description: 'Métricas de desempenho da academia',
                     icon: <Activity className="h-5 w-5" />,
+                    id: 'performance-report',
                   },
-                ].map((report, index) => (
-                  <Card key={index} className="flex flex-col items-center p-4 text-center">
+                ].map((report) => (
+                  <Card key={report.id} className="flex flex-col items-center p-4 text-center">
                     <div className="rounded-full bg-primary/10 p-3 text-primary">{report.icon}</div>
                     <h3 className="mt-3 font-medium">{report.title}</h3>
                     <p className="text-sm text-muted-foreground">{report.description}</p>
-                    <Button className="mt-4" variant="outline">
-                      Visualizar
-                    </Button>
                   </Card>
                 ))}
               </div>
@@ -346,6 +346,13 @@ export default function DashboardPage() {
         </TabsContent>
       </Tabs>
     </div>
-  )
+  );
 }
 
+export default function DashboardPage() {
+  return (
+    <Suspense fallback={<PageSkeleton />}>
+      <DashboardPageContent />
+    </Suspense>
+  );
+}

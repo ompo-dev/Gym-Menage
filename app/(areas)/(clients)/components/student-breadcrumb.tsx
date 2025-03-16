@@ -1,7 +1,7 @@
 'use client';
 
 import { ChevronRight } from 'lucide-react';
-import { useSearchParams } from 'next/navigation';
+import { useQueryState } from 'nuqs';
 import { Suspense } from 'react';
 
 const breadcrumbMap = {
@@ -14,8 +14,9 @@ const breadcrumbMap = {
 };
 
 function StudentBreadcrumbContent() {
-  const searchParams = useSearchParams();
-  const currentPage = Object.keys(breadcrumbMap).find((key) => searchParams.has(key)) || 'overview';
+  const [searchParams] = useQueryState('', { history: 'push' });
+  const currentPage =
+    Object.keys(breadcrumbMap).find((key) => searchParams?.includes(key)) || 'overview';
 
   return (
     <div className="flex items-center gap-1 text-sm">

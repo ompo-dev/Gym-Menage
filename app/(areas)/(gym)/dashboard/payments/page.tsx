@@ -1,11 +1,9 @@
-"use client"
+'use client';
 
-import { useState } from "react"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { PageSkeleton } from '@/components/PageSkeleton';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import {
   Dialog,
   DialogContent,
@@ -14,175 +12,205 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog"
-import { Label } from "@/components/ui/label"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Badge } from "@/components/ui/badge"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { DollarSign, MoreVertical, Search, Filter, Edit, Eye, Receipt, CreditCard } from "lucide-react"
+} from '@/components/ui/dialog';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import {
+  CreditCard,
+  DollarSign,
+  Edit,
+  Eye,
+  Filter,
+  MoreVertical,
+  Receipt,
+  Search,
+} from 'lucide-react';
+import { Suspense, useState } from 'react';
 
 // Dados simulados de pagamentos
 const initialPayments = [
   {
     id: 1,
-    clientName: "João Silva",
+    clientName: 'João Silva',
     amount: 120.0,
-    date: "10/03/2025",
-    dueDate: "15/03/2025",
-    status: "Pago",
-    method: "Cartão de Crédito",
-    plan: "Mensal",
-    invoice: "INV-2025-001",
+    date: '10/03/2025',
+    dueDate: '15/03/2025',
+    status: 'Pago',
+    method: 'Cartão de Crédito',
+    plan: 'Mensal',
+    invoice: 'INV-2025-001',
   },
   {
     id: 2,
-    clientName: "Maria Oliveira",
+    clientName: 'Maria Oliveira',
     amount: 1200.0,
-    date: "05/03/2025",
-    dueDate: "10/03/2025",
-    status: "Pago",
-    method: "Transferência Bancária",
-    plan: "Anual",
-    invoice: "INV-2025-002",
+    date: '05/03/2025',
+    dueDate: '10/03/2025',
+    status: 'Pago',
+    method: 'Transferência Bancária',
+    plan: 'Anual',
+    invoice: 'INV-2025-002',
   },
   {
     id: 3,
-    clientName: "Pedro Santos",
+    clientName: 'Pedro Santos',
     amount: 300.0,
-    date: "",
-    dueDate: "20/03/2025",
-    status: "Pendente",
-    method: "",
-    plan: "Trimestral",
-    invoice: "INV-2025-003",
+    date: '',
+    dueDate: '20/03/2025',
+    status: 'Pendente',
+    method: '',
+    plan: 'Trimestral',
+    invoice: 'INV-2025-003',
   },
   {
     id: 4,
-    clientName: "Ana Costa",
+    clientName: 'Ana Costa',
     amount: 120.0,
-    date: "",
-    dueDate: "05/03/2025",
-    status: "Atrasado",
-    method: "",
-    plan: "Mensal",
-    invoice: "INV-2025-004",
+    date: '',
+    dueDate: '05/03/2025',
+    status: 'Atrasado',
+    method: '',
+    plan: 'Mensal',
+    invoice: 'INV-2025-004',
   },
   {
     id: 5,
-    clientName: "Carlos Ferreira",
+    clientName: 'Carlos Ferreira',
     amount: 1200.0,
-    date: "03/03/2025",
-    dueDate: "05/03/2025",
-    status: "Pago",
-    method: "Dinheiro",
-    plan: "Anual",
-    invoice: "INV-2025-005",
+    date: '03/03/2025',
+    dueDate: '05/03/2025',
+    status: 'Pago',
+    method: 'Dinheiro',
+    plan: 'Anual',
+    invoice: 'INV-2025-005',
   },
   {
     id: 6,
-    clientName: "Fernanda Lima",
+    clientName: 'Fernanda Lima',
     amount: 120.0,
-    date: "10/03/2025",
-    dueDate: "10/03/2025",
-    status: "Pago",
-    method: "Cartão de Débito",
-    plan: "Mensal",
-    invoice: "INV-2025-006",
+    date: '10/03/2025',
+    dueDate: '10/03/2025',
+    status: 'Pago',
+    method: 'Cartão de Débito',
+    plan: 'Mensal',
+    invoice: 'INV-2025-006',
   },
-]
+];
 
 // Tipos para os dados de pagamento
 interface Payment {
-  id: number
-  clientName: string
-  amount: number
-  date: string
-  dueDate: string
-  status: string
-  method: string
-  plan: string
-  invoice: string
+  id: number;
+  clientName: string;
+  amount: number;
+  date: string;
+  dueDate: string;
+  status: string;
+  method: string;
+  plan: string;
+  invoice: string;
 }
 
 interface NewPayment {
-  clientName: string
-  amount: string
-  dueDate: string
-  status: string
-  plan: string
+  clientName: string;
+  amount: string;
+  dueDate: string;
+  status: string;
+  plan: string;
 }
 
-export default function PaymentsPage() {
-  const [payments, setPayments] = useState<Payment[]>(initialPayments)
-  const [searchTerm, setSearchTerm] = useState("")
-  const [statusFilter, setStatusFilter] = useState("all")
-  const [planFilter, setPlanFilter] = useState("all")
-  const [isNewPaymentDialogOpen, setIsNewPaymentDialogOpen] = useState(false)
+function PaymentsPageContent() {
+  const [payments, setPayments] = useState<Payment[]>(initialPayments);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [statusFilter, setStatusFilter] = useState('all');
+  const [planFilter, setPlanFilter] = useState('all');
+  const [isNewPaymentDialogOpen, setIsNewPaymentDialogOpen] = useState(false);
   const [newPayment, setNewPayment] = useState<NewPayment>({
-    clientName: "",
-    amount: "",
-    dueDate: "",
-    status: "Pendente",
-    plan: "Mensal",
-  })
+    clientName: '',
+    amount: '',
+    dueDate: '',
+    status: 'Pendente',
+    plan: 'Mensal',
+  });
 
   // Filtrar pagamentos
   const filteredPayments = payments.filter((payment) => {
     const matchesSearch =
       payment.clientName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      payment.invoice.toLowerCase().includes(searchTerm.toLowerCase())
-    const matchesStatus = statusFilter === "all" || payment.status === statusFilter
-    const matchesPlan = planFilter === "all" || payment.plan === planFilter
+      payment.invoice.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesStatus = statusFilter === 'all' || payment.status === statusFilter;
+    const matchesPlan = planFilter === 'all' || payment.plan === planFilter;
 
-    return matchesSearch && matchesStatus && matchesPlan
-  })
+    return matchesSearch && matchesStatus && matchesPlan;
+  });
 
   // Manipular mudanças no formulário de novo pagamento
   const handleNewPaymentChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target
-    setNewPayment((prev) => ({ ...prev, [name]: value }))
-  }
+    const { name, value } = e.target;
+    setNewPayment((prev) => ({ ...prev, [name]: value }));
+  };
 
   // Adicionar novo pagamento
   const handleAddPayment = () => {
-    const today = new Date()
-    const formattedDate = `${today.getDate().toString().padStart(2, "0")}/${(today.getMonth() + 1).toString().padStart(2, "0")}/${today.getFullYear()}`
+    const today = new Date();
+    const formattedDate = `${today.getDate().toString().padStart(2, '0')}/${(today.getMonth() + 1).toString().padStart(2, '0')}/${today.getFullYear()}`;
 
     const newPaymentData: Payment = {
       id: payments.length + 1,
       clientName: newPayment.clientName,
-      amount: parseFloat(newPayment.amount) || 0,
-      date: newPayment.status === "Pago" ? formattedDate : "",
+      amount: Number.parseFloat(newPayment.amount) || 0,
+      date: newPayment.status === 'Pago' ? formattedDate : '',
       dueDate: newPayment.dueDate,
       status: newPayment.status,
-      method: newPayment.status === "Pago" ? "Cartão de Crédito" : "",
+      method: newPayment.status === 'Pago' ? 'Cartão de Crédito' : '',
       plan: newPayment.plan,
-      invoice: `INV-2025-${(payments.length + 1).toString().padStart(3, "0")}`,
-    }
+      invoice: `INV-2025-${(payments.length + 1).toString().padStart(3, '0')}`,
+    };
 
-    setPayments([...payments, newPaymentData])
+    setPayments([...payments, newPaymentData]);
     setNewPayment({
-      clientName: "",
-      amount: "",
-      dueDate: "",
-      status: "Pendente",
-      plan: "Mensal",
-    })
-    setIsNewPaymentDialogOpen(false)
-  }
+      clientName: '',
+      amount: '',
+      dueDate: '',
+      status: 'Pendente',
+      plan: 'Mensal',
+    });
+    setIsNewPaymentDialogOpen(false);
+  };
 
   // Calcular totais
   const totalReceived = filteredPayments
-    .filter((payment) => payment.status === "Pago")
-    .reduce((sum, payment) => sum + payment.amount, 0)
+    .filter((payment) => payment.status === 'Pago')
+    .reduce((sum, payment) => sum + payment.amount, 0);
 
   const totalPending = filteredPayments
-    .filter((payment) => payment.status === "Pendente")
-    .reduce((sum, payment) => sum + payment.amount, 0)
+    .filter((payment) => payment.status === 'Pendente')
+    .reduce((sum, payment) => sum + payment.amount, 0);
 
   const totalOverdue = filteredPayments
-    .filter((payment) => payment.status === "Atrasado")
-    .reduce((sum, payment) => sum + payment.amount, 0)
+    .filter((payment) => payment.status === 'Atrasado')
+    .reduce((sum, payment) => sum + payment.amount, 0);
 
   return (
     <div className="space-y-6">
@@ -197,7 +225,9 @@ export default function PaymentsPage() {
           <DialogContent className="sm:max-w-[500px]">
             <DialogHeader>
               <DialogTitle>Registrar Novo Pagamento</DialogTitle>
-              <DialogDescription>Preencha os dados do pagamento. Clique em salvar quando terminar.</DialogDescription>
+              <DialogDescription>
+                Preencha os dados do pagamento. Clique em salvar quando terminar.
+              </DialogDescription>
             </DialogHeader>
             <div className="grid gap-4 py-4">
               <div className="grid grid-cols-4 items-center gap-4">
@@ -319,7 +349,9 @@ export default function PaymentsPage() {
       <Card>
         <CardHeader>
           <CardTitle>Gerenciar Pagamentos</CardTitle>
-          <CardDescription>Visualize, adicione e gerencie todos os pagamentos da sua academia.</CardDescription>
+          <CardDescription>
+            Visualize, adicione e gerencie todos os pagamentos da sua academia.
+          </CardDescription>
         </CardHeader>
         <CardContent>
           <Tabs defaultValue="all" className="space-y-4">
@@ -409,16 +441,16 @@ export default function PaymentsPage() {
                           <TableCell>{payment.plan}</TableCell>
                           <TableCell>R$ {payment.amount.toFixed(2)}</TableCell>
                           <TableCell>{payment.dueDate}</TableCell>
-                          <TableCell>{payment.date || "-"}</TableCell>
-                          <TableCell>{payment.method || "-"}</TableCell>
+                          <TableCell>{payment.date || '-'}</TableCell>
+                          <TableCell>{payment.method || '-'}</TableCell>
                           <TableCell>
                             <Badge
                               variant={
-                                payment.status === "Pago"
-                                  ? "default"
-                                  : payment.status === "Pendente"
-                                    ? "outline"
-                                    : "destructive"
+                                payment.status === 'Pago'
+                                  ? 'default'
+                                  : payment.status === 'Pendente'
+                                    ? 'outline'
+                                    : 'destructive'
                               }
                             >
                               {payment.status}
@@ -445,7 +477,7 @@ export default function PaymentsPage() {
                                   <Receipt className="mr-2 h-4 w-4" />
                                   <span>Gerar Recibo</span>
                                 </DropdownMenuItem>
-                                {payment.status !== "Pago" && (
+                                {payment.status !== 'Pago' && (
                                   <DropdownMenuItem>
                                     <CreditCard className="mr-2 h-4 w-4" />
                                     <span>Registrar Pagamento</span>
@@ -480,6 +512,13 @@ export default function PaymentsPage() {
         </CardContent>
       </Card>
     </div>
-  )
+  );
 }
 
+export default function PaymentsPage() {
+  return (
+    <Suspense fallback={<PageSkeleton />}>
+      <PaymentsPageContent />
+    </Suspense>
+  );
+}

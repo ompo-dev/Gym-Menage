@@ -1,11 +1,9 @@
-"use client"
+'use client';
 
-import { useState } from "react"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { PageSkeleton } from '@/components/PageSkeleton';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import {
   Dialog,
   DialogContent,
@@ -14,121 +12,142 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog"
-import { Label } from "@/components/ui/label"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Badge } from "@/components/ui/badge"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { UserPlus, MoreVertical, Search, Filter, Trash2, Edit, Eye, Calendar } from "lucide-react"
+} from '@/components/ui/dialog';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Calendar, Edit, Eye, Filter, MoreVertical, Search, Trash2, UserPlus } from 'lucide-react';
+import { Suspense, useState } from 'react';
 
 // Dados simulados de funcionários
 const initialEmployees = [
   {
     id: 1,
-    name: "Roberto Almeida",
-    role: "Personal Trainer",
-    email: "roberto.almeida@email.com",
-    phone: "(11) 98765-4321",
-    status: "Ativo",
-    hireDate: "10/01/2024",
-    schedule: "Segunda a Sexta, 6h às 15h",
+    name: 'Roberto Almeida',
+    role: 'Personal Trainer',
+    email: 'roberto.almeida@email.com',
+    phone: '(11) 98765-4321',
+    status: 'Ativo',
+    hireDate: '10/01/2024',
+    schedule: 'Segunda a Sexta, 6h às 15h',
   },
   {
     id: 2,
-    name: "Juliana Costa",
-    role: "Instrutora de Yoga",
-    email: "juliana.costa@email.com",
-    phone: "(11) 91234-5678",
-    status: "Ativo",
-    hireDate: "15/03/2024",
-    schedule: "Terça e Quinta, 18h às 21h",
+    name: 'Juliana Costa',
+    role: 'Instrutora de Yoga',
+    email: 'juliana.costa@email.com',
+    phone: '(11) 91234-5678',
+    status: 'Ativo',
+    hireDate: '15/03/2024',
+    schedule: 'Terça e Quinta, 18h às 21h',
   },
   {
     id: 3,
-    name: "Marcos Santos",
-    role: "Instrutor de Spinning",
-    email: "marcos.santos@email.com",
-    phone: "(11) 99876-5432",
-    status: "Ativo",
-    hireDate: "05/11/2023",
-    schedule: "Segunda, Quarta e Sexta, 17h às 20h",
+    name: 'Marcos Santos',
+    role: 'Instrutor de Spinning',
+    email: 'marcos.santos@email.com',
+    phone: '(11) 99876-5432',
+    status: 'Ativo',
+    hireDate: '05/11/2023',
+    schedule: 'Segunda, Quarta e Sexta, 17h às 20h',
   },
   {
     id: 4,
-    name: "Ana Oliveira",
-    role: "Instrutora de Pilates",
-    email: "ana.oliveira@email.com",
-    phone: "(11) 95555-4444",
-    status: "Ativo",
-    hireDate: "20/06/2023",
-    schedule: "Segunda a Sexta, 8h às 12h",
+    name: 'Ana Oliveira',
+    role: 'Instrutora de Pilates',
+    email: 'ana.oliveira@email.com',
+    phone: '(11) 95555-4444',
+    status: 'Ativo',
+    hireDate: '20/06/2023',
+    schedule: 'Segunda a Sexta, 8h às 12h',
   },
   {
     id: 5,
-    name: "Carlos Silva",
-    role: "Personal Trainer",
-    email: "carlos.silva@email.com",
-    phone: "(11) 94444-3333",
-    status: "Inativo",
-    hireDate: "10/02/2023",
-    schedule: "Segunda a Sábado, 14h às 22h",
+    name: 'Carlos Silva',
+    role: 'Personal Trainer',
+    email: 'carlos.silva@email.com',
+    phone: '(11) 94444-3333',
+    status: 'Inativo',
+    hireDate: '10/02/2023',
+    schedule: 'Segunda a Sábado, 14h às 22h',
   },
-]
+];
 
-export default function EmployeesPage() {
-  const [employees, setEmployees] = useState(initialEmployees)
-  const [searchTerm, setSearchTerm] = useState("")
-  const [statusFilter, setStatusFilter] = useState("all")
-  const [roleFilter, setRoleFilter] = useState("all")
-  const [isNewEmployeeDialogOpen, setIsNewEmployeeDialogOpen] = useState(false)
+function EmployeesPageContent() {
+  const [employees, setEmployees] = useState(initialEmployees);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [statusFilter, setStatusFilter] = useState('all');
+  const [roleFilter, setRoleFilter] = useState('all');
+  const [isNewEmployeeDialogOpen, setIsNewEmployeeDialogOpen] = useState(false);
   const [newEmployee, setNewEmployee] = useState({
-    name: "",
-    role: "",
-    email: "",
-    phone: "",
-    status: "Ativo",
-    schedule: "",
-  })
+    name: '',
+    role: '',
+    email: '',
+    phone: '',
+    status: 'Ativo',
+    schedule: '',
+  });
 
   // Filtrar funcionários
   const filteredEmployees = employees.filter((employee) => {
     const matchesSearch =
       employee.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      employee.email.toLowerCase().includes(searchTerm.toLowerCase())
-    const matchesStatus = statusFilter === "all" || employee.status === statusFilter
-    const matchesRole = roleFilter === "all" || employee.role === roleFilter
+      employee.email.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesStatus = statusFilter === 'all' || employee.status === statusFilter;
+    const matchesRole = roleFilter === 'all' || employee.role === roleFilter;
 
-    return matchesSearch && matchesStatus && matchesRole
-  })
+    return matchesSearch && matchesStatus && matchesRole;
+  });
 
   // Manipular mudanças no formulário de novo funcionário
-  const handleNewEmployeeChange = (e: { target: { name: any; value: any } }) => {
-    const { name, value } = e.target
-    setNewEmployee((prev) => ({ ...prev, [name]: value }))
-  }
+  const handleNewEmployeeChange = (e: { target: { name: string; value: string } }) => {
+    const { name, value } = e.target;
+    setNewEmployee((prev) => ({ ...prev, [name]: value }));
+  };
 
   // Adicionar novo funcionário
   const handleAddEmployee = () => {
-    const today = new Date()
-    const formattedDate = `${today.getDate().toString().padStart(2, "0")}/${(today.getMonth() + 1).toString().padStart(2, "0")}/${today.getFullYear()}`
+    const today = new Date();
+    const formattedDate = `${today.getDate().toString().padStart(2, '0')}/${(today.getMonth() + 1).toString().padStart(2, '0')}/${today.getFullYear()}`;
 
     const newEmployeeData = {
       id: employees.length + 1,
       ...newEmployee,
       hireDate: formattedDate,
-    }
+    };
 
-    setEmployees([...employees, newEmployeeData])
+    setEmployees([...employees, newEmployeeData]);
     setNewEmployee({
-      name: "",
-      role: "",
-      email: "",
-      phone: "",
-      status: "Ativo",
-      schedule: "",
-    })
-    setIsNewEmployeeDialogOpen(false)
-  }
+      name: '',
+      role: '',
+      email: '',
+      phone: '',
+      status: 'Ativo',
+      schedule: '',
+    });
+    setIsNewEmployeeDialogOpen(false);
+  };
 
   return (
     <div className="space-y-6">
@@ -295,8 +314,12 @@ export default function EmployeesPage() {
                             <SelectItem value="all">Todos</SelectItem>
                             <SelectItem value="Personal Trainer">Personal Trainer</SelectItem>
                             <SelectItem value="Instrutora de Yoga">Instrutor de Yoga</SelectItem>
-                            <SelectItem value="Instrutor de Spinning">Instrutor de Spinning</SelectItem>
-                            <SelectItem value="Instrutora de Pilates">Instrutor de Pilates</SelectItem>
+                            <SelectItem value="Instrutor de Spinning">
+                              Instrutor de Spinning
+                            </SelectItem>
+                            <SelectItem value="Instrutora de Pilates">
+                              Instrutor de Pilates
+                            </SelectItem>
                           </SelectContent>
                         </Select>
                       </div>
@@ -329,7 +352,9 @@ export default function EmployeesPage() {
                           <TableCell>{employee.email}</TableCell>
                           <TableCell>{employee.phone}</TableCell>
                           <TableCell>
-                            <Badge variant={employee.status === "Ativo" ? "default" : "destructive"}>
+                            <Badge
+                              variant={employee.status === 'Ativo' ? 'default' : 'destructive'}
+                            >
                               {employee.status}
                             </Badge>
                           </TableCell>
@@ -386,6 +411,13 @@ export default function EmployeesPage() {
         </CardContent>
       </Card>
     </div>
-  )
+  );
 }
 
+export default function EmployeesPage() {
+  return (
+    <Suspense fallback={<PageSkeleton />}>
+      <EmployeesPageContent />
+    </Suspense>
+  );
+}

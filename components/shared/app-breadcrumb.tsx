@@ -9,7 +9,8 @@ import {
   BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb';
 import Link from 'next/link';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
+import { useQueryState } from 'nuqs';
 import * as React from 'react';
 
 type RouteMap = {
@@ -60,10 +61,10 @@ const studentRouteMap: RouteMap = {
   schedule: 'Horários',
 };
 
-export function AppBreadcrumb() {
+function AppBreadcrumbContent() {
   const router = useRouter();
   const pathname = usePathname();
-  const searchParams = useSearchParams();
+  const [searchParams] = useQueryState('', { history: 'push' });
 
   // Determina se estamos na área de dashboard ou de estudantes
   const isStudentArea = pathname.includes('/students');
@@ -78,12 +79,12 @@ export function AppBreadcrumb() {
 
   // Função para depuração
   React.useEffect(() => {
-    console.log('Search Params:', searchParams.toString());
+    console.log('Search Params:', searchParams);
     console.log('Pathname:', pathname);
 
     // Verificamos se o primeiro parâmetro está no mapa de rotas
-    if (searchParams.toString()) {
-      const firstParam = searchParams.toString().split('&')[0];
+    if (searchParams) {
+      const firstParam = searchParams.split('&')[0];
       console.log('First Param:', firstParam);
       console.log('In Route Map:', !!routeMap[firstParam]);
     }
@@ -95,17 +96,17 @@ export function AppBreadcrumb() {
       {
         href: baseRoute,
         label: routeMap[baseRoute],
-        isLast: !searchParams.toString(),
+        isLast: !searchParams,
       },
     ];
 
     // Se não temos parâmetros de busca, retornamos apenas o item base
-    if (!searchParams.toString()) {
+    if (!searchParams) {
       return breadcrumbs;
     }
 
     // Obtemos todos os parâmetros de busca como string
-    const queryString = searchParams.toString();
+    const queryString = searchParams;
 
     // Verificamos se temos um parâmetro sem valor (ex: ?clients)
     // Este é o formato específico usado na aplicação
@@ -163,5 +164,13 @@ export function AppBreadcrumb() {
         ))}
       </BreadcrumbList>
     </Breadcrumb>
+  );
+}
+
+export function AppBreadcrumb() {
+  return (
+    <React.Suspense fallback={<div>Carregando...</div>}>
+      <AppBreadcrumbContent />
+    </React.Suspense>
   );
 }
