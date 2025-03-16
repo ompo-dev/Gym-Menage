@@ -1,0 +1,4 @@
+#!/bin/sh
+
+# Executar lint e verificar formatação
+npx lint-staged

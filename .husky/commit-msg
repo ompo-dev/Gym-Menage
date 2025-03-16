@@ -1,0 +1,45 @@
+#!/bin/sh
+
+# Cores para output
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[0;33m'
+NC='\033[0m' # No Color
+
+# Obtém a mensagem de commit do arquivo temporário
+commit_msg_file=$1
+commit_msg=$(cat "$commit_msg_file")
+
+# Padrão para validar mensagens de commit (emoji + tipo + : + mensagem)
+# Exemplos válidos:
+# ✨ feat: adicionar nova funcionalidade
+# 🐛 fix: corrigir bug na autenticação
+# 📚 docs: atualizar README
+# :sparkles: feat: adicionar nova funcionalidade
+pattern="^(🎉|✅|⬆️|⬇️|➕|👌|💫|🐛|💡|🎉|🔧|🚀|📚|🚧|💄|🧱|🔜|🚚|✨|📦|⚡|♻️|🧹|🗑️|➖|📱|💥|🔒️|🔍️|🔖|✔️|🧪|📝|🏷️|🥅|🗃️|:[a-z_]+:) (feat|fix|docs|test|build|perf|style|refactor|chore|ci|raw|cleanup|remove)(\([a-z0-9-]+\))?:[[:space:]].{1,100}"
+
+if ! echo "$commit_msg" | grep -qE "$pattern"; then
+  echo "${RED}Erro: Mensagem de commit inválida${NC}"
+  echo "${YELLOW}A mensagem deve seguir o padrão: [emoji] [tipo]: [mensagem]${NC}"
+  echo "${YELLOW}Exemplo: ✨ feat: adicionar página de login${NC}"
+  echo "${YELLOW}Ou: :sparkles: feat: adicionar página de login${NC}"
+  echo "\nTipos permitidos:"
+  echo "  feat     - Novo recurso"
+  echo "  fix      - Correção de bug"
+  echo "  docs     - Documentação"
+  echo "  test     - Testes"
+  echo "  build    - Build e dependências"
+  echo "  perf     - Performance"
+  echo "  style    - Estilo de código"
+  echo "  refactor - Refatoração"
+  echo "  chore    - Tarefas gerais"
+  echo "  ci       - Integração contínua"
+  echo "  raw      - Dados e configurações"
+  echo "  cleanup  - Limpeza de código"
+  echo "  remove   - Remoção de arquivos/recursos"
+  echo "\nConsulte a documentação para ver os emojis correspondentes a cada tipo."
+  exit 1
+fi
+
+echo "${GREEN}Mensagem de commit válida!${NC}"
+exit 0 
