@@ -1,7 +1,7 @@
 "use client"
 
 import { Bell, ChevronsUpDown, LogOut, Moon, Palette, Settings, Sun, User } from "lucide-react"
-import { useTheme } from "@/components/theme-provider"
+import { useTheme } from "@/components/theme/theme-provider"
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import {

@@ -2,12 +2,12 @@
 
 import * as React from "react"
 import { SidebarProvider, SidebarInset, SidebarTrigger } from "@/components/ui/sidebar"
-import { AppSidebar } from "@/components/app-sidebar"
+import { AppSidebar } from "@/components/SideBar/app-sidebar"
 import { Separator } from "@/components/ui/separator"
-import { BreadcrumbNav } from "@/components/breadcrumb-nav"
-import { Main } from "./components/Main"
+import { BreadcrumbNav } from "@/components/SideBar/breadcrumb-nav"
 import { ErrorBoundary } from 'react-error-boundary'
-import { NotFound } from '@/app/error'
+import { NotFound } from "../../error"
+import { Main } from "../components/Main"
 
 export default function DashboardLayout() {
   return (

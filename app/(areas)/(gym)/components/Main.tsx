@@ -3,37 +3,37 @@
 import { useSearchParams, useRouter, usePathname } from "next/navigation"
 import { useCallback, useEffect, useState, Suspense } from "react"
 import dynamic from "next/dynamic"
-import { PageSkeleton } from "./PageSkeleton"
+import { PageSkeleton } from "@/components/PageSkeleton"
 
 type AvailablePages = "overview" | "clients" | "employees" | "equipment" | "payments" | "reports" | "schedule"
 
 // Importação dinâmica das páginas
 const DynamicPages = {
-  overview: dynamic(() => import("../page"), { 
+  overview: dynamic(() => import("../dashboard/page"), { 
     loading: () => <PageSkeleton />,
     ssr: false
   }),
-  clients: dynamic(() => import("../clients/page"), {
+  clients: dynamic(() => import("../dashboard/clients/page"), {
     loading: () => <PageSkeleton />,
     ssr: false
   }),
-  employees: dynamic(() => import("../employees/page"), {
+  employees: dynamic(() => import("../dashboard/employees/page"), {
     loading: () => <PageSkeleton />,
     ssr: false
   }),
-  equipment: dynamic(() => import("../equipment/page"), {
+  equipment: dynamic(() => import("../dashboard/equipment/page"), {
     loading: () => <PageSkeleton />,
     ssr: false
   }),
-  payments: dynamic(() => import("../payments/page"), {
+  payments: dynamic(() => import("../dashboard/payments/page"), {
     loading: () => <PageSkeleton />,
     ssr: false
   }),
-  reports: dynamic(() => import("../reports/page"), {
+  reports: dynamic(() => import("../dashboard/reports/page"), {
     loading: () => <PageSkeleton />,
     ssr: false
   }),
-  schedule: dynamic(() => import("../schedule/page"), {
+  schedule: dynamic(() => import("../dashboard/schedule/page"), {
     loading: () => <PageSkeleton />,
     ssr: false
   })

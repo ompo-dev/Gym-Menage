@@ -15,9 +15,9 @@ import {
   GraduationCap,
 } from "lucide-react"
 
-import { NavMain } from "@/components/nav-main"
-import { NavAcademias } from "@/components/nav-academias"
-import { NavUser } from "@/components/nav-user"
+import { NavMain } from "@/components/SideBar/nav-main"
+import { NavAcademias } from "@/components/SideBar/nav-academias"
+import { NavUser } from "@/components/SideBar/nav-user"
 import { AcademiaSwitcher } from "@/components/academia-switcher"
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarRail } from "@/components/ui/sidebar"
 
