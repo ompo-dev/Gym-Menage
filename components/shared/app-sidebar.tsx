@@ -46,13 +46,11 @@ export type SidebarAcademiaData = {
 export type SidebarNavItem = {
   title: string;
   url?: string;
-  param?: string;
   icon?: React.ElementType;
   isActive?: boolean;
   items?: {
     title: string;
     url?: string;
-    param?: string;
   }[];
 };
 

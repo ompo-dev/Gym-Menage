@@ -151,7 +151,7 @@ const studentData = {
 };
 
 // TODO: Integrar com sistema de autenticação
-const hasAccess = true; // Simula verificação de acesso
+const hasAccess = false; // Simula verificação de acesso
 
 export default function StudentsLayout() {
   const [mounted, setMounted] = React.useState(false);

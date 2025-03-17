@@ -17,46 +17,48 @@ type RouteMap = {
 
 // Mapeamento de rotas para o dashboard
 const dashboardRouteMap: RouteMap = {
-  '/dashboard': 'Dashboard',
-  clients: 'Clientes',
-  new: 'Novos Clientes',
-  plans: 'Planos',
-  employees: 'Funcionários',
-  instructors: 'Instrutores',
-  admin: 'Administrativo',
-  equipment: 'Equipamentos',
-  maintenance: 'Manutenção',
-  payments: 'Pagamentos',
-  invoices: 'Faturas',
-  reports: 'Relatórios de Pagamentos',
-  schedule: 'Agendamentos',
-  timetable: 'Horários',
-  attendance: 'Frequência',
-  performance: 'Desempenho',
-  settings: 'Configurações',
-  profile: 'Perfil',
-  gym: 'Academia',
-  integrations: 'Integrações',
+  dashboard: 'Dashboard',
   analytics: 'Análises',
+  clients: 'Clientes',
+  'clients/new': 'Novos Clientes',
+  'clients/plans': 'Planos',
+  employees: 'Funcionários',
+  'employees/instructors': 'Instrutores',
+  'employees/admin': 'Administrativo',
+  equipment: 'Equipamentos',
+  'equipment/maintenance': 'Manutenção',
+  payments: 'Pagamentos',
+  'payments/invoices': 'Faturas',
+  'payments/reports': 'Relatórios de Pagamentos',
+  schedule: 'Agendamentos',
+  'schedule/timetable': 'Horários',
+  reports: 'Relatórios',
+  'reports/attendance': 'Frequência',
+  'reports/performance': 'Desempenho',
+  settings: 'Configurações',
+  'settings/profile': 'Perfil',
+  'settings/gym': 'Academia',
+  'settings/plans': 'Planos',
+  'settings/integrations': 'Integrações',
 };
 
 // Mapeamento de rotas para a área de estudantes
 const studentRouteMap: RouteMap = {
-  '/students': 'Área do Aluno',
-  profile: 'Perfil',
-  workouts: 'Treinos',
-  current: 'Meus Treinos',
-  history: 'Histórico de Treinos',
-  exercises: 'Exercícios',
-  measurements: 'Medidas',
-  evolution: 'Evolução',
-  photos: 'Fotos',
-  diet: 'Dieta',
-  plan: 'Plano Alimentar',
-  meals: 'Refeições',
-  progress: 'Progresso da Dieta',
-  payments: 'Pagamentos',
-  schedule: 'Horários',
+  students: 'Área do Aluno',
+  'students/profile': 'Perfil',
+  'students/workouts': 'Treinos',
+  'students/workouts/current': 'Meus Treinos',
+  'students/workouts/history': 'Histórico de Treinos',
+  'students/exercises': 'Exercícios',
+  'students/measurements': 'Medidas',
+  'students/evolution': 'Evolução',
+  'students/photos': 'Fotos',
+  'students/diet': 'Dieta',
+  'students/diet/plan': 'Plano Alimentar',
+  'students/diet/meals': 'Refeições',
+  'students/diet/progress': 'Progresso da Dieta',
+  'students/payments': 'Pagamentos',
+  'students/schedule': 'Horários',
 };
 
 function AppBreadcrumbContent() {
@@ -74,87 +76,38 @@ function AppBreadcrumbContent() {
     router.push(href);
   };
 
-  // Estado para armazenar os parâmetros da URL
-  const [queryString, setQueryString] = React.useState('');
-
-  // Atualiza os parâmetros da URL quando o componente é montado e quando a URL muda
-  React.useEffect(() => {
-    // Certifica-se de que estamos no cliente antes de acessar window
-    if (typeof window !== 'undefined') {
-      const updateQueryString = () => {
-        const currentSearchParams = new URLSearchParams(window.location.search);
-        setQueryString(currentSearchParams.toString());
-      };
-
-      // Atualiza imediatamente
-      updateQueryString();
-
-      // Adiciona um listener para detectar mudanças na URL
-      window.addEventListener('popstate', updateQueryString);
-
-      // No App Router, precisamos usar o evento 'hashchange' ou 'popstate'
-      // para detectar mudanças na URL, já que não temos mais router.events
-      window.addEventListener('hashchange', updateQueryString);
-
-      // Limpa os listeners quando o componente é desmontado
-      return () => {
-        window.removeEventListener('popstate', updateQueryString);
-        window.removeEventListener('hashchange', updateQueryString);
-      };
-    }
-  }, []);
-
-  // Função para depuração
-  React.useEffect(() => {
-    console.log('Query String:', queryString);
-    console.log('Pathname:', pathname);
-
-    // Verificamos se o primeiro parâmetro está no mapa de rotas
-    if (queryString) {
-      const firstParam = queryString.split('&')[0].split('=')[0];
-      console.log('First Param:', firstParam);
-      console.log('In Route Map:', !!routeMap[firstParam]);
-    }
-  }, [queryString, pathname, routeMap]);
-
   const getBreadcrumbs = () => {
+    // Remove a barra inicial e divide o pathname em segmentos
+    const segments = pathname.split('/').filter(Boolean);
+
     // Primeiro item sempre é a rota base
     const breadcrumbs = [
       {
         href: baseRoute,
-        label: routeMap[baseRoute],
-        isLast: !queryString,
+        label: routeMap[segments[0]] || segments[0],
+        isLast: segments.length === 1,
       },
     ];
 
-    // Se não temos parâmetros de busca, retornamos apenas o item base
-    if (!queryString) {
+    // Se temos apenas um segmento, retornamos apenas o item base
+    if (segments.length <= 1) {
       return breadcrumbs;
     }
 
-    // Verificamos se temos um parâmetro sem valor (ex: ?clients)
-    // Este é o formato específico usado na aplicação
-    const mainParam = queryString.split('&')[0].split('=')[0];
+    // Construímos o caminho progressivamente
+    let currentPath = '';
 
-    if (routeMap[mainParam]) {
+    // Iteramos sobre os segmentos restantes
+    for (let i = 1; i < segments.length; i++) {
+      currentPath += `/${segments[i]}`;
+      const fullPath = segments.slice(0, i + 1).join('/');
+      const label = routeMap[fullPath] || segments[i];
+
       breadcrumbs.push({
-        href: `${baseRoute}?${mainParam}`,
-        label: routeMap[mainParam],
-        isLast: queryString === mainParam,
+        href: `/${fullPath}`,
+        label,
+        isLast: i === segments.length - 1,
       });
-    }
-
-    // Se temos mais parâmetros, adicionamos o segundo nível
-    if (queryString.includes('&')) {
-      const subParam = queryString.split('&')[1].split('=')[0];
-
-      if (routeMap[subParam]) {
-        breadcrumbs.push({
-          href: `${baseRoute}?${queryString}`,
-          label: routeMap[subParam],
-          isLast: true,
-        });
-      }
     }
 
     return breadcrumbs;
@@ -162,7 +115,6 @@ function AppBreadcrumbContent() {
 
   const breadcrumbs = getBreadcrumbs();
 
-  // Sempre exibimos o breadcrumb, mesmo que tenha apenas um item
   return (
     <Breadcrumb>
       <BreadcrumbList>

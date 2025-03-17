@@ -2,7 +2,7 @@
 
 import { PageSkeleton } from '@/components/PageSkeleton';
 import dynamic from 'next/dynamic';
-import { useSearchParams } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import { Suspense, useCallback, useEffect, useState } from 'react';
 
 type AvailablePages =
@@ -12,11 +12,17 @@ type AvailablePages =
   | 'equipment'
   | 'payments'
   | 'reports'
-  | 'schedule';
+  | 'schedule'
+  | 'settings'
+  | 'analytics';
 
 // Importação dinâmica das páginas
 const DynamicPages = {
   overview: dynamic(() => import('../dashboard/page'), {
+    loading: () => <PageSkeleton />,
+    ssr: false,
+  }),
+  analytics: dynamic(() => import('../dashboard/analytics/page'), {
     loading: () => <PageSkeleton />,
     ssr: false,
   }),
@@ -44,37 +50,46 @@ const DynamicPages = {
     loading: () => <PageSkeleton />,
     ssr: false,
   }),
+  settings: dynamic(() => import('../dashboard/settings/page'), {
+    loading: () => <PageSkeleton />,
+    ssr: false,
+  }),
 };
 
 function MainContent() {
-  const searchParams = useSearchParams();
+  const pathname = usePathname();
   const [currentComponent, setCurrentComponent] = useState<AvailablePages>('overview');
 
-  // Adicionar um useEffect para capturar mudanças na URL
-  useEffect(() => {
-    console.log('Dashboard Main component mounted/updated, searchParams:', searchParams.toString());
-  }, [searchParams]);
-
-  // Função para determinar qual página exibir baseado nos parâmetros de busca
+  // Função para determinar qual página exibir baseado no pathname
   const getCurrentPage = useCallback((): AvailablePages => {
-    const paramsString = searchParams.toString();
-    console.log('Search Params (Dashboard Main.tsx):', paramsString);
+    // Remove o prefixo /dashboard se existir
+    const path = pathname.replace('/dashboard', '').split('/')[1] || '';
 
-    // Verificar cada parâmetro
-    if (paramsString.includes('clients')) return 'clients';
-    if (paramsString.includes('employees')) return 'employees';
-    if (paramsString.includes('equipment')) return 'equipment';
-    if (paramsString.includes('payments')) return 'payments';
-    if (paramsString.includes('reports')) return 'reports';
-    if (paramsString.includes('schedule')) return 'schedule';
-
-    // Se não houver parâmetros, retorna a página inicial
-    return 'overview';
-  }, [searchParams]);
+    // Mapeia os caminhos para os componentes correspondentes
+    switch (path) {
+      case 'clients':
+        return 'clients';
+      case 'employees':
+        return 'employees';
+      case 'equipment':
+        return 'equipment';
+      case 'payments':
+        return 'payments';
+      case 'reports':
+        return 'reports';
+      case 'schedule':
+        return 'schedule';
+      case 'settings':
+        return 'settings';
+      case 'analytics':
+        return 'analytics';
+      default:
+        return 'overview';
+    }
+  }, [pathname]);
 
   useEffect(() => {
     const newPage = getCurrentPage();
-    console.log('Dashboard Current Component:', currentComponent, 'New Page:', newPage);
 
     // Só atualiza se for diferente para evitar loops
     if (newPage !== currentComponent) {

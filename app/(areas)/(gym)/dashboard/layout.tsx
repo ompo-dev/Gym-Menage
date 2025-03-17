@@ -62,140 +62,140 @@ const dashboardData = {
         },
         {
           title: 'Análises',
-          url: '/dashboard?analytics',
+          url: '/dashboard/analytics',
         },
         {
           title: 'Relatórios',
-          url: '/dashboard?reports',
+          url: '/dashboard/reports',
         },
       ],
     },
     {
       title: 'Clientes',
-      url: '/dashboard?clients',
+      url: '/dashboard/clients',
       icon: Users,
       items: [
         {
           title: 'Todos os Clientes',
-          url: '/dashboard?clients',
+          url: '/dashboard/clients',
         },
         {
           title: 'Novos Clientes',
-          url: '/dashboard?clients&new',
+          url: '/dashboard/clients/new',
         },
         {
           title: 'Planos',
-          url: '/dashboard?clients&plans',
+          url: '/dashboard/clients/plans',
         },
       ],
     },
     {
       title: 'Funcionários',
-      url: '/dashboard?employees',
+      url: '/dashboard/employees',
       icon: UserCog,
       items: [
         {
           title: 'Todos os Funcionários',
-          url: '/dashboard?employees',
+          url: '/dashboard/employees',
         },
         {
           title: 'Instrutores',
-          url: '/dashboard?employees&instructors',
+          url: '/dashboard/employees/instructors',
         },
         {
           title: 'Administrativo',
-          url: '/dashboard?employees&admin',
+          url: '/dashboard/employees/admin',
         },
       ],
     },
     {
       title: 'Equipamentos',
-      url: '/dashboard?equipment',
+      url: '/dashboard/equipment',
       icon: Dumbbell,
       items: [
         {
           title: 'Inventário',
-          url: '/dashboard?equipment',
+          url: '/dashboard/equipment',
         },
         {
           title: 'Manutenção',
-          url: '/dashboard?equipment&maintenance',
+          url: '/dashboard/equipment/maintenance',
         },
       ],
     },
     {
       title: 'Pagamentos',
-      url: '/dashboard?payments',
+      url: '/dashboard/payments',
       icon: DollarSign,
       items: [
         {
           title: 'Mensalidades',
-          url: '/dashboard?payments',
+          url: '/dashboard/payments',
         },
         {
           title: 'Faturas',
-          url: '/dashboard?payments&invoices',
+          url: '/dashboard/payments/invoices',
         },
         {
           title: 'Relatórios',
-          url: '/dashboard?payments&reports',
+          url: '/dashboard/payments/reports',
         },
       ],
     },
     {
       title: 'Agendamentos',
-      url: '/dashboard?schedule',
+      url: '/dashboard/schedule',
       icon: Calendar,
       items: [
         {
           title: 'Aulas',
-          url: '/dashboard?schedule',
+          url: '/dashboard/schedule',
         },
         {
           title: 'Horários',
-          url: '/dashboard?schedule&timetable',
+          url: '/dashboard/schedule/timetable',
         },
       ],
     },
     {
       title: 'Relatórios',
-      url: '/dashboard?reports',
+      url: '/dashboard/reports',
       icon: BarChart3,
       items: [
         {
           title: 'Financeiro',
-          url: '/dashboard?reports',
+          url: '/dashboard/reports',
         },
         {
           title: 'Frequência',
-          url: '/dashboard?reports&attendance',
+          url: '/dashboard/reports/attendance',
         },
         {
           title: 'Desempenho',
-          url: '/dashboard?reports&performance',
+          url: '/dashboard/reports/performance',
         },
       ],
     },
     {
       title: 'Configurações',
-      url: '/dashboard?settings',
+      url: '/dashboard/settings',
       icon: Settings,
       items: [
         {
           title: 'Perfil',
-          url: '/dashboard?settings&profile',
+          url: '/dashboard/settings/profile',
         },
         {
           title: 'Academia',
-          url: '/dashboard?settings&gym',
+          url: '/dashboard/settings/gym',
         },
         {
           title: 'Planos',
-          url: '/dashboard?settings&plans',
+          url: '/dashboard/settings/plans',
         },
         {
           title: 'Integrações',
-          url: '/dashboard?settings&integrations',
+          url: '/dashboard/settings/integrations',
         },
       ],
     },
